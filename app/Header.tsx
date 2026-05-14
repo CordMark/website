@@ -89,10 +89,6 @@ export function Header() {
           </div>
         </div>
 
-        <a className="nav-link" href="/about?tab=mission" onClick={() => setIsOpen(false)}>
-          ミッション
-        </a>
-
         <div className="nav-item has-menu">
           <a className="nav-link" href="/#business" onClick={() => setIsOpen(false)}>
             事業内容 <span className="nav-caret" aria-hidden="true"></span>

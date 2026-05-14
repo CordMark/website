@@ -21,7 +21,7 @@ export default function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html:
-              "try{var n=performance.getEntriesByType('navigation')[0];if(n&&n.type==='reload'){document.documentElement.classList.add('is-reload');setTimeout(function(){document.documentElement.classList.remove('is-reload')},4300)}}catch(e){}",
+              "try{if('scrollRestoration'in history){history.scrollRestoration='manual'}document.documentElement.classList.add('is-reload');document.documentElement.style.scrollBehavior='auto';scrollTo(0,0);setTimeout(function(){document.documentElement.style.scrollBehavior=''},80)}catch(e){}",
           }}
         />
         {children}

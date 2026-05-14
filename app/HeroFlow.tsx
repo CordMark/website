@@ -4,6 +4,7 @@ import type { CSSProperties } from "react";
 import { useEffect, useRef, useState } from "react";
 
 const heroLines = ["Beyond", "Efficiency,", "Toward", "Culture."];
+const introAnimationDuration = 4300;
 
 function AnimatedHeroTitle() {
   let charIndex = 0;
@@ -50,8 +51,95 @@ export function HeroFlow() {
   const introRef = useRef<HTMLElement | null>(null);
   const stickyTitleRef = useRef<HTMLHeadingElement | null>(null);
   const introTitleRef = useRef<HTMLHeadingElement | null>(null);
+  const nightVideoRef = useRef<HTMLVideoElement | null>(null);
   const [isIntro, setIsIntro] = useState(false);
   const [isLanded, setIsLanded] = useState(false);
+
+  useEffect(() => {
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    const root = document.documentElement;
+    const body = document.body;
+    const previousScrollRestoration = history.scrollRestoration;
+    const previousScrollBehavior = root.style.scrollBehavior;
+    const lockedKeys = new Set([
+      " ",
+      "ArrowDown",
+      "ArrowUp",
+      "End",
+      "Home",
+      "PageDown",
+      "PageUp",
+    ]);
+
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+
+    root.style.scrollBehavior = "auto";
+    window.scrollTo(0, 0);
+    root.style.scrollBehavior = previousScrollBehavior;
+    root.classList.add("is-reload");
+
+    if (reduceMotion) {
+      root.classList.remove("is-reload");
+      return () => {
+        if ("scrollRestoration" in history) {
+          history.scrollRestoration = previousScrollRestoration;
+        }
+      };
+    }
+
+    const keepAtTop = () => {
+      if (window.scrollY !== 0) {
+        window.scrollTo(0, 0);
+      }
+    };
+    const preventScroll = (event: Event) => {
+      event.preventDefault();
+      keepAtTop();
+    };
+    const preventScrollKeys = (event: KeyboardEvent) => {
+      if (!lockedKeys.has(event.key)) return;
+      event.preventDefault();
+      keepAtTop();
+    };
+    const scrollLockOptions = { capture: true, passive: false };
+
+    root.classList.add("hero-intro-lock");
+    body.classList.add("hero-intro-lock");
+    keepAtTop();
+    window.addEventListener("wheel", preventScroll, scrollLockOptions);
+    window.addEventListener("touchmove", preventScroll, scrollLockOptions);
+    window.addEventListener("keydown", preventScrollKeys, { capture: true });
+
+    const unlockTimer = window.setTimeout(() => {
+      root.classList.remove("hero-intro-lock");
+      body.classList.remove("hero-intro-lock");
+      root.classList.remove("is-reload");
+      window.removeEventListener("wheel", preventScroll, scrollLockOptions);
+      window.removeEventListener("touchmove", preventScroll, scrollLockOptions);
+      window.removeEventListener("keydown", preventScrollKeys, {
+        capture: true,
+      });
+    }, introAnimationDuration);
+
+    return () => {
+      window.clearTimeout(unlockTimer);
+      root.classList.remove("hero-intro-lock");
+      body.classList.remove("hero-intro-lock");
+      root.classList.remove("is-reload");
+      window.removeEventListener("wheel", preventScroll, scrollLockOptions);
+      window.removeEventListener("touchmove", preventScroll, scrollLockOptions);
+      window.removeEventListener("keydown", preventScrollKeys, {
+        capture: true,
+      });
+      if ("scrollRestoration" in history) {
+        history.scrollRestoration = previousScrollRestoration;
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const updateState = () => {
@@ -94,6 +182,37 @@ export function HeroFlow() {
     };
   }, []);
 
+  useEffect(() => {
+    const slideDuration = 18000;
+    const nightSlideStart = slideDuration * 0.27;
+    let interval: number | null = null;
+
+    const playNightVideoFromStart = () => {
+      const video = nightVideoRef.current;
+      if (!video) return;
+
+      try {
+        video.currentTime = 0;
+        void video.play().catch(() => undefined);
+      } catch {
+        // Ignore browsers that reject seeking before metadata is ready.
+      }
+    };
+
+    const startTimer = window.setTimeout(() => {
+      playNightVideoFromStart();
+      interval = window.setInterval(
+        playNightVideoFromStart,
+        slideDuration,
+      );
+    }, nightSlideStart);
+
+    return () => {
+      window.clearTimeout(startTimer);
+      if (interval) window.clearInterval(Number(interval));
+    };
+  }, []);
+
   return (
     <div
       className={`hero-flow${isIntro ? " is-intro" : ""}${isLanded ? " is-landed" : ""}`}
@@ -119,8 +238,30 @@ export function HeroFlow() {
 
       <section className="hero" aria-label="CordMark hero">
         <div className="hero__slides" aria-hidden="true">
-          <span className="hero__slide"></span>
-          <span className="hero__slide"></span>
+          <span className="hero__slide">
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="metadata"
+              poster="/assets/hero-city.png"
+            >
+              <source src="/assets/city-video.mp4" type="video/mp4" />
+            </video>
+          </span>
+          <span className="hero__slide">
+            <video
+              ref={nightVideoRef}
+              loop
+              muted
+              playsInline
+              preload="metadata"
+              poster="/assets/hero-night.png"
+            >
+              <source src="/assets/night-video.mp4" type="video/mp4" />
+            </video>
+          </span>
           <span className="hero__slide"></span>
         </div>
         <div className="hero__shade"></div>

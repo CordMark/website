@@ -31,6 +31,13 @@ body.nav-open {
   overflow: hidden;
 }
 
+html.hero-intro-lock,
+body.hero-intro-lock {
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: none;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -95,6 +102,15 @@ img {
   position: relative;
 }
 
+.has-menu::after {
+  position: absolute;
+  top: 100%;
+  right: -18px;
+  left: -18px;
+  height: 20px;
+  content: "";
+}
+
 .nav-link,
 .nav-menu a {
   position: relative;
@@ -123,9 +139,12 @@ img {
   color: var(--accent);
 }
 
-.site-header:not(.is-scrolled):not(.is-open) .nav-link:hover,
-.site-header:not(.is-scrolled):not(.is-open) .nav-menu a:hover {
+.site-header:not(.is-scrolled):not(.is-open) .nav-link:hover {
   color: #dbe9f2;
+}
+
+.site-header:not(.is-scrolled):not(.is-open) .nav-menu a:hover {
+  color: var(--accent);
 }
 
 .nav-link:hover::after,
@@ -276,6 +295,13 @@ img {
 .hero__slide:nth-child(1) {
   background-image: url("/assets/hero-city.png");
   opacity: 1;
+}
+
+.hero__slide video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .hero__slide:nth-child(2) {
@@ -683,60 +709,71 @@ img {
   width: 100vw;
   content: "";
   pointer-events: none;
-  filter: drop-shadow(0 0 7px rgba(29, 118, 201, .1));
   transform: translateX(-50%);
 }
 
 .intro::before {
-  opacity: .38;
+  opacity: 0;
   background:
-    linear-gradient(90deg, transparent, rgba(29, 118, 201, .42) 28%, rgba(120, 144, 162, .14) 70%, transparent) -36% 18% / 280px 3px no-repeat,
-    linear-gradient(90deg, transparent, rgba(20, 35, 52, .16) 34%, rgba(29, 118, 201, .28) 62%, transparent) -22% 37% / 410px 2px no-repeat,
-    linear-gradient(90deg, transparent, rgba(120, 144, 162, .3) 30%, rgba(20, 35, 52, .1) 64%, transparent) -30% 79% / 340px 2px no-repeat;
-  animation: missionStreaksEast 2.7s linear infinite;
+    radial-gradient(circle at 72% 34%, rgba(29, 118, 201, .13), transparent 34%),
+    radial-gradient(circle at 18% 78%, rgba(120, 144, 162, .18), transparent 30%),
+    linear-gradient(115deg, rgba(244, 250, 253, .96), rgba(232, 244, 252, .62) 48%, rgba(255, 255, 255, .94));
+  transform: translateX(-50%) scale(1.02);
 }
 
 .intro::after {
-  opacity: .34;
+  opacity: 0;
   background:
-    linear-gradient(270deg, transparent, rgba(29, 118, 201, .38) 26%, rgba(120, 144, 162, .14) 72%, transparent) 132% 25% / 360px 3px no-repeat,
-    linear-gradient(270deg, transparent, rgba(120, 144, 162, .32) 30%, transparent 74%) 118% 66% / 430px 3px no-repeat;
-  animation: missionStreaksWest 3.1s linear infinite;
+    radial-gradient(circle at 58% 46%, rgba(29, 118, 201, .12), transparent 24%),
+    radial-gradient(circle at 84% 82%, rgba(87, 154, 186, .1), transparent 28%);
+  background-size: 120% 120%, 120% 120%;
+  mix-blend-mode: multiply;
+  transform: translateX(-50%) scale(1.04);
 }
 
-@keyframes missionStreaksEast {
+.hero-flow.is-landed .intro::before {
+  animation: missionBackgroundBloom 1.05s cubic-bezier(.2, .8, .2, 1) both;
+}
+
+.hero-flow.is-landed .intro::after {
+  animation:
+    missionAuraIn .9s cubic-bezier(.2, .8, .2, 1) both,
+    missionAuraDrift 8s ease-in-out .9s infinite alternate;
+}
+
+@keyframes missionBackgroundBloom {
   0% {
-    background-position: -36% 18%, -22% 37%, -30% 79%;
-  }
-
-  36% {
-    background-position: 42% 18%, 18% 37%, 56% 79%;
-  }
-
-  67% {
-    background-position: 96% 18%, 74% 37%, 110% 79%;
+    opacity: 0;
+    transform: translateX(-50%) scale(1.02);
   }
 
   100% {
-    background-position: 142% 18%, 128% 37%, 152% 79%;
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
   }
 }
 
-@keyframes missionStreaksWest {
+@keyframes missionAuraIn {
   0% {
-    background-position: 132% 25%, 118% 66%;
-  }
-
-  29% {
-    background-position: 86% 25%, 62% 66%;
-  }
-
-  63% {
-    background-position: 18% 25%, 8% 66%;
+    opacity: 0;
+    background-position: 54% 44%, 86% 78%;
+    transform: translateX(-50%) scale(1.04);
   }
 
   100% {
-    background-position: -44% 25%, -56% 66%;
+    opacity: 1;
+    background-position: 50% 48%, 80% 84%;
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+@keyframes missionAuraDrift {
+  0% {
+    background-position: 50% 48%, 80% 84%;
+  }
+
+  100% {
+    background-position: 56% 42%, 74% 78%;
   }
 }
 
@@ -902,15 +939,67 @@ img {
 
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 6px;
+  grid-template-columns: 1fr;
+  gap: 28px;
 }
 
 .service-card {
   position: relative;
   overflow: hidden;
-  min-height: 390px;
+  display: grid;
+  min-height: clamp(430px, 45vw, 560px);
   border: 0;
+  background: var(--deep);
+}
+
+@supports (animation-timeline: view()) {
+  .service-card {
+    animation-duration: 1ms;
+    animation-fill-mode: both;
+    animation-timeline: view();
+    animation-timing-function: cubic-bezier(.22, 1, .36, 1);
+  }
+
+  .service-card:nth-child(odd) {
+    animation-name: serviceCardSlideFromLeft;
+    animation-range: entry 0% cover 44%;
+  }
+
+  .service-card:nth-child(even) {
+    animation-name: serviceCardSlideFromRight;
+    animation-range: entry 0% cover 44%;
+  }
+}
+
+@keyframes serviceCardSlideFromLeft {
+  from {
+    opacity: .18;
+    transform: translateX(-28vw);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes serviceCardSlideFromRight {
+  from {
+    opacity: .18;
+    transform: translateX(28vw);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.service-card__media {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  min-height: 100%;
   background: var(--deep);
 }
 
@@ -924,18 +1013,24 @@ img {
   transition: transform .35s ease, opacity .35s ease;
 }
 
-.service-card::after {
+.service-card__media::after {
   position: absolute;
   inset: 0;
   content: "";
   background:
-    linear-gradient(180deg, rgba(12, 29, 43, .24), rgba(12, 29, 43, .64)),
-    linear-gradient(90deg, rgba(7, 34, 52, .26), rgba(7, 34, 52, .04));
+    linear-gradient(90deg, rgba(12, 29, 43, .18), rgba(12, 29, 43, .7)),
+    linear-gradient(180deg, rgba(12, 29, 43, .1), rgba(12, 29, 43, .48));
+}
+
+.service-card--reverse .service-card__media::after {
+  background:
+    linear-gradient(270deg, rgba(12, 29, 43, .18), rgba(12, 29, 43, .7)),
+    linear-gradient(180deg, rgba(12, 29, 43, .1), rgba(12, 29, 43, .48));
 }
 
 .service-card:hover img {
-  transform: scale(1.04);
-  opacity: .82;
+  transform: scale(1.035);
+  opacity: .86;
 }
 
 .service-card__body {
@@ -944,23 +1039,29 @@ img {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-height: 390px;
-  padding: 44px 42px 36px;
+  justify-self: end;
+  width: min(520px, 48%);
+  min-height: clamp(430px, 45vw, 560px);
+  padding: clamp(34px, 5vw, 68px);
   color: var(--white);
-  text-align: center;
+  text-align: left;
+}
+
+.service-card--reverse .service-card__body {
+  justify-self: start;
 }
 
 .service-card h3 {
-  margin: 0 0 22px;
-  font-size: clamp(29px, 3vw, 42px);
+  margin: 0 0 20px;
+  font-size: clamp(30px, 3.4vw, 46px);
   font-weight: 800;
   line-height: 1.32;
 }
 
 .service-card p {
-  max-width: 520px;
+  max-width: 540px;
   min-height: 0;
-  margin: 0 auto 28px;
+  margin: 0 0 34px;
   color: rgba(255, 255, 255, .94);
   font-size: 15px;
   font-weight: 700;
@@ -972,7 +1073,7 @@ img {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
   width: min(520px, 100%);
-  margin: auto auto 0;
+  margin: 0;
 }
 
 .small-link {
@@ -1560,6 +1661,10 @@ img {
     display: grid;
   }
 
+  .has-menu::after {
+    content: none;
+  }
+
   .nav-link {
     padding: 13px 12px;
   }
@@ -1631,7 +1736,20 @@ img {
   }
 
   .service-card__body {
+    min-height: auto;
+    justify-self: stretch;
+    width: 100%;
     padding: 22px;
+  }
+
+  .service-card,
+  .service-card--reverse {
+    min-height: auto;
+  }
+
+  .service-card__media,
+  .service-card--reverse .service-card__media {
+    min-height: 100%;
   }
 
   .service-card p {
@@ -1703,6 +1821,10 @@ img {
 
   .section-title {
     font-size: 38px;
+  }
+
+  .service-card__links {
+    grid-template-columns: 1fr;
   }
 
   .service-card__title-row {

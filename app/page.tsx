@@ -32,9 +32,14 @@ export default function Home() {
           </div>
 
           <div className="card-grid">
-            {businesses.map((service) => (
-              <article className="service-card" key={service.title}>
-                <img src={service.image} alt={service.alt} />
+            {businesses.map((service, index) => (
+              <article
+                className={`service-card${index % 2 === 1 ? " service-card--reverse" : ""}`}
+                key={service.title}
+              >
+                <div className="service-card__media">
+                  <img src={service.image} alt={service.alt} />
+                </div>
                 <div className="service-card__body">
                   <h3>{service.title}</h3>
                   <p>{service.summary}</p>
