@@ -16,8 +16,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ja">
-      <body>{children}</body>
+    <html lang="ja" suppressHydrationWarning>
+      <body>
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{var n=performance.getEntriesByType('navigation')[0];if(n&&n.type==='reload'){document.documentElement.classList.add('is-reload');setTimeout(function(){document.documentElement.classList.remove('is-reload')},4300)}}catch(e){}",
+          }}
+        />
+        {children}
+      </body>
     </html>
   );
 }
