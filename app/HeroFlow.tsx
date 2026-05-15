@@ -62,10 +62,32 @@ type AmbientDrop = {
 
 function MissionAmbient({ active }: { active: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas || !active) return;
+    if (!canvas) return;
+
+    if (!("IntersectionObserver" in window)) {
+      setIsVisible(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { rootMargin: "160px 0px", threshold: 0 },
+    );
+
+    observer.observe(canvas);
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas || !active || !isVisible) return;
 
     const reduceMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
@@ -209,19 +231,22 @@ function MissionAmbient({ active }: { active: boolean }) {
       drops = [];
       context.clearRect(0, 0, canvas.width, canvas.height);
     };
-  }, [active]);
+  }, [active, isVisible]);
 
   return <canvas className="intro__ambient" ref={canvasRef} aria-hidden="true" />;
 }
 
 export function HeroFlow() {
   const flowRef = useRef<HTMLDivElement | null>(null);
+  const heroRef = useRef<HTMLElement | null>(null);
   const introRef = useRef<HTMLElement | null>(null);
   const stickyTitleRef = useRef<HTMLHeadingElement | null>(null);
   const introTitleRef = useRef<HTMLHeadingElement | null>(null);
+  const cityVideoRef = useRef<HTMLVideoElement | null>(null);
   const nightVideoRef = useRef<HTMLVideoElement | null>(null);
   const [isIntro, setIsIntro] = useState(false);
   const [isLanded, setIsLanded] = useState(false);
+  const [isHeroVisible, setIsHeroVisible] = useState(true);
 
   useEffect(() => {
     const reduceMotion = window.matchMedia(
@@ -353,13 +378,43 @@ export function HeroFlow() {
   }, []);
 
   useEffect(() => {
+    const hero = heroRef.current;
+    if (!hero || !("IntersectionObserver" in window)) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsHeroVisible(entry.isIntersecting);
+      },
+      { rootMargin: "120px 0px", threshold: 0 },
+    );
+
+    observer.observe(hero);
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const cityVideo = cityVideoRef.current;
+    const nightVideo = nightVideoRef.current;
+
+    if (isHeroVisible) {
+      void cityVideo?.play().catch(() => undefined);
+      return;
+    }
+
+    cityVideo?.pause();
+    nightVideo?.pause();
+  }, [isHeroVisible]);
+
+  useEffect(() => {
     const slideDuration = 18000;
     const nightSlideStart = slideDuration * 0.27;
     let interval: number | null = null;
+    let startTimer: number | null = null;
 
     const playNightVideoFromStart = () => {
       const video = nightVideoRef.current;
-      if (!video) return;
+      if (!video || !isHeroVisible) return;
 
       try {
         video.currentTime = 0;
@@ -369,7 +424,11 @@ export function HeroFlow() {
       }
     };
 
-    const startTimer = window.setTimeout(() => {
+    if (!isHeroVisible) {
+      return () => undefined;
+    }
+
+    startTimer = window.setTimeout(() => {
       playNightVideoFromStart();
       interval = window.setInterval(
         playNightVideoFromStart,
@@ -378,10 +437,10 @@ export function HeroFlow() {
     }, nightSlideStart);
 
     return () => {
-      window.clearTimeout(startTimer);
+      if (startTimer) window.clearTimeout(startTimer);
       if (interval) window.clearInterval(Number(interval));
     };
-  }, []);
+  }, [isHeroVisible]);
 
   return (
     <div
@@ -406,11 +465,12 @@ export function HeroFlow() {
         </div>
       </div>
 
-      <section className="hero" aria-label="CordMark hero">
+      <section className="hero" aria-label="CordMark hero" ref={heroRef}>
         <div className="hero__slides" aria-hidden="true">
           <span className="hero__slide">
             <video
               autoPlay
+              ref={cityVideoRef}
               loop
               muted
               playsInline
