@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { BorderTrace } from "./BorderTrace";
 import { businesses } from "./business/businessData";
 
 const aboutItems = [
@@ -108,8 +109,9 @@ export function Header() {
         <a className="nav-link" href="/#recruit" onClick={() => setIsOpen(false)}>
           採用情報
         </a>
-        <a className="nav-contact" href="/#contact" onClick={() => setIsOpen(false)}>
+        <a className="nav-contact border-spin" href="/#contact" onClick={() => setIsOpen(false)}>
           お問い合わせ
+          <BorderTrace />
         </a>
       </nav>
     </header>

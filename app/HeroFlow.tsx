@@ -2,6 +2,7 @@
 
 import type { CSSProperties } from "react";
 import { useEffect, useRef, useState } from "react";
+import { BorderTrace } from "./BorderTrace";
 
 const heroLines = ["Beyond", "Efficiency,", "Toward", "Culture."];
 const introAnimationDuration = 4300;
@@ -289,8 +290,9 @@ export function HeroFlow() {
           <p>
             CordMarkは、AIと自動化によって、生活と組織の負荷を下げるだけでなく、その先に生まれる余白を人間の営みへと接続します。私たちは、「自律した生活基盤」と「創発する文化的共同体」を通じて、ポストAI社会の生活の器を実装します。
           </p>
-          <a className="pill-link" href="#about">
+          <a className="pill-link border-spin" href="#about">
             私たちについて <span aria-hidden="true"></span>
+            <BorderTrace />
           </a>
         </div>
       </section>

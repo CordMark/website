@@ -1,14 +1,13 @@
 import { Header } from "./Header";
 import { HeroFlow } from "./HeroFlow";
+import { NewsSection } from "./NewsSection";
+import { BorderTrace } from "./BorderTrace";
 import { businesses } from "./business/businessData";
 
-const newsItems = [
-  { date: "2025.05.03", title: "創業", active: true },
-  { date: "2025.04.15", title: "コーポレートサイトを公開しました" },
-  { date: "2025.03.28", title: "YouTubeチャンネルを開設しました" },
-  { date: "2025.03.10", title: "AI・DX支援事業の提供を開始しました" },
-  { date: "2025.02.20", title: "文化共創事業の構想について" },
-];
+const featuredLinkLabels: Record<string, { category: string; title: string }> = {
+  "YouTubeメディア DotCraft": { category: "YouTubeメディア", title: "DotCraft" },
+  "ボードゲーム Laplace": { category: "ボードゲーム", title: "Laplace" },
+};
 
 export default function Home() {
   return (
@@ -44,15 +43,27 @@ export default function Home() {
                   <h3>{service.title}</h3>
                   <p>{service.summary}</p>
                   <div className="service-card__links">
-                    {service.links.map((link) => (
-                      <a
-                        className="small-link"
-                        href={`/business/${service.slug}`}
-                        key={link}
-                      >
-                        {link} <span aria-hidden="true"></span>
-                      </a>
-                    ))}
+                    {service.links.map((link) => {
+                      const featuredLabel = featuredLinkLabels[link];
+
+                      return (
+                        <a
+                          className={`small-link${featuredLabel ? " small-link--featured" : ""}`}
+                          href={`/business/${service.slug}`}
+                          key={link}
+                        >
+                          {featuredLabel ? (
+                            <span className="small-link__label">
+                              <span className="small-link__category">{featuredLabel.category}</span>
+                              <span className="small-link__title">{featuredLabel.title}</span>
+                            </span>
+                          ) : (
+                            link
+                          )}
+                          <span className="small-link__arrow" aria-hidden="true"></span>
+                        </a>
+                      );
+                    })}
                   </div>
                 </div>
               </article>
@@ -60,39 +71,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="section news-section" id="news">
-          <div className="feature-news">
-            <article className="feature">
-              <img
-                src="/assets/news-landscape.jpg"
-                alt="山並みに立つ一本の木"
-              />
-              <p className="section-kicker">創業</p>
-              <h2>2025.05.03</h2>
-            </article>
-
-            <div className="news">
-              <div className="news__head">
-                <p className="section-title">NEWS</p>
-                <a className="pill-link pill-link--compact" href="#contact">
-                  All News <span aria-hidden="true"></span>
-                </a>
-              </div>
-              <div className="news__list" aria-label="ニュース一覧">
-                {newsItems.map((item) => (
-                  <a
-                    className={`news-row${item.active ? " is-active" : ""}`}
-                    href="#contact"
-                    key={`${item.date}-${item.title}`}
-                  >
-                    <time>{item.date}</time>
-                    <span>{item.title}</span>
-                  </a>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
+        <NewsSection />
 
         <section className="join" id="recruit">
           <div className="join__inner">
@@ -109,8 +88,9 @@ export default function Home() {
                 CordMarkは、AIと自動化によって生活と組織の負荷を下げ、文化的共同体が育つ基盤を実装しようとしています。
                 技術だけでなく、事業、場づくり、制度、編集、教育を横断して関わる仲間を求めています。
               </p>
-              <a className="outline-link" href="#contact">
+              <a className="outline-link border-spin" href="#contact">
                 採用情報へ <span aria-hidden="true"></span>
+                <BorderTrace />
               </a>
             </div>
           </div>
