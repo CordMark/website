@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { BorderTrace } from "./BorderTrace";
 
 const heroLines = ["Beyond", "Efficiency,", "Toward", "Culture."];
+const introScrollUnlockDelay = 2150;
 const introAnimationDuration = 4300;
 
 function AnimatedHeroTitle() {
@@ -115,27 +116,29 @@ export function HeroFlow() {
     window.addEventListener("touchmove", preventScroll, scrollLockOptions);
     window.addEventListener("keydown", preventScrollKeys, { capture: true });
 
-    const unlockTimer = window.setTimeout(() => {
+    const unlockScroll = () => {
       root.classList.remove("hero-intro-lock");
       body.classList.remove("hero-intro-lock");
-      root.classList.remove("is-reload");
       window.removeEventListener("wheel", preventScroll, scrollLockOptions);
       window.removeEventListener("touchmove", preventScroll, scrollLockOptions);
       window.removeEventListener("keydown", preventScrollKeys, {
         capture: true,
       });
+    };
+
+    const unlockTimer = window.setTimeout(
+      unlockScroll,
+      introScrollUnlockDelay,
+    );
+    const introEndTimer = window.setTimeout(() => {
+      root.classList.remove("is-reload");
     }, introAnimationDuration);
 
     return () => {
       window.clearTimeout(unlockTimer);
-      root.classList.remove("hero-intro-lock");
-      body.classList.remove("hero-intro-lock");
+      window.clearTimeout(introEndTimer);
+      unlockScroll();
       root.classList.remove("is-reload");
-      window.removeEventListener("wheel", preventScroll, scrollLockOptions);
-      window.removeEventListener("touchmove", preventScroll, scrollLockOptions);
-      window.removeEventListener("keydown", preventScrollKeys, {
-        capture: true,
-      });
       if ("scrollRestoration" in history) {
         history.scrollRestoration = previousScrollRestoration;
       }

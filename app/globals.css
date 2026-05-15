@@ -64,13 +64,13 @@ img {
 
 .site-header.is-scrolled {
   color: var(--deep);
-  background: rgba(255, 255, 255, .94);
+  background: linear-gradient(180deg, rgba(248, 250, 251, .96), rgba(239, 243, 246, .92));
   box-shadow: 0 10px 30px rgba(13, 27, 40, .16);
   backdrop-filter: blur(14px);
 }
 
 .site-header.is-open {
-  background: rgba(255, 255, 255, .96);
+  background: linear-gradient(180deg, rgba(248, 250, 251, .98), rgba(239, 243, 246, .94));
   color: var(--deep);
   box-shadow: 0 10px 30px rgba(13, 27, 40, .16);
   backdrop-filter: blur(14px);
@@ -858,15 +858,22 @@ img {
   stroke-width: 1px;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-dasharray: 100;
-  stroke-dashoffset: 100;
+  stroke-dasharray: 101;
+  stroke-dashoffset: 101;
+  opacity: 0;
   vector-effect: non-scaling-stroke;
-  transition: stroke-dashoffset .64s cubic-bezier(.22, .9, .2, 1);
+  transition:
+    stroke-dashoffset .64s cubic-bezier(.22, .9, .2, 1),
+    opacity 0s linear .64s;
 }
 
 .border-spin:hover .border-trace__line,
 .border-spin:focus-visible .border-trace__line {
   stroke-dashoffset: 0;
+  opacity: 1;
+  transition:
+    stroke-dashoffset .64s cubic-bezier(.22, .9, .2, 1),
+    opacity 0s linear;
 }
 
 .pill-link span,
@@ -1109,6 +1116,8 @@ img {
 
 .small-link {
   position: relative;
+  overflow: hidden;
+  isolation: isolate;
   justify-content: space-between;
   min-height: 48px;
   padding: 0 18px;
@@ -1117,6 +1126,43 @@ img {
   color: var(--ink);
   background: var(--white);
   font-size: 13px;
+  box-shadow: 0 0 0 rgba(8, 22, 35, 0);
+  transition:
+    transform .26s cubic-bezier(.22, .9, .2, 1),
+    box-shadow .26s ease,
+    color .22s ease;
+}
+
+.small-link::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  content: "";
+  background: linear-gradient(135deg, rgba(242, 249, 253, .78), rgba(190, 224, 247, .46) 52%, rgba(118, 178, 226, .34));
+  clip-path: polygon(0 0, 0 0, 0 0);
+  transition: clip-path .72s cubic-bezier(.22, .9, .2, 1);
+}
+
+.small-link:hover,
+.small-link:focus-visible {
+  color: #101c28;
+  box-shadow: 0 14px 28px rgba(8, 22, 35, .22);
+  transform: translateY(-4px);
+}
+
+.small-link:hover::before,
+.small-link:focus-visible::before {
+  clip-path: polygon(0 0, 34rem 0, 0 34rem);
+}
+
+.small-link:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, .72);
+  outline-offset: 3px;
+}
+
+.small-link:hover .small-link__arrow,
+.small-link:focus-visible .small-link__arrow {
+  transform: translate(4px, -50%);
 }
 
 .small-link .small-link__label,
@@ -1174,6 +1220,7 @@ img {
   background: currentColor;
   clip-path: polygon(0 44%, 72% 44%, 72% 0, 100% 50%, 72% 100%, 72% 56%, 0 56%);
   transform: translateY(-50%);
+  transition: transform .26s cubic-bezier(.22, .9, .2, 1);
 }
 
 .news-section {
