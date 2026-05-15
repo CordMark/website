@@ -708,6 +708,7 @@ img {
   left: 50%;
   width: 100vw;
   content: "";
+  clip-path: inset(0);
   pointer-events: none;
   transform: translateX(-50%);
 }
@@ -715,20 +716,28 @@ img {
 .intro::before {
   opacity: 0;
   background:
-    radial-gradient(circle at 72% 34%, rgba(29, 118, 201, .13), transparent 34%),
-    radial-gradient(circle at 18% 78%, rgba(120, 144, 162, .18), transparent 30%),
-    linear-gradient(115deg, rgba(244, 250, 253, .96), rgba(232, 244, 252, .62) 48%, rgba(255, 255, 255, .94));
-  transform: translateX(-50%) scale(1.02);
+    radial-gradient(circle at 70% 36%, rgba(29, 118, 201, .028), transparent 38%),
+    radial-gradient(circle at 22% 76%, rgba(120, 144, 162, .035), transparent 34%),
+    radial-gradient(circle at 50% 18%, rgba(190, 220, 238, .045), transparent 42%),
+    linear-gradient(115deg, rgba(252, 254, 255, .995), rgba(244, 250, 253, .16) 52%, rgba(255, 255, 255, .995));
+  background-position: 72% 34%, 18% 78%, 48% 12%, 0 0;
+  background-size: 150% 150%, 145% 145%, 170% 170%, 100% 100%;
+  filter: blur(18px);
+  transform: translateX(-50%);
 }
 
 .intro::after {
   opacity: 0;
   background:
-    radial-gradient(circle at 58% 46%, rgba(29, 118, 201, .12), transparent 24%),
-    radial-gradient(circle at 84% 82%, rgba(87, 154, 186, .1), transparent 28%);
-  background-size: 120% 120%, 120% 120%;
+    radial-gradient(circle at 50% 48%, rgba(29, 118, 201, .014), transparent 48%),
+    radial-gradient(circle at 80% 82%, rgba(87, 154, 186, .013), transparent 50%),
+    radial-gradient(circle at 30% 32%, rgba(201, 222, 235, .026), transparent 48%),
+    radial-gradient(circle at 44% 86%, rgba(165, 202, 224, .018), transparent 52%);
+  background-position: 50% 48%, 80% 84%, 30% 32%, 44% 86%;
+  background-size: 150% 150%, 160% 160%, 138% 138%, 170% 170%;
+  filter: blur(46px);
   mix-blend-mode: multiply;
-  transform: translateX(-50%) scale(1.04);
+  transform: translateX(-50%);
 }
 
 .hero-flow.is-landed .intro::before {
@@ -736,44 +745,148 @@ img {
 }
 
 .hero-flow.is-landed .intro::after {
-  animation:
-    missionAuraIn .9s cubic-bezier(.2, .8, .2, 1) both,
-    missionAuraDrift 8s ease-in-out .9s infinite alternate;
+  animation: missionAuraIn .9s cubic-bezier(.2, .8, .2, 1) both;
+}
+
+.intro__ambient {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 100vw;
+  height: 100%;
+  opacity: .96;
+  pointer-events: none;
+  filter: blur(10px);
+  transform: translateX(-50%);
 }
 
 @keyframes missionBackgroundBloom {
   0% {
     opacity: 0;
-    transform: translateX(-50%) scale(1.02);
+    transform: translateX(-50%);
   }
 
   100% {
     opacity: 1;
-    transform: translateX(-50%) scale(1);
+    transform: translateX(-50%);
   }
 }
 
 @keyframes missionAuraIn {
   0% {
     opacity: 0;
-    background-position: 54% 44%, 86% 78%;
-    transform: translateX(-50%) scale(1.04);
+    background-position: 54% 44%, 86% 78%, 24% 28%, 48% 88%;
+    transform: translateX(-50%);
   }
 
   100% {
     opacity: 1;
-    background-position: 50% 48%, 80% 84%;
-    transform: translateX(-50%) scale(1);
+    background-position: 50% 48%, 80% 84%, 30% 32%, 44% 86%;
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes missionBackgroundFloat {
+  0% {
+    opacity: .82;
+    background-position: 70% 36%, 22% 76%, 50% 18%, 0 0;
+    background-size: 146% 146%, 142% 142%, 166% 166%, 100% 100%;
+    transform: translateX(-50%);
+  }
+
+  19% {
+    opacity: .96;
+    background-position: 71% 35%, 21% 77%, 51% 17%, 0 0;
+    background-size: 151% 151%, 146% 146%, 172% 172%, 100% 100%;
+    transform: translateX(-50%);
+  }
+
+  43% {
+    opacity: .86;
+    background-position: 69% 37%, 23% 75%, 49% 19%, 0 0;
+    background-size: 148% 148%, 144% 144%, 168% 168%, 100% 100%;
+    transform: translateX(-50%);
+  }
+
+  73% {
+    opacity: .98;
+    background-position: 72% 36%, 22% 78%, 50% 16%, 0 0;
+    background-size: 154% 154%, 149% 149%, 176% 176%, 100% 100%;
+    transform: translateX(-50%);
+  }
+
+  100% {
+    opacity: .88;
+    background-position: 70% 35%, 20% 76%, 52% 18%, 0 0;
+    background-size: 149% 149%, 143% 143%, 170% 170%, 100% 100%;
+    transform: translateX(-50%);
   }
 }
 
 @keyframes missionAuraDrift {
   0% {
-    background-position: 50% 48%, 80% 84%;
+    opacity: .03;
+    background-position: 50% 48%, 80% 84%, 30% 32%, 44% 86%;
+    background-size: 122% 122%, 130% 130%, 112% 112%, 136% 136%;
+    transform: translateX(-50%);
+  }
+
+  11% {
+    opacity: .54;
+    background-position: 50% 48%, 80% 84%, 30% 32%, 44% 86%;
+    background-size: 145% 145%, 154% 154%, 132% 132%, 162% 162%;
+    transform: translateX(-50%);
+  }
+
+  24% {
+    opacity: .16;
+    background-position: 50% 48%, 80% 84%, 30% 32%, 44% 86%;
+    background-size: 164% 164%, 174% 174%, 152% 152%, 184% 184%;
+    transform: translateX(-50%);
+  }
+
+  31% {
+    opacity: .02;
+    background-position: 58% 40%, 74% 78%, 25% 42%, 52% 78%;
+    background-size: 118% 118%, 126% 126%, 108% 108%, 132% 132%;
+    transform: translateX(-50%);
+  }
+
+  47% {
+    opacity: .62;
+    background-position: 58% 40%, 74% 78%, 25% 42%, 52% 78%;
+    background-size: 152% 152%, 138% 138%, 148% 148%, 142% 142%;
+    transform: translateX(-50%);
+  }
+
+  63% {
+    opacity: .12;
+    background-position: 58% 40%, 74% 78%, 25% 42%, 52% 78%;
+    background-size: 174% 174%, 158% 158%, 166% 166%, 164% 164%;
+    transform: translateX(-50%);
+  }
+
+  72% {
+    opacity: .03;
+    background-position: 40% 56%, 86% 70%, 44% 24%, 30% 82%;
+    background-size: 116% 116%, 120% 120%, 126% 126%, 118% 118%;
+    transform: translateX(-50%);
+  }
+
+  88% {
+    opacity: .5;
+    background-position: 40% 56%, 86% 70%, 44% 24%, 30% 82%;
+    background-size: 148% 148%, 164% 164%, 140% 140%, 156% 156%;
+    transform: translateX(-50%);
   }
 
   100% {
-    background-position: 56% 42%, 74% 78%;
+    opacity: .04;
+    background-position: 40% 56%, 86% 70%, 44% 24%, 30% 82%;
+    background-size: 170% 170%, 188% 188%, 164% 164%, 178% 178%;
+    transform: translateX(-50%);
   }
 }
 

@@ -48,6 +48,172 @@ function ColorHeroTitle() {
   );
 }
 
+type AmbientDrop = {
+  x: number;
+  y: number;
+  maxRadius: number;
+  dotRadius: number;
+  life: number;
+  age: number;
+  alpha: number;
+  color: string;
+  hasRipple: boolean;
+};
+
+function MissionAmbient({ active }: { active: boolean }) {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas || !active) return;
+
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    if (reduceMotion) return;
+
+    const context = canvas.getContext("2d", { alpha: true });
+    if (!context) return;
+
+    let frame = 0;
+    let lastTime = performance.now();
+    let spawnIn = 0;
+    let drops: AmbientDrop[] = [];
+    const colors = ["29, 118, 201", "87, 154, 186", "120, 172, 210"];
+
+    const resize = () => {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.max(1, Math.floor(rect.width * dpr));
+      canvas.height = Math.max(1, Math.floor(rect.height * dpr));
+      context.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+
+    const randomBetween = (min: number, max: number) =>
+      min + Math.random() * (max - min);
+
+    const spawnDrop = () => {
+      const rect = canvas.getBoundingClientRect();
+      const isLargeDrop = Math.random() < .18;
+
+      drops.push({
+        x: randomBetween(rect.width * .08, rect.width * .92),
+        y: randomBetween(rect.height * .1, rect.height * .9),
+        maxRadius: isLargeDrop
+          ? randomBetween(rect.width * .4, rect.width * .62)
+          : randomBetween(rect.width * .16, rect.width * .42),
+        dotRadius: isLargeDrop ? randomBetween(9, 15) : randomBetween(4, 10),
+        life: isLargeDrop ? randomBetween(8200, 12800) : randomBetween(5600, 10200),
+        age: 0,
+        alpha: isLargeDrop ? randomBetween(.035, .07) : randomBetween(.045, .085),
+        color: colors[Math.floor(Math.random() * colors.length)],
+        hasRipple: Math.random() < .3,
+      });
+
+      if (drops.length > 14) {
+        drops = drops.slice(-14);
+      }
+    };
+
+    const easeOut = (value: number) => 1 - Math.pow(1 - value, 3);
+    const easeInOut = (value: number) =>
+      value < .5 ? 2 * value * value : 1 - Math.pow(-2 * value + 2, 2) / 2;
+
+    const draw = (time: number) => {
+      const delta = Math.min(48, time - lastTime);
+      lastTime = time;
+      const rect = canvas.getBoundingClientRect();
+
+      context.clearRect(0, 0, rect.width, rect.height);
+
+      spawnIn -= delta;
+      if (spawnIn <= 0) {
+        spawnDrop();
+        spawnIn = randomBetween(600, 1250);
+      }
+
+      drops = drops
+        .map((drop) => ({ ...drop, age: drop.age + delta }))
+        .filter((drop) => drop.age < drop.life);
+
+      for (const drop of drops) {
+        const progress = drop.age / drop.life;
+        const spread = easeOut(progress);
+        const fade = Math.pow(1 - progress, 1.45);
+        const impactLife = drop.hasRipple ? .16 : .58;
+        const arrival = Math.max(0, 1 - progress / impactLife);
+        const radius = Math.max(1, drop.maxRadius * spread);
+        const opacity = drop.alpha * fade;
+
+        if (drop.hasRipple) {
+          const gradient = context.createRadialGradient(
+            drop.x,
+            drop.y,
+            0,
+            drop.x,
+            drop.y,
+            radius,
+          );
+
+          context.filter = "blur(18px)";
+          gradient.addColorStop(0, `rgba(${drop.color}, ${opacity * .28})`);
+          gradient.addColorStop(
+            .34 + easeInOut(progress) * .12,
+            `rgba(${drop.color}, ${opacity * .2})`,
+          );
+          gradient.addColorStop(
+            .72,
+            `rgba(${drop.color}, ${opacity * .08})`,
+          );
+          gradient.addColorStop(1, `rgba(${drop.color}, 0)`);
+
+          context.fillStyle = gradient;
+          context.fillRect(0, 0, rect.width, rect.height);
+        }
+
+        if (arrival > 0) {
+          const dotSpread = drop.hasRipple ? 1 - progress / .16 : 1 + progress * 2.8;
+          const dotRadius = drop.dotRadius * Math.max(.25, dotSpread);
+          const dot = context.createRadialGradient(
+            drop.x,
+            drop.y,
+            0,
+            drop.x,
+            drop.y,
+            dotRadius * (drop.hasRipple ? 7 : 12),
+          );
+
+          const dotAlpha = drop.hasRipple ? arrival * .16 : arrival * .095;
+
+          context.filter = drop.hasRipple ? "none" : "blur(12px)";
+          dot.addColorStop(0, `rgba(${drop.color}, ${dotAlpha})`);
+          dot.addColorStop(.3, `rgba(${drop.color}, ${dotAlpha * .48})`);
+          dot.addColorStop(1, `rgba(${drop.color}, 0)`);
+          context.fillStyle = dot;
+          context.fillRect(0, 0, rect.width, rect.height);
+        }
+
+        context.filter = "none";
+      }
+
+      frame = window.requestAnimationFrame(draw);
+    };
+
+    resize();
+    window.addEventListener("resize", resize);
+    frame = window.requestAnimationFrame(draw);
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("resize", resize);
+      drops = [];
+      context.clearRect(0, 0, canvas.width, canvas.height);
+    };
+  }, [active]);
+
+  return <canvas className="intro__ambient" ref={canvasRef} aria-hidden="true" />;
+}
+
 export function HeroFlow() {
   const flowRef = useRef<HTMLDivElement | null>(null);
   const introRef = useRef<HTMLElement | null>(null);
@@ -272,6 +438,7 @@ export function HeroFlow() {
       </section>
 
       <section className="intro" id="about" ref={introRef}>
+        <MissionAmbient active={isLanded} />
         <div className="intro__statement">
           <h2 ref={introTitleRef}>
             Beyond

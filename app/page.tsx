@@ -4,10 +4,14 @@ import { NewsSection } from "./NewsSection";
 import { BorderTrace } from "./BorderTrace";
 import { businesses } from "./business/businessData";
 
-const featuredLinkLabels: Record<string, { category: string; title: string }> = {
-  "YouTubeメディア DotCraft": { category: "YouTubeメディア", title: "DotCraft" },
-  "ボードゲーム Laplace": { category: "ボードゲーム", title: "Laplace" },
-};
+const featuredLinkLabels: Record<string, { category: string; title: string }> =
+  {
+    "YouTubeメディア DotCraft": {
+      category: "YouTubeメディア",
+      title: "DotCraft",
+    },
+    "ボードゲーム Laplace": { category: "ボードゲーム", title: "Laplace" },
+  };
 
 export default function Home() {
   return (
@@ -21,12 +25,10 @@ export default function Home() {
           <div className="section__head two-col">
             <div>
               <p className="section-title">SERVICE</p>
-              <p>自動化から、文化的共同体の実装まで</p>
+              <p>自動化から、文化共創まで</p>
             </div>
             <p>
-              私たちは、AI導入・DX支援と生活圏づくりを通じて、暮らしと組織の運営を軽くし、
-              人が本来の営みに向き合える余白を生み出します。現場に入り、地域や施設と共創しながら、
-              学び・制作・交流・自治が生まれる仕組みを、サービスや運営モデルとして事業化します。
+              CordMarkは、業務改善・AI活用・自動化を通じて、組織や施設の運営負荷を下げる仕組みを実装します。さらに、人々に生まれる余白を文化的な営みへとつなぐサービスを展開し、暮らしと組織の新しいあり方をつくります。
             </p>
           </div>
 
@@ -54,13 +56,20 @@ export default function Home() {
                         >
                           {featuredLabel ? (
                             <span className="small-link__label">
-                              <span className="small-link__category">{featuredLabel.category}</span>
-                              <span className="small-link__title">{featuredLabel.title}</span>
+                              <span className="small-link__category">
+                                {featuredLabel.category}
+                              </span>
+                              <span className="small-link__title">
+                                {featuredLabel.title}
+                              </span>
                             </span>
                           ) : (
                             link
                           )}
-                          <span className="small-link__arrow" aria-hidden="true"></span>
+                          <span
+                            className="small-link__arrow"
+                            aria-hidden="true"
+                          ></span>
                         </a>
                       );
                     })}
@@ -85,8 +94,7 @@ export default function Home() {
             </div>
             <div>
               <p>
-                CordMarkは、AIと自動化によって生活と組織の負荷を下げ、文化的共同体が育つ基盤を実装しようとしています。
-                技術だけでなく、事業、場づくり、制度、編集、教育を横断して関わる仲間を求めています。
+                CordMarkは、AIによる変化を単なる技術革新ではなく、千年単位で続いてきた生活様式が組み替わる転換点として捉えています。暮らし、組織、文化の新しい基盤を、事業として共に実装していく仲間を求めています。
               </p>
               <a className="outline-link border-spin" href="#contact">
                 採用情報へ <span aria-hidden="true"></span>
