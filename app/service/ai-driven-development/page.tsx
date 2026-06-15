@@ -1,6 +1,26 @@
 import { Header } from "../../Header";
 
-const painPoints = [
+type AidIconType =
+  | "bars"
+  | "chart"
+  | "check"
+  | "clock"
+  | "document"
+  | "flow"
+  | "grid"
+  | "list"
+  | "person"
+  | "shield"
+  | "tag"
+  | "user-circle";
+
+type AidCardItem = {
+  icon: AidIconType;
+  title: string;
+  body: string;
+};
+
+const painPoints: AidCardItem[] = [
   {
     icon: "person",
     title: "個人任せで",
@@ -40,7 +60,7 @@ const programBullets = [
   "6週間の実装パイロット計画を提案",
 ];
 
-const diagnosisSteps = [
+const diagnosisSteps: Array<{ step: string; title: string; icon: AidIconType }> = [
   {
     step: "STEP 1",
     title: "現状ヒアリング・プロセス整理",
@@ -68,7 +88,7 @@ const diagnosisSteps = [
   },
 ];
 
-const deliverables = [
+const deliverables: AidCardItem[] = [
   {
     icon: "list",
     title: "AI活用候補リスト",
@@ -96,7 +116,7 @@ const deliverables = [
   },
 ];
 
-const offerFacts = [
+const offerFacts: Array<{ icon: AidIconType; label: string; value: string }> = [
   {
     icon: "clock",
     label: "期間",
@@ -148,7 +168,7 @@ function TagIcon() {
   );
 }
 
-function AidIcon({ type }: { type: string }) {
+function AidIcon({ type }: { type: AidIconType }) {
   if (type === "clock") return <ClockIcon />;
   if (type === "tag") return <TagIcon />;
   if (type === "person") return <PeopleIcon />;
@@ -235,6 +255,22 @@ function AidIcon({ type }: { type: string }) {
   );
 }
 
+function AidInfoCard({
+  className,
+  item,
+}: {
+  className: "aid-problem" | "aid-deliverable";
+  item: AidCardItem;
+}) {
+  return (
+    <article className={className}>
+      <AidIcon type={item.icon} />
+      <h3>{item.title}</h3>
+      <p>{item.body}</p>
+    </article>
+  );
+}
+
 export default function AiDrivenDevelopmentPage() {
   return (
     <>
@@ -286,11 +322,7 @@ export default function AiDrivenDevelopmentPage() {
           </div>
           <div className="aid-problem-grid">
             {painPoints.map((point) => (
-              <article className="aid-problem" key={`${point.title}-${point.body}`}>
-                <AidIcon type={point.icon} />
-                <h3>{point.title}</h3>
-                <p>{point.body}</p>
-              </article>
+              <AidInfoCard className="aid-problem" item={point} key={point.title} />
             ))}
           </div>
         </section>
@@ -337,11 +369,7 @@ export default function AiDrivenDevelopmentPage() {
           </div>
           <div className="aid-deliverable-grid">
             {deliverables.map((item) => (
-              <article className="aid-deliverable" key={item.title}>
-                <AidIcon type={item.icon} />
-                <h3>{item.title}</h3>
-                <p>{item.body}</p>
-              </article>
+              <AidInfoCard className="aid-deliverable" item={item} key={item.title} />
             ))}
           </div>
         </section>

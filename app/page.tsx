@@ -66,7 +66,22 @@ const howWorkItems = [
   },
 ];
 
-const works = [
+const workVisualImages = {
+  development: "/assets/implementation-development.png",
+  workflow: "/assets/implementation-workflow.png",
+  agent: "/assets/implementation-agent.png",
+  product: "/assets/implementation-product.png",
+} as const;
+
+type WorkVisualVariant = keyof typeof workVisualImages;
+
+const works: Array<{
+  visual: WorkVisualVariant;
+  category: string;
+  title: string;
+  description: string;
+  kpi: string;
+}> = [
   {
     visual: "development",
     category: "AI-DRIVEN DEVELOPMENT",
@@ -166,164 +181,10 @@ function PhilosophyIcon({ type }: { type: PhilosophyIconType }) {
   );
 }
 
-function WorkVisual({ variant }: { variant: string }) {
-  const imageByVariant: Record<string, string> = {
-    development: "/assets/implementation-development.png",
-    workflow: "/assets/implementation-workflow.png",
-    agent: "/assets/implementation-agent.png",
-    product: "/assets/implementation-product.png",
-  };
-
-  if (imageByVariant[variant]) {
-    return (
-      <div className="work-visual" aria-hidden="true">
-        <img className="work-visual__image" src={imageByVariant[variant]} alt="" />
-      </div>
-    );
-  }
-
-  if (variant === "development") {
-    return (
-      <div className="work-visual work-visual--development" aria-hidden="true">
-        <div className="dev-mock">
-          <div className="dev-mock__top">
-            <strong>Pull Request #3421</strong>
-            <span>Open</span>
-          </div>
-          <div className="dev-mock__tabs">
-            <span>Conversation</span>
-            <span>Commits</span>
-            <span>Checks</span>
-            <span>Files changed</span>
-          </div>
-          <div className="dev-mock__workspace">
-            <div className="dev-mock__files">
-              <span>Files changed</span>
-              <i></i>
-              <p>src/api/auth.ts</p>
-              <p>src/services/user.ts</p>
-              <p>src/components/UserList.tsx</p>
-            </div>
-            <div className="dev-mock__code">
-              <span>110</span>
-              <span>111</span>
-              <span>112</span>
-              <span>113</span>
-              <span>114</span>
-              <span>115</span>
-              <span>116</span>
-            </div>
-          </div>
-          <div className="dev-mock__review">
-            <strong>AI Review</strong>
-            <p>エラーハンドリングの網羅性を向上させることを推奨します。</p>
-            <span>提案を適用</span>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (variant === "workflow") {
-    return (
-      <div className="work-visual work-visual--workflow" aria-hidden="true">
-        <div className="flow-mock">
-          <div className="flow-mock__top">
-            <strong>営業・CSワークフロー</strong>
-            <span>有効</span>
-          </div>
-          <div className="flow-step">
-            <i>@</i>
-            <div>
-              <strong>問い合わせ受信</strong>
-              <span>Webフォーム / メール</span>
-            </div>
-          </div>
-          <div className="flow-step">
-            <i>+</i>
-            <div>
-              <strong>AIが内容を要約・分類</strong>
-              <span>Intent / 優先度 / 製品カテゴリ</span>
-            </div>
-          </div>
-          <div className="flow-step">
-            <i>U</i>
-            <div>
-              <strong>担当者に自動割り当て</strong>
-              <span>スキル・稼働状況を考慮</span>
-            </div>
-          </div>
-          <div className="flow-step">
-            <i>✓</i>
-            <div>
-              <strong>回答・提案を生成して送信</strong>
-              <span>AIドラフト → 確認 → 送信</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (variant === "agent") {
-    return (
-      <div className="work-visual work-visual--agent" aria-hidden="true">
-        <div className="agent-mock">
-          <aside>
-            <strong>AI</strong>
-            <span>ホーム</span>
-            <span className="is-active">チャット</span>
-            <span>ナレッジ</span>
-            <span>ドキュメント</span>
-            <span>FAQ</span>
-          </aside>
-          <div className="agent-mock__main">
-            <h4>AI Assistant</h4>
-            <p className="agent-mock__question">経費精算の締め切りはいつですか？</p>
-            <div className="agent-mock__answer">
-              <p>経費精算の締め切りは、毎月末日です。</p>
-              <ul>
-                <li>経費精算ガイドライン v2.1</li>
-                <li>経費精算フロー</li>
-                <li>よくある質問（経費精算）</li>
-              </ul>
-            </div>
-            <span className="agent-mock__input">別の質問を入力してください...</span>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
+function WorkVisual({ variant }: { variant: WorkVisualVariant }) {
   return (
-    <div className="work-visual work-visual--product" aria-hidden="true">
-      <div className="product-mock">
-        <aside>
-          <strong>ACME</strong>
-          <span className="is-active">ダッシュボード</span>
-          <span>分析</span>
-          <span>顧客</span>
-          <span>レポート</span>
-        </aside>
-        <div className="product-mock__dashboard">
-          <h4>ダッシュボード</h4>
-          <div className="product-mock__stats">
-            <span>売上 548,560,000</span>
-            <span>アクティブユーザー 12,845</span>
-          </div>
-          <div className="product-mock__chart"></div>
-          <div className="product-mock__bars">
-            <i></i>
-            <i></i>
-            <i></i>
-          </div>
-        </div>
-        <div className="product-mock__insight">
-          <strong>AIインサイト</strong>
-          <p>売上は堅調に推移しています。</p>
-          <span>詳細を確認</span>
-        </div>
-      </div>
+    <div className="work-visual" aria-hidden="true">
+      <img className="work-visual__image" src={workVisualImages[variant]} alt="" />
     </div>
   );
 }
