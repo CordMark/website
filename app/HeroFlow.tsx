@@ -244,6 +244,8 @@ export function HeroFlow() {
   const introTitleRef = useRef<HTMLHeadingElement | null>(null);
   const cityVideoRef = useRef<HTMLVideoElement | null>(null);
   const nightVideoRef = useRef<HTMLVideoElement | null>(null);
+  const cityVideoVisibleRef = useRef(false);
+  const nightVideoVisibleRef = useRef(false);
   const [isIntro, setIsIntro] = useState(false);
   const [isLanded, setIsLanded] = useState(false);
   const [isHeroVisible, setIsHeroVisible] = useState(true);
@@ -394,51 +396,73 @@ export function HeroFlow() {
   }, []);
 
   useEffect(() => {
-    const cityVideo = cityVideoRef.current;
-    const nightVideo = nightVideoRef.current;
-
-    if (isHeroVisible) {
-      void cityVideo?.play().catch(() => undefined);
-      return;
-    }
-
-    cityVideo?.pause();
-    nightVideo?.pause();
-  }, [isHeroVisible]);
-
-  useEffect(() => {
     const slideDuration = 18000;
-    const nightSlideStart = slideDuration * 0.27;
     let interval: number | null = null;
-    let startTimer: number | null = null;
 
-    const playNightVideoFromStart = () => {
-      const video = nightVideoRef.current;
-      if (!video || !isHeroVisible) return;
-
+    const resetAndPause = (video: HTMLVideoElement | null) => {
+      if (!video) return;
+      video.pause();
       try {
-        video.currentTime = 0;
-        void video.play().catch(() => undefined);
+        if (video.currentTime !== 0) video.currentTime = 0;
       } catch {
         // Ignore browsers that reject seeking before metadata is ready.
       }
     };
 
+    const playFromStart = (video: HTMLVideoElement | null) => {
+      if (!video) return;
+
+      try {
+        video.currentTime = 0;
+      } catch {
+        // Ignore browsers that reject seeking before metadata is ready.
+      }
+
+      void video.play().catch(() => undefined);
+    };
+
+    const syncVideo = (
+      video: HTMLVideoElement | null,
+      visibleRef: { current: boolean },
+      shouldBeVisible: boolean,
+    ) => {
+      if (visibleRef.current === shouldBeVisible) return;
+
+      visibleRef.current = shouldBeVisible;
+
+      if (shouldBeVisible) {
+        playFromStart(video);
+        return;
+      }
+
+      resetAndPause(video);
+    };
+
     if (!isHeroVisible) {
-      return () => undefined;
+      syncVideo(cityVideoRef.current, cityVideoVisibleRef, false);
+      syncVideo(nightVideoRef.current, nightVideoVisibleRef, false);
+      return () => {
+        if (interval) window.clearInterval(interval);
+      };
     }
 
-    startTimer = window.setTimeout(() => {
-      playNightVideoFromStart();
-      interval = window.setInterval(
-        playNightVideoFromStart,
-        slideDuration,
-      );
-    }, nightSlideStart);
+    const startedAt = performance.now();
+
+    const syncVideoToSlide = () => {
+      const progress =
+        ((performance.now() - startedAt) % slideDuration) / slideDuration;
+      const shouldShowCity = progress < 0.35 || progress >= 0.93;
+      const shouldShowNight = progress >= 0.27 && progress < 0.68;
+
+      syncVideo(cityVideoRef.current, cityVideoVisibleRef, shouldShowCity);
+      syncVideo(nightVideoRef.current, nightVideoVisibleRef, shouldShowNight);
+    };
+
+    syncVideoToSlide();
+    interval = window.setInterval(syncVideoToSlide, 80);
 
     return () => {
-      if (startTimer) window.clearTimeout(startTimer);
-      if (interval) window.clearInterval(Number(interval));
+      if (interval) window.clearInterval(interval);
     };
   }, [isHeroVisible]);
 

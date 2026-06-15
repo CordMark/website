@@ -1,117 +1,89 @@
 "use client";
 
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { BorderTrace } from "./BorderTrace";
-import { businesses } from "./business/businessData";
+import { useEffect, useLayoutEffect, useState } from "react";
 
-const aboutItems = [
-  { href: "/about?tab=mission", label: "ミッション" },
-  { href: "/about?tab=principles", label: "行動指針" },
-  { href: "/about?tab=company", label: "会社概要" },
+const navItems = [
+  { href: "#about", label: "About" },
+  { href: "#services", label: "Services" },
+  { href: "#how-we-work", label: "How We Work" },
+  { href: "#cases", label: "Cases" },
 ];
 
-const businessItems = businesses.map((business) => ({
-  href: `/business/${business.slug}`,
-  label: business.title,
-}));
-
 export function Header() {
-  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
+  useLayoutEffect(() => {
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+
+    if (window.location.hash) {
+      window.history.replaceState(
+        null,
+        "",
+        `${window.location.pathname}${window.location.search}`,
+      );
+    }
+
+    window.scrollTo(0, 0);
+  }, []);
+
   useEffect(() => {
-    const updateHeader = () => {
-      if (pathname !== "/") {
-        setIsScrolled(true);
-        return;
-      }
-
-      const stickyTitle = document.querySelector(".hero-sticky h1");
-      const introTitle = document.querySelector(".intro__statement h2");
-
-      if (stickyTitle && introTitle) {
-        const stickyTop = stickyTitle.getBoundingClientRect().top;
-        const introTop = introTitle.getBoundingClientRect().top;
-        setIsScrolled(introTop <= stickyTop + 2);
-        return;
-      }
-
-      setIsScrolled(false);
-    };
+    const updateHeader = () => setIsScrolled(window.scrollY > 10);
 
     updateHeader();
     window.addEventListener("scroll", updateHeader, { passive: true });
-    window.addEventListener("resize", updateHeader);
 
-    return () => {
-      window.removeEventListener("scroll", updateHeader);
-      window.removeEventListener("resize", updateHeader);
-    };
-  }, [pathname]);
+    return () => window.removeEventListener("scroll", updateHeader);
+  }, []);
 
   useEffect(() => {
     document.body.classList.toggle("nav-open", isOpen);
+
     return () => document.body.classList.remove("nav-open");
   }, [isOpen]);
 
+  const closeMenu = () => setIsOpen(false);
+
   return (
-    <header
-      className={`site-header${isScrolled ? " is-scrolled" : ""}${
-        isOpen ? " is-open" : ""
-      }`}
-      data-header
-    >
-      <a className="brand" href="/" aria-label="CordMark home">
+    <header className={`site-header${isScrolled ? " is-scrolled" : ""}`}>
+      <a className="brand" href="#top" aria-label="CordMark home" onClick={closeMenu}>
         CordMark
       </a>
-      <button
-        className="nav-toggle"
-        type="button"
-        aria-label="メニューを開く"
-        aria-expanded={isOpen}
-        onClick={() => setIsOpen((current) => !current)}
-      >
-        <span></span>
-        <span></span>
-      </button>
-      <nav className="site-nav" data-nav>
-        <div className="nav-item has-menu">
-          <a className="nav-link" href="/about" onClick={() => setIsOpen(false)}>
-            私たちについて <span className="nav-caret" aria-hidden="true"></span>
-          </a>
-          <div className="nav-menu">
-            {aboutItems.map((item) => (
-              <a key={item.href} href={item.href} onClick={() => setIsOpen(false)}>
-                {item.label}
-              </a>
-            ))}
-          </div>
-        </div>
 
-        <div className="nav-item has-menu">
-          <a className="nav-link" href="/#business" onClick={() => setIsOpen(false)}>
-            事業内容 <span className="nav-caret" aria-hidden="true"></span>
+      <nav className="site-nav" aria-label="Primary navigation">
+        {navItems.map((item) => (
+          <a key={item.href} href={item.href}>
+            {item.label}
           </a>
-          <div className="nav-menu">
-            {businessItems.map((item) => (
-              <a key={item.href} href={item.href} onClick={() => setIsOpen(false)}>
-                {item.label}
-              </a>
-            ))}
-          </div>
-        </div>
+        ))}
+      </nav>
 
-        <a className="nav-link" href="/#news" onClick={() => setIsOpen(false)}>
-          ニュース
+      <div className="header-actions">
+        <a className="header-contact" href="#contact">
+          Contact
         </a>
-        <a className="nav-link" href="/#recruit" onClick={() => setIsOpen(false)}>
-          採用情報
-        </a>
-        <a className="nav-contact border-spin" href="/#contact" onClick={() => setIsOpen(false)}>
-          お問い合わせ
-          <BorderTrace />
+        <button
+          className="menu-button"
+          type="button"
+          aria-label={isOpen ? "メニューを閉じる" : "メニューを開く"}
+          aria-expanded={isOpen}
+          onClick={() => setIsOpen((current) => !current)}
+        >
+          <span>Menu</span>
+          <i aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <nav className={`mobile-nav${isOpen ? " is-open" : ""}`} aria-label="Mobile navigation">
+        {navItems.map((item) => (
+          <a key={item.href} href={item.href} onClick={closeMenu}>
+            {item.label}
+          </a>
+        ))}
+        <a href="#contact" onClick={closeMenu}>
+          Contact
         </a>
       </nav>
     </header>
