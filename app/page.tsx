@@ -1,5 +1,3 @@
-import { Header } from "./Header";
-
 const trustItems = [
   "Enterprise AI",
   "AI Native Studio",
@@ -192,8 +190,6 @@ function WorkVisual({ variant }: { variant: WorkVisualVariant }) {
 export default function Home() {
   return (
     <>
-      <Header />
-
       <main id="top" className="site-main">
         <section className="hero-section" aria-labelledby="hero-heading">
           <div className="hero-section__copy">
@@ -204,10 +200,10 @@ export default function Home() {
               <br />
               systems.
             </h1>
-            <p>
-              企業の意思決定、業務プロセス、プロダクト開発を、AI前提の構造へ再設計する。
+            <p className="hero-section__lead">
+              <span>企業の意思決定、業務プロセス、プロダクト開発を、AI前提の構造へ再設計する。</span>
               <br />
-              私たちは、構想だけで終わらせず、現場で動くAI Nativeな仕組みまで実装します。
+              <span>私たちは、構想だけで終わらせず、現場で動くAI Nativeな仕組みまで実装します。</span>
             </p>
             <a className="button button--dark" href="#services">
               AI Native Strategy <span aria-hidden="true">→</span>
@@ -246,7 +242,7 @@ export default function Home() {
             </a>
           </div>
           <div className="who-section__image" aria-hidden="true">
-            <img src="/assets/lp-layer-stack.png" alt="" />
+            <img src="/assets/lp-who-we-are-layer-stack.png" alt="" />
           </div>
         </section>
 
@@ -365,8 +361,8 @@ export default function Home() {
               人間が担うべき仕事を再定義することだ。
             </h2>
             <p>
-              AIは単なる効率化装置ではありません。企業にとってのAIは、情報を読み、
-              判断を補助し、実行を支え、学習を蓄積する新しい神経系です。
+              AIは単なる効率化のための道具ではありません。企業にとってのAIは、情報を読み取り、
+              判断を助け、実行を支え、学習を積み重ねていく、業務の新しい基盤です。
             </p>
             <p>
               だから私たちは、AIを「便利な道具」としてではなく、組織の構造を変える力として扱います。

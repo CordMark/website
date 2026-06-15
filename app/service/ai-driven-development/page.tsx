@@ -1,5 +1,3 @@
-import { Header } from "../../Header";
-
 type AidIconType =
   | "bars"
   | "chart"
@@ -7,9 +5,11 @@ type AidIconType =
   | "clock"
   | "document"
   | "flow"
+  | "growth"
   | "grid"
   | "list"
   | "person"
+  | "scissors"
   | "shield"
   | "tag"
   | "user-circle";
@@ -20,36 +20,96 @@ type AidCardItem = {
   body: string;
 };
 
+type AidOutcomeStep = {
+  step: string;
+  icon: AidIconType;
+  title: string;
+  body: string[];
+};
+
+type AidPhaseItem = {
+  phase: string;
+  title: string;
+  emphasis: string;
+  body: string[];
+  featured?: boolean;
+};
+
 const painPoints: AidCardItem[] = [
   {
+    icon: "scissors",
+    title: "AIツールを入れても",
+    body: "開発成果につながらない",
+  },
+  {
     icon: "person",
-    title: "個人任せで",
-    body: "組織的に活用できていない",
+    title: "個人活用に留まり、",
+    body: "チーム標準になっていない",
   },
   {
     icon: "flow",
-    title: "どの工程にAIを",
-    body: "入れるべきか分からない",
+    title: "レビュー・テスト・",
+    body: "ドキュメント生成が分断している",
   },
   {
     icon: "bars",
-    title: "効果が出ているか",
-    body: "測定できていない",
-  },
-  {
-    icon: "user-circle",
-    title: "一部の強い人に",
-    body: "属人化してしまう",
+    title: "KPIで",
+    body: "効果検証できていない",
   },
   {
     icon: "shield",
-    title: "セキュリティや品質への",
-    body: "不安で踏み出せない",
+    title: "現場に合う",
+    body: "運用ルールがない",
   },
   {
+    icon: "user-circle",
+    title: "ナレッジが",
+    body: "属人化している",
+  },
+];
+
+const outcomeSteps: AidOutcomeStep[] = [
+  {
+    step: "STEP 1",
     icon: "document",
-    title: "経営層に投資対効果を",
-    body: "説明できない",
+    title: "診断する",
+    body: ["開発プロセスを見直し、", "AI活用余地と課題を可視化"],
+  },
+  {
+    step: "STEP 2",
+    icon: "flow",
+    title: "改善を設計・実装する",
+    body: ["効果の高いテーマを選び、", "AIワークフローを組み込む"],
+  },
+  {
+    step: "STEP 3",
+    icon: "growth",
+    title: "定着させる",
+    body: ["運用ルール・教育・共有を整え、", "継続活用につなげる"],
+  },
+];
+
+const targetProcesses = ["仕様策定", "実装", "レビュー", "テスト", "ドキュメント", "運用"];
+
+const developmentPhases: AidPhaseItem[] = [
+  {
+    phase: "PHASE 1",
+    title: "AI駆動開発プロセス診断",
+    emphasis: "2週間",
+    body: ["AIを入れるべき工程と、", "測定KPI・優先テーマを整理します。"],
+    featured: true,
+  },
+  {
+    phase: "PHASE 2",
+    title: "6週間実装パイロット",
+    emphasis: "6週間",
+    body: ["選定テーマにAIワークフロー・", "開発環境・運用ルールを実装します。"],
+  },
+  {
+    phase: "PHASE 3",
+    title: "定着・横展開支援",
+    emphasis: "継続的",
+    body: ["利用状況とKPIを見ながら、", "チーム標準として定着・展開します。"],
   },
 ];
 
@@ -245,10 +305,32 @@ function AidIcon({ type }: { type: AidIconType }) {
           <path d="m6 17 7-7 7 4 7-8" />
         </>
       )}
+      {type === "growth" && (
+        <>
+          <path d="m7 18 7-7 6 5 9-10" />
+          <path d="M24 6h5v5" />
+          <circle cx="10" cy="25" r="2.4" />
+          <circle cx="18" cy="23" r="2.4" />
+          <circle cx="26" cy="25" r="2.4" />
+          <path d="M5.8 31c1.1-2.9 2.5-4.4 4.2-4.4s3.1 1.5 4.2 4.4" />
+          <path d="M13.8 31c1.1-2.9 2.5-4.4 4.2-4.4s3.1 1.5 4.2 4.4" />
+          <path d="M21.8 31c1.1-2.9 2.5-4.4 4.2-4.4s3.1 1.5 4.2 4.4" />
+        </>
+      )}
       {type === "check" && (
         <>
           <circle cx="18" cy="18" r="14" />
           <path d="m12 18.4 4 4 8.2-9" />
+        </>
+      )}
+      {type === "scissors" && (
+        <>
+          <circle cx="10.2" cy="25.8" r="3.6" />
+          <circle cx="25.8" cy="25.8" r="3.6" />
+          <path d="m13 23.1 15-15" />
+          <path d="m23 23.1-15-15" />
+          <path d="M15.2 20.8 20.8 26.4" />
+          <path d="M20.8 20.8 15.2 26.4" />
         </>
       )}
     </svg>
@@ -273,52 +355,44 @@ function AidInfoCard({
 
 export default function AiDrivenDevelopmentPage() {
   return (
-    <>
-      <Header />
-      <main id="top" className="aid-page site-main">
-        <section className="aid-hero" aria-labelledby="aid-heading">
-          <div className="aid-hero__copy">
-            <p className="aid-kicker">AI-Driven Development</p>
-            <h1 id="aid-heading">
-              開発組織を、
-              <br />
-              AI前提のプロセスへ。
-            </h1>
-            <p className="aid-lead">
-              AIコーディングツールは、個人単位の利用で止まりがちです。
-              <br />
-              CordMarkは、仕様・実装・レビュー・テスト・ドキュメント・
-              <br />
-              KPI測定まで、開発プロセス全体をAI前提に再設計します。
-            </p>
-            <p className="aid-hero-note">
-              まずは2週間の「AI駆動開発プロセス診断」で、御社の開発組織のどこにAIを入れるべきか、
-              何を測るべきか、次に何を実装すべきかを明確にします。
-            </p>
+    <main id="top" className="aid-page site-main">
+      <section className="aid-hero" aria-labelledby="aid-heading">
+        <div className="aid-hero__copy">
+          <p className="aid-kicker">AI-DRIVEN DEVELOPMENT</p>
+          <h1 id="aid-heading">
+            開発組織を、
+            <br />
+            AI前提の
+            <br className="aid-mobile-only-break" />
+            プロセスへ。
+          </h1>
+          <p className="aid-lead">
+            CordMarkは、仕様・実装・レビュー・テスト・ドキュメント・KPI測定まで、
+            <br />
+            開発プロセス全体をAI前提に再設計します。
+          </p>
+          <p className="aid-hero-note">
+            開発組織をAI駆動に変えます。その最初の入口が2週間診断です。
+          </p>
 
-            <div className="aid-actions">
-              <a className="aid-primary" href="#contact">
-                診断について相談する <span aria-hidden="true">→</span>
-              </a>
-              <a className="aid-secondary" href="#kpi-example">
-                KPI測定の例を見る <span aria-hidden="true">→</span>
-              </a>
-            </div>
+          <div className="aid-actions">
+            <a className="aid-primary" href="#contact">
+              診断について相談する <span aria-hidden="true">→</span>
+            </a>
+            <a className="aid-secondary" href="#diagnosis-steps">
+              提供ステップを見る <span aria-hidden="true">→</span>
+            </a>
           </div>
+        </div>
 
-          <div className="aid-hero__visual" aria-hidden="true">
-            <img src="/assets/ai-driven-development-hero.png" alt="" />
-          </div>
-        </section>
+        <div className="aid-hero__visual" aria-hidden="true">
+          <img src="/assets/ai-driven-development-hero.png" alt="" />
+        </div>
+      </section>
 
         <section className="aid-problems" aria-labelledby="aid-problems-heading">
-          <div className="aid-section-head aid-section-head--center">
-            <p className="aid-kicker">よくある課題</p>
-            <h2 id="aid-problems-heading">
-              AIツールを入れても、
-              <br />
-              開発組織はまだAI Nativeになっていない。
-            </h2>
+          <div className="aid-section-head aid-section-head--center aid-section-head--compact">
+            <h2 id="aid-problems-heading">よくある課題</h2>
           </div>
           <div className="aid-problem-grid">
             {painPoints.map((point) => (
@@ -327,7 +401,77 @@ export default function AiDrivenDevelopmentPage() {
           </div>
         </section>
 
-        <section className="aid-diagnosis" aria-labelledby="aid-diagnosis-heading">
+        <section className="aid-outcomes" aria-labelledby="aid-outcomes-heading">
+          <div className="aid-outcomes__head">
+            <h2 id="aid-outcomes-heading">AI-Driven Developmentで実現すること</h2>
+            <p>
+              お客様の開発プロセスが本当に最適化され、AIを最大活用できているかを診断し、
+              <br />
+              改善を設計・実装して、定着まで伴走支援します。
+            </p>
+          </div>
+
+          <div className="aid-outcome-steps">
+            {outcomeSteps.map((item, index) => (
+              <div className="aid-outcome-step-wrap" key={item.step}>
+                <article className="aid-outcome-step">
+                  <span className="aid-outcome-badge">{item.step}</span>
+                  <AidIcon type={item.icon} />
+                  <h3>{item.title}</h3>
+                  <p>
+                    {item.body.map((line) => (
+                      <span key={line}>{line}</span>
+                    ))}
+                  </p>
+                </article>
+                {index < outcomeSteps.length - 1 && (
+                  <span className="aid-outcome-arrow" aria-hidden="true">
+                    ›
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+
+          <div className="aid-process-strip" aria-label="主な対象工程">
+            <strong>主な対象工程</strong>
+            <div>
+              {targetProcesses.map((process) => (
+                <span key={process}>{process}</span>
+              ))}
+            </div>
+          </div>
+
+          <h3 className="aid-phase-heading">AI-Driven Developmentの進め方</h3>
+          <div className="aid-phase-grid">
+            {developmentPhases.map((item, index) => (
+              <div className="aid-phase-wrap" key={item.phase}>
+                <article className={`aid-phase-card${item.featured ? " is-featured" : ""}`}>
+                  <span className="aid-outcome-badge">{item.phase}</span>
+                  <h4>{item.title}</h4>
+                  <strong>{item.emphasis}</strong>
+                  <p>
+                    {item.body.map((line) => (
+                      <span key={line}>{line}</span>
+                    ))}
+                  </p>
+                </article>
+                {index < developmentPhases.length - 1 && (
+                  <span className="aid-phase-arrow" aria-hidden="true">
+                    →
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+
+          <div className="aid-outcome-note">
+            <span aria-hidden="true">✓</span>
+            <strong>診断だけでなく、改善設計・実装・定着まで支援します。</strong>
+          </div>
+        </section>
+
+        <section className="aid-diagnosis" id="diagnosis-steps" aria-labelledby="aid-diagnosis-heading">
           <div className="aid-diagnosis__copy">
             <p className="aid-kicker">AI駆動開発プロセス診断とは</p>
             <h2 id="aid-diagnosis-heading">
@@ -483,7 +627,6 @@ export default function AiDrivenDevelopmentPage() {
             </button>
           </form>
         </section>
-      </main>
-    </>
+    </main>
   );
 }

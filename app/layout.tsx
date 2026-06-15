@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Header } from "./Header";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -18,6 +19,7 @@ export default function RootLayout({
   return (
     <html lang="ja" suppressHydrationWarning>
       <body>
+        <Header />
         {children}
       </body>
     </html>
