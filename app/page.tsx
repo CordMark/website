@@ -1,3 +1,5 @@
+import { Footer } from "./Footer";
+
 const trustItems = [
   "Enterprise AI",
   "AI Native Studio",
@@ -134,14 +136,6 @@ const philosophyPrinciples = [
 
 const rotatingWorks = [...works, ...works.slice(0, 3)];
 
-const footerLinks = [
-  { label: "About", href: "#about" },
-  { label: "Services", href: "#services" },
-  { label: "How We Work", href: "#how-we-work" },
-  { label: "Cases", href: "#cases" },
-  { label: "Privacy Policy", href: "#top" },
-];
-
 type PhilosophyIconType = (typeof philosophyPrinciples)[number]["icon"];
 
 function PhilosophyIcon({ type }: { type: PhilosophyIconType }) {
@@ -237,7 +231,7 @@ export default function Home() {
               単発のPoCやツール導入ではなく、日々の業務・意思決定・顧客体験に
               AIが組み込まれた状態をつくります。
             </p>
-            <a className="text-link" href="#philosophy">
+            <a className="text-link" href="/about">
               More About Us <span aria-hidden="true">→</span>
             </a>
           </div>
@@ -369,7 +363,7 @@ export default function Home() {
               人間がすべてを抱え込む会社から、人間とAIが分散的に考え、動き、学習する会社へ。
               その移行を、構想ではなく実装として支援します。
             </p>
-            <a className="text-link" href="#contact">
+            <a className="text-link" href="/about">
               More About Us <span aria-hidden="true">→</span>
             </a>
           </div>
@@ -398,24 +392,7 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="site-footer">
-        <div className="site-footer__brand">
-          <a className="brand brand--footer" href="#top" aria-label="CordMark home">
-            CordMark
-          </a>
-          <small>© 2026 CORDMARK Inc. All rights reserved.</small>
-        </div>
-        <nav aria-label="Footer navigation">
-          {footerLinks.map((link) => (
-            <a key={link.label} href={link.href}>
-              {link.label}
-            </a>
-          ))}
-        </nav>
-        <a className="to-top" href="#top" aria-label="ページ上部へ戻る">
-          ↑
-        </a>
-      </footer>
+      <Footer homeLinks />
     </>
   );
 }

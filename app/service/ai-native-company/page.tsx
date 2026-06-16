@@ -1,3 +1,5 @@
+import { Footer } from "../../Footer";
+
 type AncIconType =
   | "agent"
   | "bars"
@@ -227,14 +229,6 @@ const offerFacts = [
   { icon: "check", label: "形式", value: "オンライン中心（必要に応じて対面）" },
   { icon: "tag", label: "価格", value: "初期モニター募集中 / 個別見積もり" },
 ] satisfies Array<{ icon: AncIconType; label: string; value: string }>;
-
-const footerLinks = [
-  { label: "About", href: "/#about" },
-  { label: "Services", href: "/#services" },
-  { label: "How We Work", href: "/#how-we-work" },
-  { label: "Cases", href: "/#cases" },
-  { label: "Privacy Policy", href: "#top" },
-];
 
 function AncIcon({ type }: { type: AncIconType }) {
   return (
@@ -1005,24 +999,7 @@ export default function AiNativeCompanyPage() {
         </section>
       </main>
 
-      <footer className="site-footer">
-        <div className="site-footer__brand">
-          <a className="brand brand--footer" href="#top" aria-label="CordMark home">
-            CordMark
-          </a>
-          <small>© 2026 CORDMARK Inc. All rights reserved.</small>
-        </div>
-        <nav aria-label="Footer navigation">
-          {footerLinks.map((link) => (
-            <a key={link.label} href={link.href}>
-              {link.label}
-            </a>
-          ))}
-        </nav>
-        <a className="to-top" href="#top" aria-label="ページ上部へ戻る">
-          ↑
-        </a>
-      </footer>
+      <Footer />
     </>
   );
 }

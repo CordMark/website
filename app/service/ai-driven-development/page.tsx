@@ -1007,7 +1007,7 @@ export default function AiDrivenDevelopmentPage() {
                 <label htmlFor="company">
                   会社名 <span>必須</span>
                 </label>
-                <input id="company" name="company" type="text" placeholder="例）株式会社CordMark" required />
+                <input id="company" name="company" type="text" placeholder="例）CordMark株式会社" required />
               </div>
               <div className="aid-field">
                 <label htmlFor="name">
