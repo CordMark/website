@@ -1,7 +1,7 @@
 "use client";
 
 import type { ButtonHTMLAttributes, ReactNode } from "react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 type LoadingSubmitButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   children: ReactNode;
@@ -13,11 +13,43 @@ export function LoadingSubmitButton({
   className = "",
   disabled,
   loadingLabel = "送信中...",
+  onClick,
   type = "submit",
   ...props
 }: LoadingSubmitButtonProps) {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const showLoadingEffect = useCallback(() => {
+    const button = buttonRef.current;
+
+    if (!button) {
+      return;
+    }
+
+    button.classList.add("is-loading");
+    button.setAttribute("aria-busy", "true");
+  }, []);
+
+  const setLoadingState = useCallback(
+    (loading: boolean) => {
+      const button = buttonRef.current;
+
+      if (button) {
+        button.disabled = disabled || loading;
+        button.classList.toggle("is-loading", loading);
+
+        if (loading) {
+          button.setAttribute("aria-busy", "true");
+        } else {
+          button.removeAttribute("aria-busy");
+        }
+      }
+
+      setIsSubmitting(loading);
+    },
+    [disabled],
+  );
 
   useEffect(() => {
     const button = buttonRef.current;
@@ -26,19 +58,6 @@ export function LoadingSubmitButton({
     if (!button || !form) {
       return;
     }
-
-    const setLoadingState = (loading: boolean) => {
-      button.disabled = disabled || loading;
-      button.classList.toggle("is-loading", loading);
-
-      if (loading) {
-        button.setAttribute("aria-busy", "true");
-      } else {
-        button.removeAttribute("aria-busy");
-      }
-
-      setIsSubmitting(loading);
-    };
 
     const handleSubmit = (event: Event) => {
       const submitEvent = event as SubmitEvent;
@@ -67,7 +86,21 @@ export function LoadingSubmitButton({
       form.removeEventListener("reset", handleReset);
       window.removeEventListener("pageshow", handleReset);
     };
-  }, [disabled]);
+  }, [setLoadingState]);
+
+  const handleClick: NonNullable<ButtonHTMLAttributes<HTMLButtonElement>["onClick"]> = (event) => {
+    onClick?.(event);
+
+    if (event.defaultPrevented || type !== "submit") {
+      return;
+    }
+
+    const form = buttonRef.current?.form;
+
+    if (form?.checkValidity()) {
+      showLoadingEffect();
+    }
+  };
 
   return (
     <button
@@ -77,6 +110,7 @@ export function LoadingSubmitButton({
       disabled={disabled || isSubmitting}
       type={type}
       aria-busy={isSubmitting}
+      onClick={handleClick}
     >
       <span className="submit-button__content" aria-hidden={isSubmitting}>
         {children}

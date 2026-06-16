@@ -1,0 +1,47 @@
+name: Deploy Development to Vercel
+
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch:
+
+concurrency:
+  group: vercel-development
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy development
+    runs-on: ubuntu-latest
+    environment: development
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@54.14.0
+
+      - name: Pull Vercel development environment
+        run: vercel pull --yes --environment=development --token="${{ secrets.VERCEL_TOKEN }}"
+
+      - name: Build development artifact
+        run: vercel build --target=development --token="${{ secrets.VERCEL_TOKEN }}"
+
+      - name: Deploy to Vercel development
+        run: vercel deploy --prebuilt --target=development --token="${{ secrets.VERCEL_TOKEN }}"
