@@ -1,17 +1,24 @@
 type AidIconType =
   | "bars"
+  | "book"
   | "chart"
   | "check"
+  | "code"
   | "clock"
   | "document"
+  | "flag"
   | "flow"
   | "growth"
   | "grid"
   | "list"
+  | "monitor"
   | "person"
+  | "rocket"
   | "scissors"
+  | "search"
   | "shield"
   | "tag"
+  | "target"
   | "user-circle";
 
 type AidCardItem = {
@@ -20,96 +27,177 @@ type AidCardItem = {
   body: string;
 };
 
-type AidOutcomeStep = {
-  step: string;
+type AidProblemVisual = "pipeline" | "team" | "fragmented" | "kpi" | "rules" | "knowledge";
+
+type AidProblemItem = AidCardItem & {
+  visual: AidProblemVisual;
+};
+
+type AidSupportItem = {
   icon: AidIconType;
   title: string;
-  body: string[];
+  body: string;
+};
+
+type AidSupportGroup = {
+  label: string;
+  items: AidSupportItem[];
 };
 
 type AidPhaseItem = {
   phase: string;
   title: string;
   emphasis: string;
-  body: string[];
-  featured?: boolean;
+  body: string;
 };
 
-const painPoints: AidCardItem[] = [
+type AidProcessDetailStep = {
+  day: string;
+  number: string;
+  image: string;
+  title: string;
+  body: string;
+};
+
+type AidPoint = [number, number];
+
+type AidKpiExample = {
+  title: string;
+  before: string;
+  after: string;
+  delta?: string;
+  trend: {
+    before: AidPoint[];
+    after: AidPoint[];
+  };
+};
+
+const painPoints: AidProblemItem[] = [
   {
     icon: "scissors",
-    title: "AIツールを入れても",
-    body: "開発成果につながらない",
+    title: "AIツールを入れても開発成果につながらない",
+    body: "導入は進んでも、開発速度や品質改善に結びついていない。",
+    visual: "pipeline",
   },
   {
     icon: "person",
-    title: "個人活用に留まり、",
-    body: "チーム標準になっていない",
+    title: "個人活用に留まり、チーム標準になっていない",
+    body: "一部メンバーの利用に留まり、再現可能な開発フローになっていない。",
+    visual: "team",
   },
   {
     icon: "flow",
-    title: "レビュー・テスト・",
-    body: "ドキュメント生成が分断している",
+    title: "レビュー・テスト・ドキュメント生成が分断している",
+    body: "工程ごとのAI利用がバラバラで、開発体験がつながっていない。",
+    visual: "fragmented",
   },
   {
     icon: "bars",
-    title: "KPIで",
-    body: "効果検証できていない",
+    title: "KPIで効果検証できていない",
+    body: "導入前後の変化を測る指標がなく、投資判断につなげられない。",
+    visual: "kpi",
   },
   {
     icon: "shield",
-    title: "現場に合う",
-    body: "運用ルールがない",
+    title: "現場に合う運用ルールがない",
+    body: "品質・セキュリティ・権限管理を踏まえた利用ルールが設計されていない。",
+    visual: "rules",
   },
   {
     icon: "user-circle",
-    title: "ナレッジが",
-    body: "属人化している",
+    title: "ナレッジが属人化している",
+    body: "知見や使い方が個人に閉じ、チームで共有・再利用できていない。",
+    visual: "knowledge",
   },
 ];
 
-const outcomeSteps: AidOutcomeStep[] = [
-  {
-    step: "STEP 1",
-    icon: "document",
-    title: "診断する",
-    body: ["開発プロセスを見直し、", "AI活用余地と課題を可視化"],
-  },
-  {
-    step: "STEP 2",
-    icon: "flow",
-    title: "改善を設計・実装する",
-    body: ["効果の高いテーマを選び、", "AIワークフローを組み込む"],
-  },
-  {
-    step: "STEP 3",
-    icon: "growth",
-    title: "定着させる",
-    body: ["運用ルール・教育・共有を整え、", "継続活用につなげる"],
-  },
+const aidValueBullets = [
+  "現状のプロセスとAI活用状況を客観的に診断",
+  "AIを入れるべき工程・テーマと測定すべきKPIを特定",
+  "具体的な改善計画を設計し、実装・定着まで支援",
 ];
 
-const targetProcesses = ["仕様策定", "実装", "レビュー", "テスト", "ドキュメント", "運用"];
+const supportGroups: AidSupportGroup[] = [
+  {
+    label: "診断・分析",
+    items: [
+      {
+        icon: "document",
+        title: "仕様・要件整理",
+        body: "要件の曖昧さを可視化し、AI活用に適した課題を特定します。",
+      },
+      {
+        icon: "flow",
+        title: "実装フロー設計",
+        body: "AIを活用する最適な工程とワークフローを設計します。",
+      },
+    ],
+  },
+  {
+    label: "実装支援",
+    items: [
+      {
+        icon: "code",
+        title: "コードレビュー支援",
+        body: "AIを活用したレビュー体制を構築し、品質とスピードを向上します。",
+      },
+      {
+        icon: "shield",
+        title: "テスト自動化設計",
+        body: "AIを活用したテスト設計・自動化で、品質を継続的に担保します。",
+      },
+    ],
+  },
+  {
+    label: "基盤整備",
+    items: [
+      {
+        icon: "book",
+        title: "ドキュメント整備",
+        body: "開発知見を体系化し、AI活用しやすいドキュメント基盤を整えます。",
+      },
+      {
+        icon: "chart",
+        title: "KPI設計・可視化",
+        body: "効果を測定するKPIを設計し、ダッシュボードで可視化します。",
+      },
+    ],
+  },
+  {
+    label: "定着支援",
+    items: [
+      {
+        icon: "monitor",
+        title: "開発環境／ツール活用設計",
+        body: "AIツールや開発環境の選定・導入を支援し、活用しやすい基盤を構築します。",
+      },
+      {
+        icon: "person",
+        title: "チーム定着支援",
+        body: "トレーニングや伴走支援を通じて、チームへの定着を実現します。",
+      },
+    ],
+  },
+];
 
 const developmentPhases: AidPhaseItem[] = [
   {
-    phase: "PHASE 1",
+    phase: "Phase 1",
     title: "AI駆動開発プロセス診断",
     emphasis: "2週間",
-    body: ["AIを入れるべき工程と、", "測定KPI・優先テーマを整理します。"],
-    featured: true,
+    body: "現行プロセスを分析し、AIを入れるべき工程、測定KPI、実装テーマを設計します。",
   },
   {
-    phase: "PHASE 2",
+    phase: "Phase 2",
     title: "6週間実装パイロット",
     emphasis: "6週間",
-    body: ["選定テーマにAIワークフロー・", "開発環境・運用ルールを実装します。"],
+    body: "診断で選定したテーマを対象に、AIワークフロー・Agent・開発環境・運用ルールを実装します。",
   },
   {
-    phase: "PHASE 3",
-    title: "定着・横展開支援",
-    emphasis: "継続的",
-    body: ["利用状況とKPIを見ながら、", "チーム標準として定着・展開します。"],
+    phase: "Phase 3",
+    title: "開発組織への定着・横展開",
+    emphasis: "継続的に支援",
+    body: "利用状況とKPIを見ながら、チーム標準の開発プロセスとして定着させ、横展開します。",
   },
 ];
 
@@ -148,6 +236,51 @@ const diagnosisSteps: Array<{ step: string; title: string; icon: AidIconType }> 
   },
 ];
 
+const diagnosisProcessDetailSteps: AidProcessDetailStep[] = [
+  {
+    day: "Day 1",
+    number: "01",
+    image: "/assets/aid-process-kickoff.png",
+    title: "キックオフ",
+    body: "目的・スコープ・体制をすり合わせ、計画を策定。",
+  },
+  {
+    day: "Day 2–5",
+    number: "02",
+    image: "/assets/aid-process-hearing.png",
+    title: "ヒアリング・現行プロセス整理",
+    body: "各ステークホルダーへヒアリングを行い、現行フローを整理。",
+  },
+  {
+    day: "Day 6–8",
+    number: "03",
+    image: "/assets/aid-process-candidates.png",
+    title: "AI活用候補の設計",
+    body: "AI活用の余地を特定し、候補を優先順位化。",
+  },
+  {
+    day: "Day 9–10",
+    number: "04",
+    image: "/assets/aid-process-kpi.png",
+    title: "KPI設計",
+    body: "KPIを設計し、測定方法と目標値を定義。",
+  },
+  {
+    day: "Day 11–13",
+    number: "05",
+    image: "/assets/aid-process-pilot.png",
+    title: "実装パイロット計画",
+    body: "パイロットのスコープ・体制・計画・期待効果を整理。",
+  },
+  {
+    day: "Day 14",
+    number: "06",
+    image: "/assets/aid-process-report.png",
+    title: "報告会",
+    body: "診断結果と推奨内容をご報告・ご合意。",
+  },
+];
+
 const deliverables: AidCardItem[] = [
   {
     icon: "list",
@@ -176,27 +309,132 @@ const deliverables: AidCardItem[] = [
   },
 ];
 
-const offerFacts: Array<{ icon: AidIconType; label: string; value: string }> = [
+const diagnosisKpiExamples: AidKpiExample[] = [
   {
-    icon: "clock",
-    label: "期間",
-    value: "2週間",
+    title: "開発リードタイム",
+    before: "18.5日",
+    after: "12.3日",
+    delta: "-33%",
+    trend: {
+      before: [
+        [12, 52],
+        [40, 49],
+        [72, 40],
+      ],
+      after: [
+        [112, 60],
+        [148, 70],
+      ],
+    },
   },
   {
-    icon: "tag",
-    label: "価格",
-    value: "初期モニター 50万円〜",
+    title: "PR作成時間",
+    before: "46分",
+    after: "22分",
+    delta: "-52%",
+    trend: {
+      before: [
+        [12, 54],
+        [42, 53],
+        [72, 44],
+      ],
+      after: [
+        [112, 61],
+        [148, 72],
+      ],
+    },
   },
   {
-    icon: "person",
-    label: "対象",
-    value: "1部署または1開発チーム",
+    title: "レビュー待ち時間",
+    before: "30.2時間",
+    after: "14.1時間",
+    delta: "-53%",
+    trend: {
+      before: [
+        [12, 50],
+        [42, 48],
+        [72, 42],
+      ],
+      after: [
+        [112, 62],
+        [148, 72],
+      ],
+    },
   },
   {
-    icon: "check",
-    label: "形式",
-    value: "オンライン中心（必要に応じて対面）",
+    title: "テスト作成時間",
+    before: "120分",
+    after: "45分",
+    delta: "-62%",
+    trend: {
+      before: [
+        [12, 50],
+        [42, 47],
+        [72, 40],
+      ],
+      after: [
+        [112, 62],
+        [148, 72],
+      ],
+    },
   },
+  {
+    title: "AIツール利用率",
+    before: "22%",
+    after: "71%",
+    trend: {
+      before: [
+        [12, 68],
+        [42, 65],
+        [72, 42],
+      ],
+      after: [
+        [112, 33],
+        [148, 26],
+      ],
+    },
+  },
+  {
+    title: "利用者満足度",
+    before: "3.1",
+    after: "4.3",
+    trend: {
+      before: [
+        [12, 68],
+        [42, 68],
+        [72, 55],
+      ],
+      after: [
+        [112, 42],
+        [148, 32],
+      ],
+    },
+  },
+];
+
+const pricingTargets = [
+  "SIer / SES / 受託開発企業",
+  "SaaS事業会社",
+  "事業会社の内製開発部門",
+  "チーム規模：5名〜数百名程度",
+];
+
+const fitStates = [
+  "AIツールを一部導入済みだが、成果が出ていない",
+  "小さく検証し、効果を見極めたい",
+  "効果測定の方法に課題がある",
+  "セキュリティ・品質面の不安がある",
+];
+
+const teamSizeOptions = ["1〜4名", "5〜20名", "21〜50名", "50名以上"];
+
+const issueOptions = [
+  "要件定義・仕様策定",
+  "実装",
+  "レビュー",
+  "テスト",
+  "ドキュメント",
+  "運用",
 ];
 
 function PeopleIcon() {
@@ -278,6 +516,58 @@ function AidIcon({ type }: { type: AidIconType }) {
           <path d="M14 27h7" />
         </>
       )}
+      {type === "code" && (
+        <>
+          <rect x="7" y="8" width="22" height="20" rx="2.2" />
+          <path d="m15 15-4 3 4 3" />
+          <path d="m21 15 4 3-4 3" />
+          <path d="m19.5 13.5-3 9" />
+        </>
+      )}
+      {type === "book" && (
+        <>
+          <path d="M8 7.5h9.2c2.2 0 4 1.8 4 4V30H12c-2.2 0-4-1.8-4-4V7.5Z" />
+          <path d="M28 7.5h-6.8V30H24c2.2 0 4-1.8 4-4V7.5Z" />
+          <path d="M12 12h5" />
+          <path d="M12 17h5" />
+        </>
+      )}
+      {type === "monitor" && (
+        <>
+          <rect x="6.5" y="8" width="23" height="16" rx="2.2" />
+          <path d="M18 24v5" />
+          <path d="M12.5 29h11" />
+        </>
+      )}
+      {type === "rocket" && (
+        <>
+          <path d="M20.8 5.8c5.2 1.2 8.2 4.2 9.4 9.4l-7.5 7.5-9.4-9.4 7.5-7.5Z" />
+          <path d="M13.3 13.3 8.5 15 6 21l7.8-2.8" />
+          <path d="m17.8 22.2-2.8 7.8 6-2.5 1.7-4.8" />
+          <circle cx="22.2" cy="13.8" r="2.6" />
+          <path d="M10 26 6.5 29.5" />
+        </>
+      )}
+      {type === "search" && (
+        <>
+          <circle cx="15.5" cy="15.5" r="9.5" />
+          <path d="m22.4 22.4 7.1 7.1" />
+        </>
+      )}
+      {type === "flag" && (
+        <>
+          <path d="M8 31V7" />
+          <path d="M8 8c4.6-2.5 8.7 2.6 13.3.1 2-.9 3.8-1.2 6.7.1v13c-2.9-1.3-4.7-1-6.7-.1C16.7 23.6 12.6 18.5 8 21" />
+        </>
+      )}
+      {type === "target" && (
+        <>
+          <circle cx="18" cy="18" r="13" />
+          <circle cx="18" cy="18" r="8" />
+          <circle cx="18" cy="18" r="3" />
+          <path d="m24 12 5-5" />
+        </>
+      )}
       {type === "list" && (
         <>
           <path d="M13 10h17" />
@@ -353,6 +643,67 @@ function AidInfoCard({
   );
 }
 
+const aidProblemImageSources: Record<AidProblemVisual, string> = {
+  pipeline: "/assets/aid-challenge-pipeline.png",
+  team: "/assets/aid-challenge-team.png",
+  fragmented: "/assets/aid-challenge-fragmented.png",
+  kpi: "/assets/aid-challenge-kpi.png",
+  rules: "/assets/aid-challenge-rules.png",
+  knowledge: "/assets/aid-challenge-knowledge.png",
+};
+
+function AidProblemVisual({ type }: { type: AidProblemVisual }) {
+  return (
+    <div className={`aid-problem-visual aid-problem-visual--${type}`} aria-hidden="true">
+      <img src={aidProblemImageSources[type]} alt="" />
+    </div>
+  );
+}
+
+function AidProblemCard({ item, index }: { item: AidProblemItem; index: number }) {
+  return (
+    <article className="aid-problem">
+      <AidProblemVisual type={item.visual} />
+      <div className="aid-problem__body">
+        <span className="aid-problem__number">{index + 1}</span>
+        <div>
+          <h3>{item.title}</h3>
+          <p>{item.body}</p>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function AidKpiSparkline({ trend }: { trend: AidKpiExample["trend"] }) {
+  const beforePoints = trend.before.map(([x, y]) => `${x},${y}`).join(" ");
+  const afterPoints = [trend.before[trend.before.length - 1], ...trend.after]
+    .map(([x, y]) => `${x},${y}`)
+    .join(" ");
+
+  return (
+    <svg className="aid-kpi-chart" viewBox="0 0 160 82" aria-hidden="true">
+      <path className="aid-kpi-baseline" d="M10 68h140" />
+      <polyline className="aid-kpi-before-line" points={beforePoints} />
+      <polyline className="aid-kpi-after-line" points={afterPoints} />
+      {trend.before.map(([x, y]) => (
+        <circle className="aid-kpi-dot aid-kpi-dot--before" cx={x} cy={y} key={`before-${x}-${y}`} r="3.6" />
+      ))}
+      {trend.after.map(([x, y]) => (
+        <circle className="aid-kpi-dot aid-kpi-dot--after" cx={x} cy={y} key={`after-${x}-${y}`} r="3.6" />
+      ))}
+    </svg>
+  );
+}
+
+function ContactChartIllustration() {
+  return (
+    <div className="aid-contact-visual" aria-hidden="true">
+      <img src="/assets/aid-contact-illustration.png" alt="" width={1254} height={1254} loading="lazy" />
+    </div>
+  );
+}
+
 export default function AiDrivenDevelopmentPage() {
   return (
     <main id="top" className="aid-page site-main">
@@ -391,70 +742,80 @@ export default function AiDrivenDevelopmentPage() {
       </section>
 
         <section className="aid-problems" aria-labelledby="aid-problems-heading">
-          <div className="aid-section-head aid-section-head--center aid-section-head--compact">
+          <div className="aid-section-head aid-section-head--challenges">
+            <p className="aid-kicker">COMMON CHALLENGES</p>
             <h2 id="aid-problems-heading">よくある課題</h2>
+            <p className="aid-problems-lead">AIツールを入れても、開発組織はまだAI Nativeになっていない。</p>
+            <p className="aid-problems-note">
+              多くの組織でAIツールの導入は進む一方、チーム全体の開発成果に結びつけられていません。
+            </p>
           </div>
           <div className="aid-problem-grid">
-            {painPoints.map((point) => (
-              <AidInfoCard className="aid-problem" item={point} key={point.title} />
+            {painPoints.map((point, index) => (
+              <AidProblemCard index={index} item={point} key={point.title} />
             ))}
           </div>
         </section>
 
         <section className="aid-outcomes" aria-labelledby="aid-outcomes-heading">
           <div className="aid-outcomes__head">
-            <h2 id="aid-outcomes-heading">AI-Driven Developmentで実現すること</h2>
+            <h2 id="aid-outcomes-heading">AI-Driven Developmentの価値と進め方</h2>
             <p>
-              お客様の開発プロセスが本当に最適化され、AIを最大活用できているかを診断し、
+              開発プロセスを診断し、最適な改善計画を立て、
               <br />
-              改善を設計・実装して、定着まで伴走支援します。
+              実際にAIを組み込みながら定着まで伴走します。
             </p>
           </div>
 
-          <div className="aid-outcome-steps">
-            {outcomeSteps.map((item, index) => (
-              <div className="aid-outcome-step-wrap" key={item.step}>
-                <article className="aid-outcome-step">
-                  <span className="aid-outcome-badge">{item.step}</span>
-                  <AidIcon type={item.icon} />
-                  <h3>{item.title}</h3>
-                  <p>
-                    {item.body.map((line) => (
-                      <span key={line}>{line}</span>
-                    ))}
-                  </p>
-                </article>
-                {index < outcomeSteps.length - 1 && (
-                  <span className="aid-outcome-arrow" aria-hidden="true">
-                    ›
-                  </span>
-                )}
-              </div>
-            ))}
-          </div>
+          <div className="aid-value-panel">
+            <div className="aid-value-copy">
+              <h3>私たちが提供する価値</h3>
+              <p className="aid-value-lead">
+                自社の開発プロセスが、本当に最適化され、
+                <br />
+                AIのメリットを最大活用できているかを明らかにします。
+              </p>
+              <ul>
+                {aidValueBullets.map((bullet) => (
+                  <li key={bullet}>{bullet}</li>
+                ))}
+              </ul>
+            </div>
 
-          <div className="aid-process-strip" aria-label="主な対象工程">
-            <strong>主な対象工程</strong>
-            <div>
-              {targetProcesses.map((process) => (
-                <span key={process}>{process}</span>
-              ))}
+            <div className="aid-support">
+              <h3>主な支援内容</h3>
+              <div className="aid-support-groups">
+                {supportGroups.map((group) => (
+                  <div className="aid-support-row" key={group.label}>
+                    <span className="aid-support-label">{group.label}</span>
+                    <div className="aid-support-items">
+                      {group.items.map((item) => (
+                        <article className="aid-support-item" key={item.title}>
+                          <span className="aid-support-icon" aria-hidden="true">
+                            <AidIcon type={item.icon} />
+                          </span>
+                          <div>
+                            <h4>{item.title}</h4>
+                            <p>{item.body}</p>
+                          </div>
+                        </article>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
-          <h3 className="aid-phase-heading">AI-Driven Developmentの進め方</h3>
+          <h3 className="aid-phase-heading">進め方（全体の流れ）</h3>
           <div className="aid-phase-grid">
             {developmentPhases.map((item, index) => (
               <div className="aid-phase-wrap" key={item.phase}>
-                <article className={`aid-phase-card${item.featured ? " is-featured" : ""}`}>
-                  <span className="aid-outcome-badge">{item.phase}</span>
+                <article className="aid-phase-card">
+                  <span className="aid-phase-badge">{item.phase}</span>
                   <h4>{item.title}</h4>
                   <strong>{item.emphasis}</strong>
-                  <p>
-                    {item.body.map((line) => (
-                      <span key={line}>{line}</span>
-                    ))}
-                  </p>
+                  <p>{item.body}</p>
                 </article>
                 {index < developmentPhases.length - 1 && (
                   <span className="aid-phase-arrow" aria-hidden="true">
@@ -464,16 +825,11 @@ export default function AiDrivenDevelopmentPage() {
               </div>
             ))}
           </div>
-
-          <div className="aid-outcome-note">
-            <span aria-hidden="true">✓</span>
-            <strong>診断だけでなく、改善設計・実装・定着まで支援します。</strong>
-          </div>
         </section>
 
         <section className="aid-diagnosis" id="diagnosis-steps" aria-labelledby="aid-diagnosis-heading">
           <div className="aid-diagnosis__copy">
-            <p className="aid-kicker">AI駆動開発プロセス診断とは</p>
+            <p className="aid-kicker">AI駆動開発プロセス診断</p>
             <h2 id="aid-diagnosis-heading">
               2週間で、AIを入れるべき開発プロセスと
               <br />
@@ -506,126 +862,215 @@ export default function AiDrivenDevelopmentPage() {
           </div>
         </section>
 
-        <section className="aid-deliverables" id="kpi-example" aria-labelledby="aid-deliverables-heading">
-          <div className="aid-section-head aid-section-head--center">
-            <p className="aid-kicker">診断で得られるもの</p>
-            <h2 id="aid-deliverables-heading">AI導入の投資判断に必要な資料を納品します。</h2>
-          </div>
-          <div className="aid-deliverable-grid">
-            {deliverables.map((item) => (
-              <AidInfoCard className="aid-deliverable" item={item} key={item.title} />
-            ))}
-          </div>
-        </section>
-
-        <section className="aid-offer" aria-labelledby="aid-offer-heading">
-          <div className="aid-section-head aid-section-head--center">
-            <p className="aid-kicker">価格・対象</p>
-            <h2 id="aid-offer-heading">まずは1部署・1開発チームから始めます。</h2>
-          </div>
-          <dl className="aid-offer-list">
-            {offerFacts.map((fact) => (
-              <div key={fact.label}>
-                <AidIcon type={fact.icon} />
-                <dt>{fact.label}</dt>
-                <dd>{fact.value}</dd>
-              </div>
-            ))}
-          </dl>
-        </section>
-
-        <section className="aid-contact-section" id="contact" aria-labelledby="aid-contact-heading">
-          <div className="aid-contact-copy">
-            <h2 id="aid-contact-heading">診断について相談する</h2>
-            <p>
-              AI駆動開発プロセス診断に関心がある方は、以下のフォームからお問い合わせください。
-              現在のAI活用状況と開発組織の課題を伺った上で、診断対象になりそうな範囲を確認します。
+        <section className="aid-process-detail" id="kpi-example" aria-labelledby="aid-process-detail-heading">
+          <div className="aid-process-panel aid-process-panel--overview">
+            <p className="aid-detail-kicker">PROCESS</p>
+            <h2 id="aid-process-detail-heading">短期間で、診断から実装計画まで作る。</h2>
+            <p className="aid-detail-lead">
+              現行プロセスの可視化から、AI活用テーマの設計、KPI設計、実装パイロット計画までを2週間で進めます。
             </p>
+            <div className="aid-process-timeline">
+              {diagnosisProcessDetailSteps.map((item) => (
+                <article className="aid-process-step" key={item.number}>
+                  <div className="aid-process-marker">
+                    <span className="aid-process-day">{item.day}</span>
+                    <span className="aid-process-number">{item.number}</span>
+                  </div>
+                  <div className="aid-process-card">
+                    <div className="aid-process-visual" aria-hidden="true">
+                      <img src={item.image} alt="" />
+                    </div>
+                    <h3>{item.title}</h3>
+                    <p>{item.body}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
           </div>
-          <form className="aid-form">
-            <div className="aid-field">
-              <label htmlFor="company">会社名</label>
-              <input id="company" name="company" type="text" />
+
+          <div className="aid-process-panel aid-process-panel--outputs">
+            <p className="aid-detail-kicker">DELIVERABLES &amp; KPI</p>
+            <h2>納品物と、導入後に測るKPIを整理する。</h2>
+            <p className="aid-detail-lead">
+              投資判断に必要な資料を納品し、AI導入をBefore / Afterで測れる状態にします。
+            </p>
+            <div className="aid-output-layout">
+              <div className="aid-output-column aid-output-column--deliverables">
+                <h3>納品物</h3>
+                <div className="aid-output-list">
+                  {deliverables.map((item) => (
+                    <article className="aid-output-item" key={item.title}>
+                      <span className="aid-output-icon" aria-hidden="true">
+                        <AidIcon type={item.icon} />
+                      </span>
+                      <div>
+                        <h4>{item.title}</h4>
+                        <p>{item.body}。</p>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </div>
+
+              <div className="aid-output-column aid-output-column--kpis">
+                <div className="aid-kpi-head">
+                  <h3>測定KPI例</h3>
+                  <div className="aid-kpi-legend" aria-label="KPIグラフの凡例">
+                    <span>
+                      <i className="aid-kpi-legend-dot aid-kpi-legend-dot--before" />
+                      Before
+                    </span>
+                    <span>
+                      <i className="aid-kpi-legend-dot aid-kpi-legend-dot--after" />
+                      After
+                    </span>
+                  </div>
+                </div>
+                <div className="aid-kpi-grid">
+                  {diagnosisKpiExamples.map((item) => (
+                    <article className="aid-kpi-metric" key={item.title}>
+                      <h4>{item.title}</h4>
+                      <div className="aid-kpi-change">
+                        <span>{item.before}</span>
+                        <b aria-hidden="true">→</b>
+                        <strong>{item.after}</strong>
+                        {item.delta && <em>{item.delta}</em>}
+                      </div>
+                      <AidKpiSparkline trend={item.trend} />
+                    </article>
+                  ))}
+                </div>
+              </div>
             </div>
-            <div className="aid-field">
-              <label htmlFor="name">氏名</label>
-              <input id="name" name="name" type="text" />
+          </div>
+        </section>
+
+        <section className="aid-pricing-contact" id="contact" aria-label="価格とお問い合わせ">
+          <div className="aid-pricing-block">
+            <p className="aid-kicker">PRICING &amp; FIT</p>
+            <div className="aid-pricing-grid">
+              <article className="aid-pricing-card aid-pricing-card--price">
+                <h2>AI駆動開発プロセス診断</h2>
+                <p className="aid-period-badge">2週間</p>
+                <p className="aid-price-label">初期モニター</p>
+                <p className="aid-price-line">
+                  <strong>30</strong>
+                  <span>万円〜</span>
+                  <small>（税別）</small>
+                </p>
+                <p className="aid-price-target">
+                  <AidIcon type="person" />
+                  <span>対象：1部署または1開発チーム</span>
+                </p>
+              </article>
+
+              <article className="aid-pricing-card">
+                <h3>対象となる企業</h3>
+                <ul className="aid-fit-list">
+                  {pricingTargets.map((target) => (
+                    <li key={target}>
+                      <span className="aid-fit-check" aria-hidden="true">
+                        ✓
+                      </span>
+                      <span>{target}</span>
+                    </li>
+                  ))}
+                </ul>
+              </article>
+
+              <article className="aid-pricing-card">
+                <h3>特に合う状態</h3>
+                <ul className="aid-fit-list">
+                  {fitStates.map((state) => (
+                    <li key={state}>
+                      <span className="aid-fit-check" aria-hidden="true">
+                        ✓
+                      </span>
+                      <span>{state}</span>
+                    </li>
+                  ))}
+                </ul>
+              </article>
             </div>
-            <div className="aid-field">
-              <label htmlFor="role">役職</label>
-              <input id="role" name="role" type="text" />
+          </div>
+
+          <div className="aid-contact-panel">
+            <div className="aid-contact-copy">
+              <p className="aid-kicker">CONTACT</p>
+              <h2 id="aid-contact-heading">診断について相談する</h2>
+              <p>下記フォームを入力いただくと、担当者よりご連絡します。</p>
+              <ContactChartIllustration />
             </div>
-            <div className="aid-field aid-field--wide">
-              <label htmlFor="email">メールアドレス</label>
-              <input id="email" name="email" type="email" />
-            </div>
-            <div className="aid-field aid-field--wide">
-              <label htmlFor="team-size">開発組織の人数</label>
-              <input id="team-size" name="team-size" type="text" />
-            </div>
-            <fieldset className="aid-checks">
-              <legend>現在使っているAIツール（複数選択可）</legend>
-              {["ChatGPT", "Claude", "Cursor", "GitHub Copilot", "まだ使っていない", "その他"].map(
-                (tool) => (
-                  <label key={tool}>
-                    <input name="tools" type="checkbox" value={tool} />
-                    <span>{tool}</span>
-                  </label>
-                ))}
-            </fieldset>
-            <div className="aid-field">
-              <label htmlFor="issue">困っている開発工程（複数選択可）</label>
-              <select id="issue" name="issue" defaultValue="">
-                <option value="" disabled>
-                  選択してください
-                </option>
-                <option>要件定義・仕様策定</option>
-                <option>実装・レビュー</option>
-                <option>テスト・品質保証</option>
-                <option>ドキュメント・ナレッジ共有</option>
-              </select>
-            </div>
-            <div className="aid-field">
-              <label htmlFor="consultation">相談したい内容</label>
-              <select id="consultation" name="consultation" defaultValue="">
-                <option value="" disabled>
-                  選択してください
-                </option>
-                <option>診断について詳しく聞きたい</option>
-                <option>自社に合うか相談したい</option>
-                <option>実装支援まで相談したい</option>
-              </select>
-            </div>
-            <div className="aid-field">
-              <label htmlFor="budget">予算感</label>
-              <select id="budget" name="budget" defaultValue="">
-                <option value="" disabled>
-                  選択してください
-                </option>
-                <option>50万円〜100万円</option>
-                <option>100万円〜300万円</option>
-                <option>300万円以上</option>
-              </select>
-            </div>
-            <div className="aid-field">
-              <label htmlFor="decision">決裁者との関係</label>
-              <select id="decision" name="decision" defaultValue="">
-                <option value="" disabled>
-                  選択してください
-                </option>
-                <option>本人が決裁者</option>
-                <option>決裁者に提案予定</option>
-                <option>情報収集中</option>
-              </select>
-            </div>
-            <div className="aid-field">
-              <label htmlFor="date">希望面談日時（任意）</label>
-              <input id="date" name="date" type="date" />
-            </div>
-            <button className="aid-submit" type="button">
-              内容を確認する <span aria-hidden="true">→</span>
-            </button>
-          </form>
+
+            <form className="aid-form aid-form--consultation" aria-labelledby="aid-contact-heading">
+              <div className="aid-field">
+                <label htmlFor="company">
+                  会社名 <span>必須</span>
+                </label>
+                <input id="company" name="company" type="text" placeholder="例）株式会社CordMark" required />
+              </div>
+              <div className="aid-field">
+                <label htmlFor="name">
+                  氏名 <span>必須</span>
+                </label>
+                <input id="name" name="name" type="text" placeholder="例）山田 太郎" required />
+              </div>
+              <div className="aid-field">
+                <label htmlFor="role">役職</label>
+                <input id="role" name="role" type="text" placeholder="例）CTO" />
+              </div>
+              <div className="aid-field">
+                <label htmlFor="email">
+                  メールアドレス <span>必須</span>
+                </label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="例）example@cordmark.co.jp"
+                  required
+                />
+              </div>
+              <div className="aid-field">
+                <label htmlFor="team-size">
+                  開発組織の人数 <span>必須</span>
+                </label>
+                <select id="team-size" name="team-size" defaultValue="" required>
+                  <option value="" disabled>
+                    選択してください
+                  </option>
+                  {teamSizeOptions.map((option) => (
+                    <option key={option}>{option}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="aid-field">
+                <label htmlFor="tools">現在使っているAIツール</label>
+                <input
+                  id="tools"
+                  name="tools"
+                  type="text"
+                  placeholder="例）GitHub Copilot, Cursor, Claude など"
+                />
+              </div>
+              <fieldset className="aid-field aid-field--span-3 aid-checkbox-field">
+                <legend>困っている開発工程（複数選択可）</legend>
+                <div className="aid-checkbox-grid">
+                  {issueOptions.map((option) => (
+                    <label className="aid-checkbox-option" key={option}>
+                      <span className="aid-checkbox-main">
+                        <input name="issue" type="checkbox" value={option} />
+                        <span>{option}</span>
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
+              <button className="aid-submit" type="button">
+                診断について相談する <span aria-hidden="true">→</span>
+              </button>
+            </form>
+          </div>
         </section>
     </main>
   );

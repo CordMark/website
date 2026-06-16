@@ -11,64 +11,131 @@ type AncIconType =
   | "governance"
   | "grid"
   | "map"
+  | "organization"
   | "pause"
   | "people"
   | "person"
+  | "search"
   | "shield"
-  | "tag";
+  | "sparkle"
+  | "tag"
+  | "target";
 
-type IconCard = {
-  icon: AncIconType;
+type AncProblemVisualType =
+  | "network"
+  | "poc"
+  | "workflow"
+  | "knowledge"
+  | "governance"
+  | "measurement";
+
+type RoadmapStepVisualType = "kpi" | "process" | "brain" | "priority" | "roadmap" | "report";
+type DeliverableVisualType = "maturity" | "usecases" | "beforeAfter" | "agentFlow" | "roadmap" | "kpi";
+type ImplementationAreaType = "sales" | "knowledge" | "executive" | "development";
+
+type ProblemCard = {
+  visual: AncProblemVisualType;
+  image: string;
   title: string;
-  body?: string;
 };
 
-const painPoints: IconCard[] = [
-  { icon: "people", title: "部署ごとにAI活用がバラバラ" },
-  { icon: "pause", title: "PoCやツール導入で止まっている" },
-  { icon: "person", title: "業務プロセス自体は人間前提のまま" },
-  { icon: "database", title: "ナレッジが分散している" },
-  { icon: "shield", title: "ガバナンスが曖昧で広げられない" },
-  { icon: "bars", title: "投資対効果を説明できない" },
+type DeliverableCard = {
+  visual: DeliverableVisualType;
+  image: string;
+  title: string;
+  body: string;
+};
+
+const painPoints: ProblemCard[] = [
+  {
+    visual: "network",
+    image: "/assets/anc-problem-network.png",
+    title: "部署ごとに試しており、全社で広がらない",
+  },
+  {
+    visual: "poc",
+    image: "/assets/anc-problem-poc.png",
+    title: "PoCやツール導入で止まり、運用に乗らない",
+  },
+  {
+    visual: "workflow",
+    image: "/assets/anc-problem-workflow.png",
+    title: "業務プロセス自体が人間前提のまま",
+  },
+  {
+    visual: "knowledge",
+    image: "/assets/anc-problem-knowledge.png",
+    title: "ナレッジが分散し、AIが活用できない",
+  },
+  {
+    visual: "governance",
+    image: "/assets/anc-problem-governance.png",
+    title: "ガバナンスが曖昧で、本格展開できない",
+  },
+  {
+    visual: "measurement",
+    image: "/assets/anc-problem-measurement.png",
+    title: "効果測定がなく、投資対効果を説明できない",
+  },
 ];
 
 const companyShifts = [
-  ["個人利用中心", "ワークフロー組み込み型"],
-  ["情報検索", "組織記憶の活用"],
-  ["会議依存の意思決定", "AI支援の意思決定"],
-  ["部分最適", "全社OS再設計"],
-];
+  {
+    beforeIcon: "person",
+    before: "個人利用中心",
+    afterIcon: "organization",
+    after: "ワークフロー組み込み型",
+  },
+  {
+    beforeIcon: "search",
+    before: "情報探索",
+    afterIcon: "database",
+    after: "組織記憶の活用",
+  },
+  {
+    beforeIcon: "people",
+    before: "会議依存の意思決定",
+    afterIcon: "sparkle",
+    after: "AI支援の意思決定",
+  },
+  {
+    beforeIcon: "grid",
+    before: "部分最適",
+    afterIcon: "target",
+    after: "全社OS再設計",
+  },
+] satisfies Array<{ beforeIcon: AncIconType; before: string; afterIcon: AncIconType; after: string }>;
 
 const layers = [
   {
     number: "01",
     title: "Strategy / KPI",
     body: "経営課題とAI活用テーマを接続する。",
-    image: "/assets/lp-data-mesh.png",
+    image: "/assets/anc-layer-strategy-kpi.png",
   },
   {
     number: "02",
     title: "Workflow",
     body: "営業・CS・管理・開発の業務プロセスを再設計する。",
-    image: "/assets/lp-wave-field.png",
+    image: "/assets/anc-layer-workflow.png",
   },
   {
     number: "03",
     title: "Knowledge / Data",
     body: "社内ナレッジとデータをAIが使える形に整える。",
-    image: "/assets/lp-layer-stack.png",
+    image: "/assets/anc-layer-knowledge-data.png",
   },
   {
     number: "04",
     title: "Agent / Application",
     body: "AI Agent、RAG、業務アプリを実装する。",
-    image: "/assets/implementation-agent.png",
+    image: "/assets/anc-layer-agent-application.png",
   },
   {
     number: "05",
     title: "Governance / Enablement",
     body: "権限、ルール、教育、運用体制を設計する。",
-    image: "/assets/how-we-work-measure-operate.png",
+    image: "/assets/anc-layer-governance-enablement.png",
   },
 ];
 
@@ -80,42 +147,48 @@ const roadmapBullets = [
 ];
 
 const roadmapSteps = [
-  { icon: "flow", step: "STEP 1", title: "経営課題・事業KPIヒアリング" },
-  { icon: "document", step: "STEP 2", title: "業務・意思決定プロセスの可視化" },
-  { icon: "database", step: "STEP 3", title: "AI活用テーマの設計" },
-  { icon: "grid", step: "STEP 4", title: "優先順位・リスク・ガバナンス設計" },
-  { icon: "clock", step: "STEP 5", title: "90日実装ロードマップ作成" },
-  { icon: "person", step: "STEP 6", title: "診断結果・実装提案のご報告" },
-] satisfies Array<{ icon: AncIconType; step: string; title: string }>;
+  { visual: "kpi", step: "STEP 1", title: "経営課題・事業KPIヒアリング", image: "/assets/anc-roadmap-step-kpi.png" },
+  { visual: "process", step: "STEP 2", title: "業務・意思決定プロセスの可視化", image: "/assets/anc-roadmap-step-process.png" },
+  { visual: "brain", step: "STEP 3", title: "AI活用テーマの設計", image: "/assets/anc-roadmap-step-brain.png" },
+  { visual: "priority", step: "STEP 4", title: "優先順位・リスク・ガバナンス設計", image: "/assets/anc-roadmap-step-priority.png" },
+  { visual: "roadmap", step: "STEP 5", title: "90日実装ロードマップ作成", image: "/assets/anc-roadmap-step-roadmap.png" },
+  { visual: "report", step: "STEP 6", title: "診断結果・実装提案のご報告", image: "/assets/anc-roadmap-step-report.png" },
+] satisfies Array<{ visual: RoadmapStepVisualType; step: string; title: string; image: string }>;
 
-const deliverables: IconCard[] = [
+const deliverables: DeliverableCard[] = [
   {
-    icon: "map",
-    title: "AI Native化構想マップ",
+    visual: "maturity",
+    image: "/assets/anc-deliverable-maturity.png",
+    title: "AI Native成熟度マップ",
     body: "現在地と目指す姿を可視化",
   },
   {
-    icon: "document",
+    visual: "usecases",
+    image: "/assets/anc-deliverable-usecases.png",
     title: "部門別AI活用候補リスト",
     body: "部門ごとのユースケースを整理",
   },
   {
-    icon: "before",
+    visual: "beforeAfter",
+    image: "/assets/anc-deliverable-before-after.png",
     title: "業務プロセス Before / After案",
     body: "AI導入前後のフローを比較",
   },
   {
-    icon: "agent",
+    visual: "agentFlow",
+    image: "/assets/anc-deliverable-agent-flow.png",
     title: "AI Agent / Workflow構成案",
     body: "必要なAgentと連携を設計",
   },
   {
-    icon: "document",
+    visual: "roadmap",
+    image: "/assets/anc-deliverable-roadmap.png",
     title: "90日実装ロードマップ",
     body: "優先順位とマイルストーンを明確化",
   },
   {
-    icon: "document",
+    visual: "kpi",
+    image: "/assets/anc-deliverable-kpi.png",
     title: "KPI測定シート / ガバナンス方針案",
     body: "効果測定と運用ルールを整備",
   },
@@ -125,24 +198,27 @@ const implementationAreas = [
   {
     title: "営業・CSワークフロー",
     body: "問い合わせ、提案、議事録、対応をAIで支援。",
-    variant: "tasks",
+    variant: "sales",
+    image: "/assets/anc-area-sales.png",
   },
   {
     title: "社内ナレッジAIアシスタント",
     body: "FAQ、業務マニュアル、社内文書を横断検索。",
-    variant: "search",
+    variant: "knowledge",
+    image: "/assets/anc-area-knowledge.png",
   },
   {
     title: "経営会議・意思決定支援AI",
-    body: "論点整理、資料要約、過去判断に基づく提案。",
-    variant: "metrics",
+    body: "論点抽出、指標要約、選択肢生成を支援。",
+    variant: "executive",
+    image: "/assets/anc-area-executive.png",
   },
   {
     title: "AI駆動開発プロセス",
-    body: "仕様、実装、レビュー、テストをAI前提で再設計。",
-    variant: "board",
+    body: "仕様、実装、レビュー、テストをAI補助で再設計。",
+    variant: "development",
   },
-];
+] satisfies Array<{ title: string; body: string; variant: ImplementationAreaType; image?: string }>;
 
 const offerFacts = [
   { icon: "clock", label: "期間", value: "3〜4週間" },
@@ -251,6 +327,38 @@ function AncIcon({ type }: { type: AncIconType }) {
           <circle cx="27" cy="10.5" r="2" />
         </>
       )}
+      {type === "search" && (
+        <>
+          <circle cx="17" cy="17" r="10" />
+          <path d="m24.2 24.2 7.2 7.2" />
+        </>
+      )}
+      {type === "organization" && (
+        <>
+          <rect x="16" y="6" width="8" height="8" rx="1.5" />
+          <rect x="7" y="26" width="8" height="8" rx="1.5" />
+          <rect x="16" y="26" width="8" height="8" rx="1.5" />
+          <rect x="25" y="26" width="8" height="8" rx="1.5" />
+          <path d="M20 14v6" />
+          <path d="M11 26v-6h18v6" />
+        </>
+      )}
+      {type === "sparkle" && (
+        <>
+          <path d="M20 5.5 23.8 16 34.5 20l-10.7 4L20 34.5 16.2 24 5.5 20l10.7-4Z" />
+          <path d="M31 5.5v7" />
+          <path d="M34.5 9h-7" />
+          <path d="M9 27.5v5.5" />
+          <path d="M11.8 30.2H6.2" />
+        </>
+      )}
+      {type === "target" && (
+        <>
+          <circle cx="20" cy="20" r="14" />
+          <circle cx="20" cy="20" r="8.5" />
+          <circle cx="20" cy="20" r="3" />
+        </>
+      )}
       {type === "map" && (
         <>
           <path d="M7 11.5 16 7l8 4.5 9-4.5v25.5L24 37l-8-4.5L7 37z" />
@@ -300,64 +408,318 @@ function AncIcon({ type }: { type: AncIconType }) {
   );
 }
 
-function MiniInterface({ variant }: { variant: string }) {
-  if (variant === "search") {
+function AncProblemVisual({ type }: { type: AncProblemVisualType }) {
+  const blue = `anc-problem-blue-${type}`;
+  const pale = `anc-problem-pale-${type}`;
+  const deep = `anc-problem-deep-${type}`;
+
+  return (
+    <svg className={`anc-problem-visual anc-problem-visual--${type}`} viewBox="0 0 220 124" aria-hidden="true">
+      <defs>
+        <linearGradient id={blue} x1="0" x2="1" y1="0" y2="1">
+          <stop offset="0%" stopColor="#8db8ff" />
+          <stop offset="54%" stopColor="#4f86f7" />
+          <stop offset="100%" stopColor="#0b65ff" />
+        </linearGradient>
+        <linearGradient id={pale} x1="0" x2="1" y1="0" y2="1">
+          <stop offset="0%" stopColor="#ffffff" />
+          <stop offset="100%" stopColor="#edf5ff" />
+        </linearGradient>
+        <linearGradient id={deep} x1="0" x2="1" y1="0" y2="1">
+          <stop offset="0%" stopColor="#5f95ff" />
+          <stop offset="100%" stopColor="#0c4fd1" />
+        </linearGradient>
+      </defs>
+
+      {type === "network" && (
+        <>
+          <g fill={`url(#${pale})`} stroke="#dbe7f7" strokeWidth="1.4">
+            <path d="M31 68 61 52l30 16-30 16Z" />
+            <path d="M14 92 44 76l30 16-30 16Z" />
+            <path d="M79 92 109 76l30 16-30 16Z" />
+            <path d="M144 68 174 52l30 16-30 16Z" />
+          </g>
+          <g fill="none" stroke="#76a5ff" strokeDasharray="4 5" strokeWidth="1.8">
+            <path d="M61 52c22 4 38 18 48 40" />
+            <path d="M174 52c-25 4-48 18-65 40" />
+            <path d="M44 76c25-8 44-3 65 16" />
+          </g>
+          <g fill={`url(#${blue})`} stroke="none">
+            <circle cx="61" cy="46" r="5" />
+            <path d="M50 60c2-7 6-10 11-10s9 3 11 10Z" />
+            <circle cx="44" cy="70" r="5" />
+            <path d="M33 84c2-7 6-10 11-10s9 3 11 10Z" />
+            <circle cx="109" cy="70" r="5" />
+            <path d="M98 84c2-7 6-10 11-10s9 3 11 10Z" />
+            <circle cx="174" cy="46" r="5" />
+            <path d="M163 60c2-7 6-10 11-10s9 3 11 10Z" />
+          </g>
+        </>
+      )}
+
+      {type === "poc" && (
+        <>
+          <ellipse cx="110" cy="91" rx="62" ry="18" fill={`url(#${deep})`} stroke="none" opacity="0.2" />
+          <path d="M50 74c0 18 27 32 60 32s60-14 60-32v11c0 18-27 32-60 32S50 103 50 85Z" fill={`url(#${deep})`} stroke="none" opacity="0.85" />
+          <ellipse cx="110" cy="73" rx="60" ry="32" fill={`url(#${pale})`} stroke="#bfd4f5" strokeWidth="1.5" />
+          <ellipse cx="110" cy="70" rx="40" ry="14" fill="none" stroke="#8bb3ff" strokeWidth="2" opacity="0.65" />
+          <path d="M110 36c23 0 42 9 51 22" fill="none" stroke="#397dff" strokeDasharray="4 5" strokeWidth="1.8" />
+          <circle cx="151" cy="43" r="5" fill={`url(#${blue})`} stroke="none" />
+          <g stroke="none">
+            <path d="M90 70 110 60l20 10-20 10Z" fill="#a9c8ff" />
+            <path d="M90 70v18l20 10V80Z" fill="#79a7ff" />
+            <path d="M130 70v18l-20 10V80Z" fill="#2f72ea" />
+          </g>
+        </>
+      )}
+
+      {type === "workflow" && (
+        <>
+          <g fill={`url(#${pale})`} stroke="#d7e5f7" strokeWidth="1.3">
+            <path d="M38 78 110 40l72 38-72 38Z" opacity="0.7" />
+            <path d="M55 64 110 35l55 29-55 29Z" />
+            <path d="M37 92 110 54l73 38-73 38Z" opacity="0.56" />
+          </g>
+          <g fill="none" stroke="#4f86f7" strokeWidth="2.2">
+            <path d="M82 64h57v30H82Z" />
+            <path d="M110 64v30" />
+            <path d="M82 79h57" />
+            <path d="M70 72 82 72" />
+            <path d="M139 86h15" />
+          </g>
+          <g fill={`url(#${blue})`} stroke="none">
+            <circle cx="82" cy="64" r="5" />
+            <circle cx="110" cy="64" r="5" />
+            <circle cx="139" cy="64" r="5" />
+            <circle cx="82" cy="94" r="5" />
+            <circle cx="110" cy="94" r="5" />
+            <circle cx="139" cy="94" r="5" />
+            <circle cx="70" cy="72" r="5" />
+            <circle cx="154" cy="86" r="5" />
+          </g>
+        </>
+      )}
+
+      {type === "knowledge" && (
+        <>
+          <g fill="none" stroke="#86adf8" strokeDasharray="4 5" strokeWidth="1.7">
+            <path d="M109 43 55 61" />
+            <path d="M111 43 166 61" />
+            <path d="M110 72 55 91" />
+            <path d="M110 72 166 91" />
+          </g>
+          <g stroke="none">
+            <path d="M84 55 110 42l26 13-26 14Z" fill="#a9c8ff" />
+            <path d="M84 55v30l26 14V69Z" fill="#70a0ff" />
+            <path d="M136 55v30l-26 14V69Z" fill="#2165df" />
+            {[["45", "56"], ["155", "56"], ["45", "86"], ["155", "86"], ["100", "24"]].map(([x, y]) => (
+              <g key={`${x}-${y}`}>
+                <path d={`M${x} ${y}l11-6 11 6-11 6Z`} fill="#a8c8ff" />
+                <path d={`M${x} ${y}v12l11 6V${Number(y) + 6}Z`} fill="#6e9fff" />
+                <path d={`M${Number(x) + 22} ${y}v12l-11 6V${Number(y) + 6}Z`} fill="#3474e8" />
+              </g>
+            ))}
+          </g>
+        </>
+      )}
+
+      {type === "governance" && (
+        <>
+          <ellipse cx="111" cy="76" rx="74" ry="28" fill="none" stroke="#8bb3ff" strokeDasharray="5 7" strokeWidth="1.8" opacity="0.78" />
+          <circle cx="56" cy="65" r="5" fill={`url(#${blue})`} stroke="none" />
+          <circle cx="168" cy="65" r="5" fill={`url(#${blue})`} stroke="none" />
+          <path d="M110 27 147 42v28c0 25-15 44-37 54-22-10-37-29-37-54V42Z" fill={`url(#${pale})`} stroke="#adc9f8" strokeWidth="1.6" />
+          <path d="M110 35 137 46v22c0 20-11 35-27 43-16-8-27-23-27-43V46Z" fill={`url(#${blue})`} stroke="none" opacity="0.2" />
+          <path d="m95 73 11 11 24-27" fill="none" stroke="#0b65ff" strokeWidth="4" />
+        </>
+      )}
+
+      {type === "measurement" && (
+        <>
+          <rect x="39" y="24" width="102" height="72" rx="6" fill={`url(#${pale})`} stroke="#d2e1f4" strokeWidth="1.5" />
+          <path d="M51 81h78M51 63h78M51 45h78" stroke="#d9e7f6" strokeWidth="1.2" />
+          <path d="M52 75 71 59l18 14 21-26 20 10" fill="none" stroke="#3a7fff" strokeWidth="2.2" />
+          <g fill={`url(#${blue})`} stroke="none" opacity="0.72">
+            <rect x="62" y="72" width="9" height="24" rx="2" />
+            <rect x="83" y="62" width="9" height="34" rx="2" />
+            <rect x="104" y="50" width="9" height="46" rx="2" />
+          </g>
+          <circle cx="163" cy="78" r="30" fill="none" stroke="#dce8fb" strokeWidth="12" />
+          <path d="M163 48a30 30 0 0 1 26 45" fill="none" stroke={`url(#${deep})`} strokeWidth="12" />
+          <circle cx="163" cy="78" r="15" fill="#fff" stroke="none" />
+        </>
+      )}
+    </svg>
+  );
+}
+
+function RoadmapStepVisual({ image }: { image: string }) {
+  return (
+    <div className="anc-step-visual" aria-hidden="true">
+      <img src={image} alt="" />
+    </div>
+  );
+}
+
+function DeliverableVisual({ image, type }: { image: string; type: DeliverableVisualType }) {
+  return (
+    <div className={`anc-deliverable-visual anc-deliverable-visual--${type}`} aria-hidden="true">
+      <img src={image} alt="" />
+    </div>
+  );
+}
+
+function ImplementationPreview({ variant, image }: { variant: ImplementationAreaType; image?: string }) {
+  if (image) {
     return (
-      <div className="anc-mini anc-mini--search" aria-hidden="true">
-        <div className="anc-mini-searchbar"></div>
-        <span></span>
-        <span></span>
-        <span></span>
+      <div className="anc-area-preview anc-area-preview--image" aria-hidden="true">
+        <img src={image} alt="" />
       </div>
     );
   }
 
-  if (variant === "metrics") {
+  if (variant === "knowledge") {
     return (
-      <div className="anc-mini anc-mini--metrics" aria-hidden="true">
-        <div>
-          <b></b>
+      <div className="anc-area-preview anc-area-preview--knowledge" aria-hidden="true">
+        <div className="anc-knowledge-title">
           <span></span>
+          <div>
+            <strong>AIアシスタント</strong>
+            <small>これには「何をお探しですか？」</small>
+          </div>
         </div>
-        <div>
-          <b></b>
-          <span></span>
+        <div className="anc-knowledge-search">
+          <span>例：経費精算のルール</span>
+          <b>検索</b>
         </div>
-        <div>
-          <b></b>
-          <span></span>
+        <div className="anc-answer-box">
+          <strong>回答</strong>
+          <p>
+            経費精算の申請手順は以下の通りです。
+            <br />
+            1. 経費精算システムにログイン
+            <br />
+            2. 領収書を添付し、承認者を選択
+            <br />
+            3. 上長に申請して承認を待つ
+          </p>
+        </div>
+        <div className="anc-doc-list">
+          <strong>おすすめドキュメント</strong>
+          {["経費精算ガイドライン v2.1", "出張旅費規程", "経費精算FAQ"].map((label) => (
+            <span key={label}>
+              <i></i>
+              {label}
+            </span>
+          ))}
         </div>
       </div>
     );
   }
 
-  if (variant === "board") {
+  if (variant === "executive") {
     return (
-      <div className="anc-mini anc-mini--board" aria-hidden="true">
-        <div>
-          <strong>Backlog</strong>
-          <span></span>
-          <span></span>
+      <div className="anc-area-preview anc-area-preview--executive" aria-hidden="true">
+        <div className="anc-metric-panel">
+          <strong>経営サマリー（今月）</strong>
+          {[
+            ["売上高", "¥2.48億", "+12.6%"],
+            ["営業利益", "¥3,420万", "+18.3%"],
+            ["粗利率", "36.7%", "+2.1pt"],
+            ["顧客満足度", "4.3 / 5.0", "-0.1pt"],
+          ].map(([label, value, trend]) => (
+            <span key={label}>
+              <b>{label}</b>
+              <i>{value}</i>
+              <em className={trend.startsWith("+") ? "is-up" : "is-down"}>{trend}</em>
+            </span>
+          ))}
         </div>
-        <div>
-          <strong>In Progress</strong>
-          <span></span>
-          <span></span>
+        <div className="anc-insight-panel">
+          <strong>主要トレンド</strong>
+          <p>新規受注が前年同月比で12.6%増加</p>
+          <p>広告CPAは改善（-8.7%）</p>
+          <p>解約率はやや上昇（+0.3pt）</p>
         </div>
-        <div>
-          <strong>Review</strong>
-          <span></span>
-          <span></span>
+        <div className="anc-action-panel">
+          <strong>次のアクション候補</strong>
+          <p>価格戦略の見直しを検討</p>
+          <p>ハイタッチ顧客の解約要因を深掘り</p>
+          <p>プロダクト導入オンボーディングを強化</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (variant === "development") {
+    return (
+      <div className="anc-area-preview anc-area-preview--development" aria-hidden="true">
+        <div className="anc-kanban">
+          {[
+            ["Backlog", "12", "ユーザー管理 API設計", "認証基盤のリファクタリング"],
+            ["In Progress", "5", "データ集計バッチ実装", "テストケース リファクタリング"],
+            ["Review", "3", "コードレビュー対応", "テストケース追加"],
+            ["Done", "18", "統合テスト完了", "リリース準備"],
+          ].map(([heading, count, first, second]) => (
+            <div key={heading}>
+              <strong>
+                {heading}
+                <small>{count}</small>
+              </strong>
+              <span>{first}</span>
+              <span>{second}</span>
+            </div>
+          ))}
+        </div>
+        <div className="anc-dev-summary">
+          <strong>AI支援サマリー</strong>
+          <p>本日までに8件のPRレビューを支援しました。</p>
+          <p>バグ検出率：27% 改善（先週比）</p>
+          <b>詳細レポートを見る</b>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="anc-mini anc-mini--tasks" aria-hidden="true">
-      <span></span>
-      <span></span>
-      <span></span>
+    <div className="anc-area-preview anc-area-preview--sales" aria-hidden="true">
+      <div className="anc-sales-sidebar">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div className="anc-sales-main">
+        <div className="anc-sales-head">
+          <strong>問い合わせ管理</strong>
+          <b>+ 新規作成</b>
+        </div>
+        <div className="anc-sales-tabs">
+          {["すべて", "未対応", "対応中", "完了"].map((label, index) => (
+            <span className={index === 0 ? "is-active" : undefined} key={label}>
+              {label}
+            </span>
+          ))}
+        </div>
+        {[
+          ["問い合わせ受付", "株式会社A　山田様", "10:21", "承り待ち"],
+          ["経費申請確認", "佐藤 拓也", "09:47", "対応中"],
+          ["議事録サマリー", "定例ミーティング", "5/16", "完了"],
+          ["提案書ドラフト作成", "株式会社B　鈴木様", "昨日", "対応中"],
+        ].map(([title, meta, time, status]) => (
+          <div className="anc-ticket" key={title}>
+            <i></i>
+            <span>
+              <strong>{title}</strong>
+              <small>{meta}</small>
+            </span>
+            <b>{time}</b>
+            <em>{status}</em>
+          </div>
+        ))}
+        <p>すべての問い合わせを表示</p>
+      </div>
     </div>
   );
 }
@@ -372,11 +734,15 @@ export default function AiNativeCompanyPage() {
             <h1 id="anc-heading">
               会社を、
               <br />
-              AI前提のOperating Systemへ。
+              AI前提の
+              <br />
+              Operating Systemへ。
             </h1>
             <p className="anc-lead">
               AIツールの導入ではなく、意思決定、業務プロセス、ナレッジ、データ、
-              ガバナンスまでを再設計。人間とAIが効率的に考え、動き、学習する会社をつくります。
+              ガバナンスまでを再設計。
+              <br />
+              人間とAIが効率的に考え、動き、学習する会社をつくります。
             </p>
             <div className="anc-actions">
               <a className="anc-primary" href="#contact">
@@ -393,40 +759,60 @@ export default function AiNativeCompanyPage() {
         </section>
 
         <section className="anc-section anc-problems" aria-labelledby="anc-problems-heading">
-          <p className="anc-kicker">よくある課題</p>
-          <h2 id="anc-problems-heading">
-            AIを使い始めても、会社はまだAI Nativeになっていない。
-          </h2>
+          <div className="anc-problems__head">
+            <p className="anc-kicker">よくある課題</p>
+            <h2 id="anc-problems-heading">AIを導入しても、成果につながっていない。</h2>
+            <p className="anc-problems__lead">
+              ツール利用は始まったが、業務・意思決定・運用の設計が変わらないままでは、
+              全社の成果に結びつきません。
+            </p>
+          </div>
           <div className="anc-problem-grid">
             {painPoints.map((point) => (
               <article className="anc-problem-card" key={point.title}>
-                <AncIcon type={point.icon} />
+                <img className={`anc-problem-visual anc-problem-visual--${point.visual}`} src={point.image} alt="" />
                 <h3>{point.title}</h3>
               </article>
             ))}
           </div>
-        </section>
 
-        <section className="anc-section anc-definition" aria-labelledby="anc-definition-heading">
-          <div>
-            <p className="anc-kicker">AI Native Companyとは</p>
-            <h2 id="anc-definition-heading">
-              AIを使う会社ではなく、
-              <br />
-              AIを前提に動く会社へ。
-            </h2>
+          <div className="anc-problems__divider" />
+
+          <div className="anc-definition" aria-labelledby="anc-definition-heading">
+            <div className="anc-definition__copy">
+              <p className="anc-kicker">AI Native Companyとは</p>
+              <h2 id="anc-definition-heading">
+                目的は、AIを使うことではなく、
+                <br />
+                AIで成果が出る会社に変えること。
+              </h2>
+              <p>
+                個人のツール活用から、会社全体の判断・業務・学習の仕組みへ。
+                AIを組み込んだ運用に変えることで、継続的な成果をつくります。
+              </p>
+            </div>
+            <dl className="anc-shift-list">
+              {companyShifts.map((item) => (
+                <div key={item.before}>
+                  <dt>
+                    <span className="anc-shift-icon" aria-hidden="true">
+                      <AncIcon type={item.beforeIcon} />
+                    </span>
+                    <span>{item.before}</span>
+                  </dt>
+                  <dd>
+                    <span className="anc-shift-arrow" aria-hidden="true">
+                      →
+                    </span>
+                    <span className="anc-shift-icon" aria-hidden="true">
+                      <AncIcon type={item.afterIcon} />
+                    </span>
+                    <span>{item.after}</span>
+                  </dd>
+                </div>
+              ))}
+            </dl>
           </div>
-          <dl className="anc-shift-list">
-            {companyShifts.map(([before, after]) => (
-              <div key={before}>
-                <dt>{before}</dt>
-                <dd>
-                  <span aria-hidden="true">→</span>
-                  {after}
-                </dd>
-              </div>
-            ))}
-          </dl>
         </section>
 
         <section className="anc-section anc-layers" aria-labelledby="anc-layers-heading">
@@ -466,8 +852,8 @@ export default function AiNativeCompanyPage() {
           <ol className="anc-step-list">
             {roadmapSteps.map((item) => (
               <li key={item.step}>
-                <AncIcon type={item.icon} />
-                <span>{item.step}</span>
+                <span className="anc-step-badge">{item.step}</span>
+                <RoadmapStepVisual image={item.image} />
                 <strong>{item.title}</strong>
               </li>
             ))}
@@ -479,9 +865,9 @@ export default function AiNativeCompanyPage() {
           <h2 id="anc-deliverables-heading">AI導入の投資判断に必要な資料を納品します。</h2>
           <div className="anc-deliverable-grid">
             {deliverables.map((item) => (
-              <article className="anc-deliverable-card" key={item.title}>
-                <AncIcon type={item.icon} />
-                <div>
+              <article className={`anc-deliverable-card anc-deliverable-card--${item.visual}`} key={item.title}>
+                <DeliverableVisual image={item.image} type={item.visual} />
+                <div className="anc-deliverable-copy">
                   <h3>{item.title}</h3>
                   <p>{item.body}</p>
                 </div>
@@ -497,7 +883,7 @@ export default function AiNativeCompanyPage() {
               <article className="anc-area-card" key={area.title}>
                 <h3>{area.title}</h3>
                 <p>{area.body}</p>
-                <MiniInterface variant={area.variant} />
+                <ImplementationPreview image={area.image} variant={area.variant} />
               </article>
             ))}
           </div>
@@ -526,7 +912,7 @@ export default function AiNativeCompanyPage() {
           <form className="anc-form">
             <label>
               <span>会社名</span>
-              <input name="company" type="text" placeholder="株式会社コードマーク" />
+              <input name="company" type="text" placeholder="CordMark株式会社" />
             </label>
             <label>
               <span>氏名</span>
@@ -569,10 +955,10 @@ export default function AiNativeCompanyPage() {
                 <option value="" disabled>
                   選択してください
                 </option>
-                <option>一部社員が個人利用している</option>
-                <option>PoCを進めている</option>
-                <option>部門導入済み</option>
                 <option>未導入</option>
+                <option>一部社員個人利用</option>
+                <option>部分導入済み</option>
+                <option>PoC</option>
               </select>
             </label>
             <label>
@@ -581,9 +967,9 @@ export default function AiNativeCompanyPage() {
                 <option value="" disabled>
                   選択してください
                 </option>
+                <option>自社に合うか相談</option>
                 <option>診断について詳しく聞きたい</option>
-                <option>自社に合うか相談したい</option>
-                <option>実装支援まで相談したい</option>
+                <option>実装支援</option>
               </select>
             </label>
             <label>

@@ -403,7 +403,7 @@ export default function Home() {
           <a className="brand brand--footer" href="#top" aria-label="CordMark home">
             CordMark
           </a>
-          <small>© 2025 CORDMARK Inc. All rights reserved.</small>
+          <small>© 2026 CORDMARK Inc. All rights reserved.</small>
         </div>
         <nav aria-label="Footer navigation">
           {footerLinks.map((link) => (

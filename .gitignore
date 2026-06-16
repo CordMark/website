@@ -34,7 +34,4 @@ next-env.d.ts
 playwright-report/
 test-results/
 *.png
-!public/assets/ai-*.png
-!public/assets/lp-*.png
-!public/assets/how-we-work-*.png
-!public/assets/implementation-*.png
+!public/assets/*.png
