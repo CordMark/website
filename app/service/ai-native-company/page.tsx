@@ -739,8 +739,9 @@ export default function AiNativeCompanyPage() {
               Operating Systemへ。
             </h1>
             <p className="anc-lead">
-              AIツールの導入ではなく、意思決定、業務プロセス、ナレッジ、データ、
-              ガバナンスまでを再設計。
+              AIツールの導入ではなく、意思決定、業務プロセス、
+              <br />
+              ナレッジ、データ、ガバナンスまでを再設計。
               <br />
               人間とAIが効率的に考え、動き、学習する会社をつくります。
             </p>
