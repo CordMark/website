@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Header } from "./Header";
+import { ImageDragBlocker } from "./ImageDragBlocker";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -19,6 +20,7 @@ export default function RootLayout({
   return (
     <html lang="ja" suppressHydrationWarning>
       <body>
+        <ImageDragBlocker />
         <Header />
         {children}
       </body>

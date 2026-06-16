@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Footer } from "../Footer";
+import { LoadingSubmitButton } from "../LoadingSubmitButton";
+import { ServiceGuideDownload } from "./ServiceGuideDownload";
 
 export const metadata: Metadata = {
   title: "お問い合わせ | CordMark",
@@ -73,17 +75,34 @@ function ContactSelect({
   );
 }
 
-function ConsultationIcon() {
-  return (
-    <svg viewBox="0 0 72 54" aria-hidden="true">
-      <path d="M6 7.5h39a6 6 0 0 1 6 6v21a6 6 0 0 1-6 6H24L12 49v-8.5H6a6 6 0 0 1-6-6v-21a6 6 0 0 1 6-6Z" />
-      <path d="M31 17.5h35a6 6 0 0 1 6 6v18a6 6 0 0 1-6 6h-5v6.5l-10-6.5H31a6 6 0 0 1-6-6v-18a6 6 0 0 1 6-6Z" />
-      <path d="M40 32.5h.1M49 32.5h.1M58 32.5h.1" />
-    </svg>
-  );
+function ContactFormStatus({ sent, error }: { sent?: string; error?: string }) {
+  if (sent === "1") {
+    return (
+      <p className="form-status form-status--success" role="status">
+        送信しました。担当者より2営業日以内を目安にご連絡いたします。
+      </p>
+    );
+  }
+
+  if (error === "1") {
+    return (
+      <p className="form-status form-status--error" role="alert">
+        送信できませんでした。時間をおいて再度お試しください。
+      </p>
+    );
+  }
+
+  return null;
 }
 
-export default function ContactPage() {
+export default async function ContactPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ sent?: string; error?: string; downloadSent?: string; downloadError?: string }>;
+}) {
+  const status = await searchParams;
+  const downloadStatus = status?.downloadError === "1" ? "error" : status?.downloadSent === "1" ? "sent" : undefined;
+
   return (
     <>
       <main id="top" className="contact-page site-main">
@@ -106,7 +125,7 @@ export default function ContactPage() {
           </div>
         </section>
 
-        <section className="contact-form-section" aria-labelledby="contact-form-heading">
+        <section className="contact-form-section" id="contact" aria-labelledby="contact-form-heading">
           <div className="contact-section-head">
             <h2 id="contact-form-heading">お問い合わせフォーム</h2>
             <p>
@@ -120,7 +139,10 @@ export default function ContactPage() {
             </p>
           </div>
 
-          <form className="contact-form">
+          <form className="contact-form" action="/api/contact" method="post">
+            <input type="hidden" name="formType" value="general" />
+            <input type="hidden" name="redirectTo" value="/contact#contact" />
+            <ContactFormStatus sent={status?.sent} error={status?.error} />
             <div className="contact-field">
               <label htmlFor="company">
                 会社名 <RequiredBadge />
@@ -193,9 +215,9 @@ export default function ContactPage() {
               </div>
             </fieldset>
 
-            <button className="contact-submit" type="button">
-              内容を確認する <span aria-hidden="true">→</span>
-            </button>
+            <LoadingSubmitButton className="contact-submit">
+              送信する <span aria-hidden="true">→</span>
+            </LoadingSubmitButton>
 
             <p className="contact-policy">
               ご入力いただいた情報は、
@@ -205,9 +227,9 @@ export default function ContactPage() {
           </form>
         </section>
 
-        <section className="contact-next-step" aria-label="資料請求">
+        <section className="contact-next-step" id="service-guide" aria-label="資料請求">
           <div className="contact-next-step__icon">
-            <ConsultationIcon />
+            <img src="/assets/contact-consultation-chat.png" alt="" aria-hidden="true" />
           </div>
           <div className="contact-next-step__copy">
             <h2>まずは壁打ち・ご相談だけでも構いません</h2>
@@ -217,9 +239,7 @@ export default function ContactPage() {
               最適な進め方をご提案します。
             </p>
           </div>
-          <a className="contact-download" href="/#services">
-            サービス資料をダウンロードする <span aria-hidden="true">→</span>
-          </a>
+          <ServiceGuideDownload status={downloadStatus} />
         </section>
       </main>
 

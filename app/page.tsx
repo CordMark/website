@@ -18,7 +18,7 @@ const services = [
     lead: "開発組織をAI前提のプロセスへ再設計する。",
     body:
       "仕様策定、実装、レビュー、テスト、ドキュメント作成、開発マネジメントにAIを組み込み、開発リードタイム、レビュー待ち時間、手戻り率、AI利用率の改善まで支援します。",
-    image: "/assets/lp-wave-field.png",
+    image: "/assets/website-wave-field.png",
     href: "/service/ai-driven-development",
   },
   {
@@ -27,7 +27,7 @@ const services = [
     lead: "会社全体をAI前提の業務構造へ再設計する。",
     body:
       "営業、CS、採用、管理部門、開発、マーケティングにAI Agentやワークフローを組み込み、意思決定・業務実行・ナレッジ活用が回る状態をつくります。",
-    image: "/assets/lp-cube-system.png",
+    image: "/assets/website-cube-system.png",
     href: "/service/ai-native-company",
   },
 ];
@@ -204,7 +204,7 @@ export default function Home() {
             </a>
           </div>
           <div className="hero-section__visual" aria-hidden="true">
-            <img src="/assets/lp-ribbon-system.png" alt="" />
+            <img src="/assets/website-ribbon-system.png" alt="" />
           </div>
         </section>
 
@@ -236,7 +236,7 @@ export default function Home() {
             </a>
           </div>
           <div className="who-section__image" aria-hidden="true">
-            <img src="/assets/lp-who-we-are-layer-stack.png" alt="" />
+            <img src="/assets/website-who-we-are-layer-stack.png" alt="" />
           </div>
         </section>
 
@@ -268,7 +268,7 @@ export default function Home() {
         <section className="stats-band" aria-label="AI Native principles">
           <img
             className="stats-band__image"
-            src="/assets/lp-data-mesh.png"
+            src="/assets/website-data-mesh.png"
             alt=""
             aria-hidden="true"
           />
@@ -341,7 +341,7 @@ export default function Home() {
         <section className="philosophy-section" id="philosophy">
           <img
             className="philosophy-section__bg"
-            src="/assets/lp-philosophy-stairs-bg.png"
+            src="/assets/website-philosophy-stairs-bg.png"
             alt=""
             aria-hidden="true"
           />
@@ -386,7 +386,7 @@ export default function Home() {
             <h2>Let&apos;s build your AI Native company.</h2>
             <p>AIを試す段階から、AIで事業を動かす段階へ。</p>
           </div>
-          <a className="button button--dark final-cta__button" href="mailto:hello@cordmark.example">
+          <a className="button button--dark final-cta__button" href="/contact">
             Contact Us <span aria-hidden="true">→</span>
           </a>
         </section>

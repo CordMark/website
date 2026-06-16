@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import { Footer } from "../Footer";
 
 export const metadata: Metadata = {
@@ -25,14 +26,19 @@ const principles = [
   },
 ];
 
-const companyInfo = [
+const companyInfo: Array<[string, ReactNode]> = [
   ["会社名", "CordMark株式会社"],
   ["代表者", "橋本武士、山本圭亮"],
   ["設立", "2026年6月"],
   ["資本金", "80万円"],
   [
     "所在地",
-    "神奈川県横浜市（※詳細な所在地は、個人情報保護法その他法令に基づき必要な場合、本人確認のうえ遅滞なく開示します。）",
+    <>
+      神奈川県横浜市
+      <span className="about-info-note">
+        ※詳細な所在地は、個人情報保護法その他法令に基づき必要な場合、本人確認のうえ遅滞なく開示します。
+      </span>
+    </>,
   ],
   [
     "事業内容",
@@ -66,7 +72,7 @@ export default function AboutPage() {
             </p>
           </div>
           <div className="about-hero__visual" aria-hidden="true">
-            <img src="/assets/ai-native-company-hero.png" alt="" />
+            <img src="/assets/about-hero.png" alt="" />
           </div>
         </section>
 
@@ -119,7 +125,11 @@ export default function AboutPage() {
               <div key={label}>
                 <dt>{label}</dt>
                 <dd>
-                  {label === "お問い合わせ" ? <a href={`mailto:${value}`}>{value}</a> : value}
+                  {label === "お問い合わせ" && typeof value === "string" ? (
+                    <a href={`mailto:${value}`}>{value}</a>
+                  ) : (
+                    value
+                  )}
                 </dd>
               </div>
             ))}

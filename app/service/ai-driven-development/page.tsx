@@ -1,3 +1,5 @@
+import { LoadingSubmitButton } from "../../LoadingSubmitButton";
+
 type AidIconType =
   | "bars"
   | "book"
@@ -71,6 +73,26 @@ type AidKpiExample = {
     after: AidPoint[];
   };
 };
+
+function ContactFormStatus({ sent, error }: { sent?: string; error?: string }) {
+  if (sent === "1") {
+    return (
+      <p className="form-status form-status--success aid-form-status" role="status">
+        送信しました。担当者より2営業日以内を目安にご連絡いたします。
+      </p>
+    );
+  }
+
+  if (error === "1") {
+    return (
+      <p className="form-status form-status--error aid-form-status" role="alert">
+        送信できませんでした。時間をおいて再度お試しください。
+      </p>
+    );
+  }
+
+  return null;
+}
 
 const painPoints: AidProblemItem[] = [
   {
@@ -704,7 +726,13 @@ function ContactChartIllustration() {
   );
 }
 
-export default function AiDrivenDevelopmentPage() {
+export default async function AiDrivenDevelopmentPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ sent?: string; error?: string }>;
+}) {
+  const status = await searchParams;
+
   return (
     <main id="top" className="aid-page site-main">
       <section className="aid-hero" aria-labelledby="aid-heading">
@@ -1002,7 +1030,15 @@ export default function AiDrivenDevelopmentPage() {
               <ContactChartIllustration />
             </div>
 
-            <form className="aid-form aid-form--consultation" aria-labelledby="aid-contact-heading">
+            <form
+              className="aid-form aid-form--consultation"
+              action="/api/contact"
+              method="post"
+              aria-labelledby="aid-contact-heading"
+            >
+              <input type="hidden" name="formType" value="ai-driven-development" />
+              <input type="hidden" name="redirectTo" value="/service/ai-driven-development#contact" />
+              <ContactFormStatus sent={status?.sent} error={status?.error} />
               <div className="aid-field">
                 <label htmlFor="company">
                   会社名 <span>必須</span>
@@ -1066,9 +1102,9 @@ export default function AiDrivenDevelopmentPage() {
                   ))}
                 </div>
               </fieldset>
-              <button className="aid-submit" type="button">
+              <LoadingSubmitButton className="aid-submit">
                 診断について相談する <span aria-hidden="true">→</span>
-              </button>
+              </LoadingSubmitButton>
             </form>
           </div>
         </section>

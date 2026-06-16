@@ -1,4 +1,5 @@
 import { Footer } from "../../Footer";
+import { LoadingSubmitButton } from "../../LoadingSubmitButton";
 
 type AncIconType =
   | "agent"
@@ -47,6 +48,26 @@ type DeliverableCard = {
   title: string;
   body: string;
 };
+
+function ContactFormStatus({ sent, error }: { sent?: string; error?: string }) {
+  if (sent === "1") {
+    return (
+      <p className="form-status form-status--success anc-form-status" role="status">
+        送信しました。担当者より2営業日以内を目安にご連絡いたします。
+      </p>
+    );
+  }
+
+  if (error === "1") {
+    return (
+      <p className="form-status form-status--error anc-form-status" role="alert">
+        送信できませんでした。時間をおいて再度お試しください。
+      </p>
+    );
+  }
+
+  return null;
+}
 
 const painPoints: ProblemCard[] = [
   {
@@ -718,7 +739,13 @@ function ImplementationPreview({ variant, image }: { variant: ImplementationArea
   );
 }
 
-export default function AiNativeCompanyPage() {
+export default async function AiNativeCompanyPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ sent?: string; error?: string }>;
+}) {
+  const status = await searchParams;
+
   return (
     <>
       <main id="top" className="anc-page site-main">
@@ -904,14 +931,17 @@ export default function AiNativeCompanyPage() {
         <section className="anc-section anc-contact" id="contact" aria-labelledby="anc-contact-heading">
           <p className="anc-kicker">お問い合わせフォーム</p>
           <h2 id="anc-contact-heading">AI Native化に関するご相談はこちらから。</h2>
-          <form className="anc-form">
+          <form className="anc-form" action="/api/contact" method="post">
+            <input type="hidden" name="formType" value="ai-native-company" />
+            <input type="hidden" name="redirectTo" value="/service/ai-native-company#contact" />
+            <ContactFormStatus sent={status?.sent} error={status?.error} />
             <label>
               <span>会社名</span>
-              <input name="company" type="text" placeholder="CordMark株式会社" />
+              <input name="company" type="text" placeholder="CordMark株式会社" required />
             </label>
             <label>
               <span>氏名</span>
-              <input name="name" type="text" placeholder="山田 太郎" />
+              <input name="name" type="text" placeholder="山田 太郎" required />
             </label>
             <label>
               <span>役職</span>
@@ -919,7 +949,7 @@ export default function AiNativeCompanyPage() {
             </label>
             <label>
               <span>メールアドレス</span>
-              <input name="email" type="email" placeholder="taro.yamada@cordmark.co.jp" />
+              <input name="email" type="email" placeholder="taro.yamada@cordmark.co.jp" required />
             </label>
             <label>
               <span>従業員規模</span>
@@ -982,9 +1012,9 @@ export default function AiNativeCompanyPage() {
               <span>希望面談日時</span>
               <input name="date" type="date" />
             </label>
-            <button type="button">
-              内容を確認する <span aria-hidden="true">→</span>
-            </button>
+            <LoadingSubmitButton>
+              送信する <span aria-hidden="true">→</span>
+            </LoadingSubmitButton>
           </form>
         </section>
 
