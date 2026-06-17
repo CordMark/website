@@ -5,11 +5,30 @@ import { LoadingSubmitButton } from "../LoadingSubmitButton";
 
 type DownloadStatus = "sent" | "error";
 
-export function ServiceGuideDownload({ status }: { status?: DownloadStatus }) {
-  const [isOpen, setIsOpen] = useState(status === "error");
+function readDownloadStatus(): DownloadStatus | undefined {
+  const params = new URLSearchParams(window.location.search);
+
+  if (params.get("downloadError") === "1") {
+    return "error";
+  }
+
+  if (params.get("downloadSent") === "1") {
+    return "sent";
+  }
+
+  return undefined;
+}
+
+export function ServiceGuideDownload() {
+  const [status, setStatus] = useState<DownloadStatus>();
+  const [isOpen, setIsOpen] = useState(false);
   const titleId = useId();
   const descriptionId = useId();
   const firstInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setStatus(readDownloadStatus());
+  }, []);
 
   useEffect(() => {
     if (status === "error") {

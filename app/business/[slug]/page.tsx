@@ -18,7 +18,7 @@ export default async function BusinessPage({
   return (
     <main className="subpage">
       <section className="business-detail">
-        <img src={business.image} alt={business.alt} />
+        <img src={business.image} alt={business.alt} loading="eager" fetchPriority="high" decoding="async" />
         <div>
           <p className="section-kicker">Business</p>
           <h1>{business.title}</h1>

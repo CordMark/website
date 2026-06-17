@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { QueryFormStatus } from "../FormStatus";
 import { Footer } from "../Footer";
 import { LoadingSubmitButton } from "../LoadingSubmitButton";
 import { ServiceGuideDownload } from "./ServiceGuideDownload";
@@ -75,34 +76,7 @@ function ContactSelect({
   );
 }
 
-function ContactFormStatus({ sent, error }: { sent?: string; error?: string }) {
-  if (sent === "1") {
-    return (
-      <p className="form-status form-status--success" role="status">
-        送信しました。担当者より2営業日以内を目安にご連絡いたします。
-      </p>
-    );
-  }
-
-  if (error === "1") {
-    return (
-      <p className="form-status form-status--error" role="alert">
-        送信できませんでした。時間をおいて再度お試しください。
-      </p>
-    );
-  }
-
-  return null;
-}
-
-export default async function ContactPage({
-  searchParams,
-}: {
-  searchParams?: Promise<{ sent?: string; error?: string; downloadSent?: string; downloadError?: string }>;
-}) {
-  const status = await searchParams;
-  const downloadStatus = status?.downloadError === "1" ? "error" : status?.downloadSent === "1" ? "sent" : undefined;
-
+export default function ContactPage() {
   return (
     <>
       <main id="top" className="contact-page site-main">
@@ -142,7 +116,10 @@ export default async function ContactPage({
           <form className="contact-form" action="/api/contact" method="post">
             <input type="hidden" name="formType" value="general" />
             <input type="hidden" name="redirectTo" value="/contact#contact" />
-            <ContactFormStatus sent={status?.sent} error={status?.error} />
+            <QueryFormStatus
+              successMessage="送信しました。担当者より2営業日以内を目安にご連絡いたします。"
+              errorMessage="送信できませんでした。時間をおいて再度お試しください。"
+            />
             <div className="contact-field">
               <label htmlFor="company">
                 会社名 <RequiredBadge />
@@ -229,7 +206,7 @@ export default async function ContactPage({
 
         <section className="contact-next-step" id="service-guide" aria-label="資料請求">
           <div className="contact-next-step__icon">
-            <img src="/assets/contact-consultation-chat.png" alt="" aria-hidden="true" />
+            <img src="/assets/contact-consultation-chat.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" />
           </div>
           <div className="contact-next-step__copy">
             <h2>まずは壁打ち・ご相談だけでも構いません</h2>
@@ -239,7 +216,7 @@ export default async function ContactPage({
               最適な進め方をご提案します。
             </p>
           </div>
-          <ServiceGuideDownload status={downloadStatus} />
+          <ServiceGuideDownload />
         </section>
       </main>
 

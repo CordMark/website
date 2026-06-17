@@ -1,4 +1,5 @@
 import { Footer } from "../../Footer";
+import { QueryFormStatus } from "../../FormStatus";
 import { LoadingSubmitButton } from "../../LoadingSubmitButton";
 
 type AncIconType =
@@ -49,55 +50,35 @@ type DeliverableCard = {
   body: string;
 };
 
-function ContactFormStatus({ sent, error }: { sent?: string; error?: string }) {
-  if (sent === "1") {
-    return (
-      <p className="form-status form-status--success anc-form-status" role="status">
-        送信しました。担当者より2営業日以内を目安にご連絡いたします。
-      </p>
-    );
-  }
-
-  if (error === "1") {
-    return (
-      <p className="form-status form-status--error anc-form-status" role="alert">
-        送信できませんでした。時間をおいて再度お試しください。
-      </p>
-    );
-  }
-
-  return null;
-}
-
 const painPoints: ProblemCard[] = [
   {
     visual: "network",
-    image: "/assets/anc-problem-network.png",
+    image: "/assets/anc-problem-network.webp",
     title: "部署ごとに試しており、全社で広がらない",
   },
   {
     visual: "poc",
-    image: "/assets/anc-problem-poc.png",
+    image: "/assets/anc-problem-poc.webp",
     title: "PoCやツール導入で止まり、運用に乗らない",
   },
   {
     visual: "workflow",
-    image: "/assets/anc-problem-workflow.png",
+    image: "/assets/anc-problem-workflow.webp",
     title: "業務プロセス自体が人間前提のまま",
   },
   {
     visual: "knowledge",
-    image: "/assets/anc-problem-knowledge.png",
+    image: "/assets/anc-problem-knowledge.webp",
     title: "ナレッジが分散し、AIが活用できない",
   },
   {
     visual: "governance",
-    image: "/assets/anc-problem-governance.png",
+    image: "/assets/anc-problem-governance.webp",
     title: "ガバナンスが曖昧で、本格展開できない",
   },
   {
     visual: "measurement",
-    image: "/assets/anc-problem-measurement.png",
+    image: "/assets/anc-problem-measurement.webp",
     title: "効果測定がなく、投資対効果を説明できない",
   },
 ];
@@ -134,31 +115,31 @@ const layers = [
     number: "01",
     title: "Strategy / KPI",
     body: "経営課題とAI活用テーマを接続する。",
-    image: "/assets/anc-layer-strategy-kpi.png",
+    image: "/assets/anc-layer-strategy-kpi.webp",
   },
   {
     number: "02",
     title: "Workflow",
     body: "営業・CS・管理・開発の業務プロセスを再設計する。",
-    image: "/assets/anc-layer-workflow.png",
+    image: "/assets/anc-layer-workflow.webp",
   },
   {
     number: "03",
     title: "Knowledge / Data",
     body: "社内ナレッジとデータをAIが使える形に整える。",
-    image: "/assets/anc-layer-knowledge-data.png",
+    image: "/assets/anc-layer-knowledge-data.webp",
   },
   {
     number: "04",
     title: "Agent / Application",
     body: "AI Agent、RAG、業務アプリを実装する。",
-    image: "/assets/anc-layer-agent-application.png",
+    image: "/assets/anc-layer-agent-application.webp",
   },
   {
     number: "05",
     title: "Governance / Enablement",
     body: "権限、ルール、教育、運用体制を設計する。",
-    image: "/assets/anc-layer-governance-enablement.png",
+    image: "/assets/anc-layer-governance-enablement.webp",
   },
 ];
 
@@ -170,48 +151,48 @@ const roadmapBullets = [
 ];
 
 const roadmapSteps = [
-  { visual: "kpi", step: "STEP 1", title: "経営課題・事業KPIヒアリング", image: "/assets/anc-roadmap-step-kpi.png" },
-  { visual: "process", step: "STEP 2", title: "業務・意思決定プロセスの可視化", image: "/assets/anc-roadmap-step-process.png" },
-  { visual: "brain", step: "STEP 3", title: "AI活用テーマの設計", image: "/assets/anc-roadmap-step-brain.png" },
-  { visual: "priority", step: "STEP 4", title: "優先順位・リスク・ガバナンス設計", image: "/assets/anc-roadmap-step-priority.png" },
-  { visual: "roadmap", step: "STEP 5", title: "90日実装ロードマップ作成", image: "/assets/anc-roadmap-step-roadmap.png" },
-  { visual: "report", step: "STEP 6", title: "診断結果・実装提案のご報告", image: "/assets/anc-roadmap-step-report.png" },
+  { visual: "kpi", step: "STEP 1", title: "経営課題・事業KPIヒアリング", image: "/assets/anc-roadmap-step-kpi.webp" },
+  { visual: "process", step: "STEP 2", title: "業務・意思決定プロセスの可視化", image: "/assets/anc-roadmap-step-process.webp" },
+  { visual: "brain", step: "STEP 3", title: "AI活用テーマの設計", image: "/assets/anc-roadmap-step-brain.webp" },
+  { visual: "priority", step: "STEP 4", title: "優先順位・リスク・ガバナンス設計", image: "/assets/anc-roadmap-step-priority.webp" },
+  { visual: "roadmap", step: "STEP 5", title: "90日実装ロードマップ作成", image: "/assets/anc-roadmap-step-roadmap.webp" },
+  { visual: "report", step: "STEP 6", title: "診断結果・実装提案のご報告", image: "/assets/anc-roadmap-step-report.webp" },
 ] satisfies Array<{ visual: RoadmapStepVisualType; step: string; title: string; image: string }>;
 
 const deliverables: DeliverableCard[] = [
   {
     visual: "maturity",
-    image: "/assets/anc-deliverable-maturity.png",
+    image: "/assets/anc-deliverable-maturity.webp",
     title: "AI Native成熟度マップ",
     body: "現在地と目指す姿を可視化",
   },
   {
     visual: "usecases",
-    image: "/assets/anc-deliverable-usecases.png",
+    image: "/assets/anc-deliverable-usecases.webp",
     title: "部門別AI活用候補リスト",
     body: "部門ごとのユースケースを整理",
   },
   {
     visual: "beforeAfter",
-    image: "/assets/anc-deliverable-before-after.png",
+    image: "/assets/anc-deliverable-before-after.webp",
     title: "業務プロセス Before / After案",
     body: "AI導入前後のフローを比較",
   },
   {
     visual: "agentFlow",
-    image: "/assets/anc-deliverable-agent-flow.png",
+    image: "/assets/anc-deliverable-agent-flow.webp",
     title: "AI Agent / Workflow構成案",
     body: "必要なAgentと連携を設計",
   },
   {
     visual: "roadmap",
-    image: "/assets/anc-deliverable-roadmap.png",
+    image: "/assets/anc-deliverable-roadmap.webp",
     title: "90日実装ロードマップ",
     body: "優先順位とマイルストーンを明確化",
   },
   {
     visual: "kpi",
-    image: "/assets/anc-deliverable-kpi.png",
+    image: "/assets/anc-deliverable-kpi.webp",
     title: "KPI測定シート / ガバナンス方針案",
     body: "効果測定と運用ルールを整備",
   },
@@ -222,19 +203,19 @@ const implementationAreas = [
     title: "営業・CSワークフロー",
     body: "問い合わせ、提案、議事録、対応をAIで支援。",
     variant: "sales",
-    image: "/assets/anc-area-sales.png",
+    image: "/assets/anc-area-sales.webp",
   },
   {
     title: "社内ナレッジAIアシスタント",
     body: "FAQ、業務マニュアル、社内文書を横断検索。",
     variant: "knowledge",
-    image: "/assets/anc-area-knowledge.png",
+    image: "/assets/anc-area-knowledge.webp",
   },
   {
     title: "経営会議・意思決定支援AI",
     body: "論点抽出、指標要約、選択肢生成を支援。",
     variant: "executive",
-    image: "/assets/anc-area-executive.png",
+    image: "/assets/anc-area-executive.webp",
   },
   {
     title: "AI駆動開発プロセス",
@@ -571,7 +552,7 @@ function AncProblemVisual({ type }: { type: AncProblemVisualType }) {
 function RoadmapStepVisual({ image }: { image: string }) {
   return (
     <div className="anc-step-visual" aria-hidden="true">
-      <img src={image} alt="" />
+      <img src={image} alt="" loading="lazy" decoding="async" />
     </div>
   );
 }
@@ -579,7 +560,7 @@ function RoadmapStepVisual({ image }: { image: string }) {
 function DeliverableVisual({ image, type }: { image: string; type: DeliverableVisualType }) {
   return (
     <div className={`anc-deliverable-visual anc-deliverable-visual--${type}`} aria-hidden="true">
-      <img src={image} alt="" />
+      <img src={image} alt="" loading="lazy" decoding="async" />
     </div>
   );
 }
@@ -588,7 +569,7 @@ function ImplementationPreview({ variant, image }: { variant: ImplementationArea
   if (image) {
     return (
       <div className="anc-area-preview anc-area-preview--image" aria-hidden="true">
-        <img src={image} alt="" />
+        <img src={image} alt="" loading="lazy" decoding="async" />
       </div>
     );
   }
@@ -739,13 +720,7 @@ function ImplementationPreview({ variant, image }: { variant: ImplementationArea
   );
 }
 
-export default async function AiNativeCompanyPage({
-  searchParams,
-}: {
-  searchParams?: Promise<{ sent?: string; error?: string }>;
-}) {
-  const status = await searchParams;
-
+export default function AiNativeCompanyPage() {
   return (
     <>
       <main id="top" className="anc-page site-main">
@@ -776,7 +751,7 @@ export default async function AiNativeCompanyPage({
             </div>
           </div>
           <div className="anc-hero__visual" aria-hidden="true">
-            <img src="/assets/ai-native-company-hero.png" alt="" />
+            <img src="/assets/ai-native-company-hero.webp" alt="" loading="eager" fetchPriority="high" decoding="async" />
           </div>
         </section>
 
@@ -792,7 +767,13 @@ export default async function AiNativeCompanyPage({
           <div className="anc-problem-grid">
             {painPoints.map((point) => (
               <article className="anc-problem-card" key={point.title}>
-                <img className={`anc-problem-visual anc-problem-visual--${point.visual}`} src={point.image} alt="" />
+                <img
+                  className={`anc-problem-visual anc-problem-visual--${point.visual}`}
+                  src={point.image}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                />
                 <h3>{point.title}</h3>
               </article>
             ))}
@@ -846,7 +827,7 @@ export default async function AiNativeCompanyPage({
                 <span>{layer.number}</span>
                 <h3>{layer.title}</h3>
                 <p>{layer.body}</p>
-                <img src={layer.image} alt="" aria-hidden="true" />
+                <img src={layer.image} alt="" aria-hidden="true" loading="lazy" decoding="async" />
               </article>
             ))}
           </div>
@@ -934,7 +915,11 @@ export default async function AiNativeCompanyPage({
           <form className="anc-form" action="/api/contact" method="post">
             <input type="hidden" name="formType" value="ai-native-company" />
             <input type="hidden" name="redirectTo" value="/service/ai-native-company#contact" />
-            <ContactFormStatus sent={status?.sent} error={status?.error} />
+            <QueryFormStatus
+              className="anc-form-status"
+              successMessage="送信しました。担当者より2営業日以内を目安にご連絡いたします。"
+              errorMessage="送信できませんでした。時間をおいて再度お試しください。"
+            />
             <label>
               <span>会社名</span>
               <input name="company" type="text" placeholder="CordMark株式会社" required />

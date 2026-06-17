@@ -114,7 +114,7 @@ export default function PrivacyPolicyPage() {
             </p>
           </div>
           <div className="privacy-hero__visual" aria-hidden="true">
-            <img src="/assets/privacy-policy-hero.png" alt="" />
+            <img src="/assets/privacy-policy-hero.webp" alt="" loading="eager" fetchPriority="high" decoding="async" />
           </div>
         </section>
 

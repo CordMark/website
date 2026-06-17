@@ -2,7 +2,7 @@ export const businesses = [
   {
     slug: "ai-dx-support",
     title: "AI・DX支援事業",
-    image: "/assets/service-ai.jpg",
+    image: "/assets/service-ai.webp",
     alt: "分析画面が表示されたノートPC",
     summary:
       "企業や施設の現場に入り、業務整理、AI導入、自動化、システム設計、研修を行います。日々の作業負荷を下げ、継続的に運用できるDXの仕組みを構築します。",
@@ -13,7 +13,7 @@ export const businesses = [
   {
     slug: "culture-co-creation",
     title: "文化共創事業",
-    image: "/assets/service-community.jpg",
+    image: "/assets/service-community.webp",
     alt: "木の内装の共同空間",
     summary:
       "AIと自動化によって生まれる余白を、文化的な営みへと接続するために、ボードゲーム、教育プログラム、メディア、コミュニティ運営支援などのサービスを展開します。",

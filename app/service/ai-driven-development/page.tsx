@@ -1,3 +1,4 @@
+import { QueryFormStatus } from "../../FormStatus";
 import { LoadingSubmitButton } from "../../LoadingSubmitButton";
 
 type AidIconType =
@@ -73,26 +74,6 @@ type AidKpiExample = {
     after: AidPoint[];
   };
 };
-
-function ContactFormStatus({ sent, error }: { sent?: string; error?: string }) {
-  if (sent === "1") {
-    return (
-      <p className="form-status form-status--success aid-form-status" role="status">
-        送信しました。担当者より2営業日以内を目安にご連絡いたします。
-      </p>
-    );
-  }
-
-  if (error === "1") {
-    return (
-      <p className="form-status form-status--error aid-form-status" role="alert">
-        送信できませんでした。時間をおいて再度お試しください。
-      </p>
-    );
-  }
-
-  return null;
-}
 
 const painPoints: AidProblemItem[] = [
   {
@@ -262,42 +243,42 @@ const diagnosisProcessDetailSteps: AidProcessDetailStep[] = [
   {
     day: "Day 1",
     number: "01",
-    image: "/assets/aid-process-kickoff.png",
+    image: "/assets/aid-process-kickoff.webp",
     title: "キックオフ",
     body: "目的・スコープ・体制をすり合わせ、計画を策定。",
   },
   {
     day: "Day 2–5",
     number: "02",
-    image: "/assets/aid-process-hearing.png",
+    image: "/assets/aid-process-hearing.webp",
     title: "ヒアリング・現行プロセス整理",
     body: "各ステークホルダーへヒアリングを行い、現行フローを整理。",
   },
   {
     day: "Day 6–8",
     number: "03",
-    image: "/assets/aid-process-candidates.png",
+    image: "/assets/aid-process-candidates.webp",
     title: "AI活用候補の設計",
     body: "AI活用の余地を特定し、候補を優先順位化。",
   },
   {
     day: "Day 9–10",
     number: "04",
-    image: "/assets/aid-process-kpi.png",
+    image: "/assets/aid-process-kpi.webp",
     title: "KPI設計",
     body: "KPIを設計し、測定方法と目標値を定義。",
   },
   {
     day: "Day 11–13",
     number: "05",
-    image: "/assets/aid-process-pilot.png",
+    image: "/assets/aid-process-pilot.webp",
     title: "実装パイロット計画",
     body: "パイロットのスコープ・体制・計画・期待効果を整理。",
   },
   {
     day: "Day 14",
     number: "06",
-    image: "/assets/aid-process-report.png",
+    image: "/assets/aid-process-report.webp",
     title: "報告会",
     body: "診断結果と推奨内容をご報告・ご合意。",
   },
@@ -666,18 +647,18 @@ function AidInfoCard({
 }
 
 const aidProblemImageSources: Record<AidProblemVisual, string> = {
-  pipeline: "/assets/aid-challenge-pipeline.png",
-  team: "/assets/aid-challenge-team.png",
-  fragmented: "/assets/aid-challenge-fragmented.png",
-  kpi: "/assets/aid-challenge-kpi.png",
-  rules: "/assets/aid-challenge-rules.png",
-  knowledge: "/assets/aid-challenge-knowledge.png",
+  pipeline: "/assets/aid-challenge-pipeline.webp",
+  team: "/assets/aid-challenge-team.webp",
+  fragmented: "/assets/aid-challenge-fragmented.webp",
+  kpi: "/assets/aid-challenge-kpi.webp",
+  rules: "/assets/aid-challenge-rules.webp",
+  knowledge: "/assets/aid-challenge-knowledge.webp",
 };
 
 function AidProblemVisual({ type }: { type: AidProblemVisual }) {
   return (
     <div className={`aid-problem-visual aid-problem-visual--${type}`} aria-hidden="true">
-      <img src={aidProblemImageSources[type]} alt="" />
+      <img src={aidProblemImageSources[type]} alt="" loading="lazy" decoding="async" />
     </div>
   );
 }
@@ -721,18 +702,19 @@ function AidKpiSparkline({ trend }: { trend: AidKpiExample["trend"] }) {
 function ContactChartIllustration() {
   return (
     <div className="aid-contact-visual" aria-hidden="true">
-      <img src="/assets/aid-contact-illustration.png" alt="" width={1254} height={1254} loading="lazy" />
+      <img
+        src="/assets/aid-contact-illustration.webp"
+        alt=""
+        width={1254}
+        height={1254}
+        loading="lazy"
+        decoding="async"
+      />
     </div>
   );
 }
 
-export default async function AiDrivenDevelopmentPage({
-  searchParams,
-}: {
-  searchParams?: Promise<{ sent?: string; error?: string }>;
-}) {
-  const status = await searchParams;
-
+export default function AiDrivenDevelopmentPage() {
   return (
     <main id="top" className="aid-page site-main">
       <section className="aid-hero" aria-labelledby="aid-heading">
@@ -765,7 +747,7 @@ export default async function AiDrivenDevelopmentPage({
         </div>
 
         <div className="aid-hero__visual" aria-hidden="true">
-          <img src="/assets/ai-driven-development-hero.png" alt="" />
+          <img src="/assets/ai-driven-development-hero.webp" alt="" loading="eager" fetchPriority="high" decoding="async" />
         </div>
       </section>
 
@@ -906,7 +888,7 @@ export default async function AiDrivenDevelopmentPage({
                   </div>
                   <div className="aid-process-card">
                     <div className="aid-process-visual" aria-hidden="true">
-                      <img src={item.image} alt="" />
+                      <img src={item.image} alt="" loading="lazy" decoding="async" />
                     </div>
                     <h3>{item.title}</h3>
                     <p>{item.body}</p>
@@ -1038,7 +1020,11 @@ export default async function AiDrivenDevelopmentPage({
             >
               <input type="hidden" name="formType" value="ai-driven-development" />
               <input type="hidden" name="redirectTo" value="/service/ai-driven-development#contact" />
-              <ContactFormStatus sent={status?.sent} error={status?.error} />
+              <QueryFormStatus
+                className="aid-form-status"
+                successMessage="送信しました。担当者より2営業日以内を目安にご連絡いたします。"
+                errorMessage="送信できませんでした。時間をおいて再度お試しください。"
+              />
               <div className="aid-field">
                 <label htmlFor="company">
                   会社名 <span>必須</span>

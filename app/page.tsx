@@ -18,7 +18,7 @@ const services = [
     lead: "開発組織をAI前提のプロセスへ再設計する。",
     body:
       "仕様策定、実装、レビュー、テスト、ドキュメント作成、開発マネジメントにAIを組み込み、開発リードタイム、レビュー待ち時間、手戻り率、AI利用率の改善まで支援します。",
-    image: "/assets/website-wave-field.png",
+    image: "/assets/website-wave-field.webp",
     href: "/service/ai-driven-development",
   },
   {
@@ -27,7 +27,7 @@ const services = [
     lead: "会社全体をAI前提の業務構造へ再設計する。",
     body:
       "営業、CS、採用、管理部門、開発、マーケティングにAI Agentやワークフローを組み込み、意思決定・業務実行・ナレッジ活用が回る状態をつくります。",
-    image: "/assets/website-cube-system.png",
+    image: "/assets/website-cube-system.webp",
     href: "/service/ai-native-company",
   },
 ];
@@ -44,33 +44,33 @@ const howWorkItems = [
     number: "01",
     title: "Diagnose",
     lead: "現行の業務・開発プロセスを可視化し、AIを入れるべき箇所を特定する。",
-    image: "/assets/how-we-work-diagnose.png",
+    image: "/assets/how-we-work-diagnose.webp",
   },
   {
     number: "02",
     title: "Redesign",
     lead: "人間とAIの役割分担から、プロセスを再設計する。",
-    image: "/assets/how-we-work-redesign.png",
+    image: "/assets/how-we-work-redesign.webp",
   },
   {
     number: "03",
     title: "Build",
     lead: "プロンプト、RAG、AI Agent、業務アプリ、開発環境を実装する。",
-    image: "/assets/how-we-work-build.png",
+    image: "/assets/how-we-work-build.webp",
   },
   {
     number: "04",
     title: "Measure & Operate",
     lead: "Before/AfterのKPIを測定し、現場で使われ続ける運用に落とし込む。",
-    image: "/assets/how-we-work-measure-operate.png",
+    image: "/assets/how-we-work-measure-operate.webp",
   },
 ];
 
 const workVisualImages = {
-  development: "/assets/implementation-development.png",
-  workflow: "/assets/implementation-workflow.png",
-  agent: "/assets/implementation-agent.png",
-  product: "/assets/implementation-product.png",
+  development: "/assets/implementation-development.webp",
+  workflow: "/assets/implementation-workflow.webp",
+  agent: "/assets/implementation-agent.webp",
+  product: "/assets/implementation-product.webp",
 } as const;
 
 type WorkVisualVariant = keyof typeof workVisualImages;
@@ -176,7 +176,7 @@ function PhilosophyIcon({ type }: { type: PhilosophyIconType }) {
 function WorkVisual({ variant }: { variant: WorkVisualVariant }) {
   return (
     <div className="work-visual" aria-hidden="true">
-      <img className="work-visual__image" src={workVisualImages[variant]} alt="" />
+      <img className="work-visual__image" src={workVisualImages[variant]} alt="" loading="lazy" decoding="async" />
     </div>
   );
 }
@@ -204,7 +204,7 @@ export default function Home() {
             </a>
           </div>
           <div className="hero-section__visual" aria-hidden="true">
-            <img src="/assets/website-ribbon-system.png" alt="" />
+            <img src="/assets/website-ribbon-system.webp" alt="" loading="eager" fetchPriority="high" decoding="async" />
           </div>
         </section>
 
@@ -236,7 +236,7 @@ export default function Home() {
             </a>
           </div>
           <div className="who-section__image" aria-hidden="true">
-            <img src="/assets/website-who-we-are-layer-stack.png" alt="" />
+            <img src="/assets/website-who-we-are-layer-stack.webp" alt="" loading="lazy" decoding="async" />
           </div>
         </section>
 
@@ -259,7 +259,7 @@ export default function Home() {
                     詳細を見る <span aria-hidden="true">→</span>
                   </span>
                 </div>
-                <img src={service.image} alt="" aria-hidden="true" />
+                <img src={service.image} alt="" aria-hidden="true" loading="lazy" decoding="async" />
               </a>
             ))}
           </div>
@@ -268,9 +268,11 @@ export default function Home() {
         <section className="stats-band" aria-label="AI Native principles">
           <img
             className="stats-band__image"
-            src="/assets/website-data-mesh.png"
+            src="/assets/website-data-mesh.webp"
             alt=""
             aria-hidden="true"
+            loading="lazy"
+            decoding="async"
           />
           <div className="stats-band__items">
             {stats.map(([value, label]) => (
@@ -301,7 +303,7 @@ export default function Home() {
                 <h3>{item.title}</h3>
                 <p>{item.lead}</p>
                 <div className="how-work-item__visual" aria-hidden="true">
-                  <img src={item.image} alt="" />
+                  <img src={item.image} alt="" loading="lazy" decoding="async" />
                 </div>
               </article>
             ))}
@@ -341,9 +343,11 @@ export default function Home() {
         <section className="philosophy-section" id="philosophy">
           <img
             className="philosophy-section__bg"
-            src="/assets/website-philosophy-stairs-bg.png"
+            src="/assets/website-philosophy-stairs-bg.webp"
             alt=""
             aria-hidden="true"
+            loading="lazy"
+            decoding="async"
           />
           <div className="philosophy-section__copy">
             <p className="section-label">Philosophy</p>
@@ -399,7 +403,7 @@ export default function Home() {
             </a>
           </div>
           <div className="media-section__visual" aria-hidden="true">
-            <img src="/assets/dotcraft-transparent.png" alt="" />
+            <img src="/assets/dotcraft-transparent.webp" alt="" loading="lazy" decoding="async" />
           </div>
         </section>
 

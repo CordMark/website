@@ -72,7 +72,7 @@ export default function AboutPage() {
             </p>
           </div>
           <div className="about-hero__visual" aria-hidden="true">
-            <img src="/assets/about-hero.png" alt="" />
+            <img src="/assets/about-hero.webp" alt="" loading="eager" fetchPriority="high" decoding="async" />
           </div>
         </section>
 
