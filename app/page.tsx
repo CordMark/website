@@ -380,6 +380,29 @@ export default function Home() {
           </div>
         </section>
 
+        <section className="media-section" id="media" aria-labelledby="media-heading">
+          <div className="media-section__copy">
+            <p className="section-label">Media</p>
+            <h2 id="media-heading">Dot Craft</h2>
+            <p>
+              AIとテクノロジーを、実装する側の視点で読み解く。
+              <br />
+              CordMarkが運営するYouTubeメディアです。
+            </p>
+            <a
+              className="media-section__button"
+              href="https://dotcraft.cordmark.co.jp"
+              target="_blank"
+              rel="noreferrer"
+            >
+              DotCraft Ch 公式サイト <span aria-hidden="true">→</span>
+            </a>
+          </div>
+          <div className="media-section__visual" aria-hidden="true">
+            <img src="/assets/dotcraft-transparent.png" alt="" />
+          </div>
+        </section>
+
         <section className="final-cta" id="contact">
           <div className="final-cta__copy">
             <p className="section-label">Next Step</p>
