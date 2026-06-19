@@ -387,7 +387,9 @@ export default function Home() {
         <section className="media-section" id="media" aria-labelledby="media-heading">
           <div className="media-section__copy">
             <p className="section-label">Media</p>
-            <h2 id="media-heading">Dot Craft</h2>
+            <h2 id="media-heading" className="media-section__logo-heading">
+              <img src="/assets/dotcraft-transparent.webp" alt="Dot Craft" loading="lazy" decoding="async" />
+            </h2>
             <p>
               AIとテクノロジーを、実装する側の視点で読み解く。
               <br />
