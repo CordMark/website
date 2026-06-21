@@ -226,10 +226,9 @@ const implementationAreas = [
 
 const offerFacts = [
   { icon: "clock", label: "期間", value: "3〜4週間" },
-  { icon: "people", label: "対象", value: "経営層 / 事業責任者 / DX推進 / 情報システム" },
-  { icon: "grid", label: "範囲", value: "1つの経営テーマ + 2〜3業務領域" },
-  { icon: "check", label: "形式", value: "オンライン中心（必要に応じて対面）" },
-  { icon: "tag", label: "価格", value: "初期モニター募集中 / 個別見積もり" },
+  { icon: "people", label: "対象部門", value: "営業部門 / CS部門 / バックオフィスなど" },
+  { icon: "grid", label: "範囲", value: "1つの経営テーマ + 2〜3部門" },
+  { icon: "tag", label: "価格", value: "初期モニター 200万円〜（税別）" },
 ] satisfies Array<{ icon: AncIconType; label: string; value: string }>;
 
 function AncIcon({ type }: { type: AncIconType }) {
@@ -843,7 +842,7 @@ export default function AiNativeCompanyPage() {
                 実装ロードマップを設計する。
               </h2>
               <p>
-                1つの経営テーマと2〜3業務領域に絞り、業務実態・意思決定プロセスの可視化から、AI活用テーマ、優先順位、KPI、90日実装計画までを設計します。
+                1つの経営テーマと2〜3部門に絞り、業務実態・意思決定プロセスの可視化から、AI活用テーマ、優先順位、KPI、90日実装計画までを設計します。
               </p>
             </div>
             <ul>
@@ -988,7 +987,7 @@ export default function AiNativeCompanyPage() {
                 <option value="" disabled>
                   選択してください
                 </option>
-                <option>300〜500万円</option>
+                <option>200〜500万円</option>
                 <option>500〜1000万円</option>
                 <option>1000万円以上</option>
               </select>

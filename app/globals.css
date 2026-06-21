@@ -6955,9 +6955,10 @@ body:has(.anc-page) .header-contact {
 
 .anc-offer-list {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0;
-  margin: clamp(36px, 4vw, 52px) 0 0;
+  max-width: min(100%, 1120px);
+  margin: clamp(36px, 4vw, 52px) auto 0;
   text-align: left;
 }
 
@@ -6966,6 +6967,7 @@ body:has(.anc-page) .header-contact {
   grid-template-columns: 44px minmax(0, 1fr);
   gap: 8px 14px;
   align-items: center;
+  align-content: center;
   min-height: 84px;
   padding: 0 clamp(14px, 1.8vw, 28px);
   border-right: 1px solid #d4dfec;
@@ -6994,6 +6996,10 @@ body:has(.anc-page) .header-contact {
 .anc-offer-list dd {
   font-size: var(--anc-card-body-size);
   font-weight: var(--anc-card-body-weight);
+}
+
+.anc-offer-list div:first-child dd {
+  transform: translateY(-6px);
 }
 
 .anc-offer__button {
@@ -7126,9 +7132,13 @@ body:has(.anc-page) .header-contact {
     transform: translate(1%, -36px);
   }
 
-  .anc-layer-grid,
-  .anc-offer-list {
+  .anc-layer-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .anc-offer-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 20px;
   }
 

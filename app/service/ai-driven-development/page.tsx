@@ -964,7 +964,7 @@ export default function AiDrivenDevelopmentPage() {
                 <p className="aid-period-badge">2週間</p>
                 <p className="aid-price-label">初期モニター</p>
                 <p className="aid-price-line">
-                  <strong>30</strong>
+                  <strong>50</strong>
                   <span>万円〜</span>
                   <small>（税別）</small>
                 </p>
