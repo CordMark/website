@@ -27,7 +27,7 @@ const formTypes = {
     ],
   },
   "ai-driven-development": {
-    label: "AI駆動開発",
+    label: "AI駆動開発 無料相談",
     required: ["company", "name", "email", "team-size"],
     fields: ["company", "name", "role", "email", "team-size", "tools", "issue"],
   },

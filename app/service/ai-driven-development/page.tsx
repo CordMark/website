@@ -738,7 +738,7 @@ export default function AiDrivenDevelopmentPage() {
 
           <div className="aid-actions">
             <a className="aid-primary" href="#contact">
-              診断について相談する <span aria-hidden="true">→</span>
+              まずは無料相談する <span aria-hidden="true">→</span>
             </a>
             <a className="aid-secondary" href="#diagnosis-steps">
               提供ステップを見る <span aria-hidden="true">→</span>
@@ -955,22 +955,21 @@ export default function AiDrivenDevelopmentPage() {
           </div>
         </section>
 
-        <section className="aid-pricing-contact" id="contact" aria-label="価格とお問い合わせ">
+        <section className="aid-pricing-contact" id="contact" aria-label="無料相談と対象企業">
           <div className="aid-pricing-block">
-            <p className="aid-kicker">PRICING &amp; FIT</p>
+            <p className="aid-kicker">CONSULTATION &amp; FIT</p>
             <div className="aid-pricing-grid">
-              <article className="aid-pricing-card aid-pricing-card--price">
-                <h2>AI駆動開発プロセス診断</h2>
-                <p className="aid-period-badge">2週間</p>
-                <p className="aid-price-label">初期モニター</p>
-                <p className="aid-price-line">
-                  <strong>50</strong>
-                  <span>万円〜</span>
-                  <small>（税別）</small>
+              <article className="aid-pricing-card aid-pricing-card--consultation">
+                <h2>まずは無料相談から</h2>
+                <p className="aid-period-badge">無料相談</p>
+                <p className="aid-consultation-copy">
+                  現在の課題やAI活用状況を伺い、
+                  <br />
+                  最適な進め方をご案内します。
                 </p>
-                <p className="aid-price-target">
+                <p className="aid-consultation-target">
                   <AidIcon type="person" />
-                  <span>対象：1部署または1開発チーム</span>
+                  <span>診断を受けるか決まっていなくても大丈夫です</span>
                 </p>
               </article>
 
@@ -1007,8 +1006,8 @@ export default function AiDrivenDevelopmentPage() {
           <div className="aid-contact-panel">
             <div className="aid-contact-copy">
               <p className="aid-kicker">CONTACT</p>
-              <h2 id="aid-contact-heading">診断について相談する</h2>
-              <p>下記フォームを入力いただくと、担当者よりご連絡します。</p>
+              <h2 id="aid-contact-heading">まずは無料相談から</h2>
+              <p>診断をご検討中の方も、まずはお気軽にご相談ください。担当者よりご連絡します。</p>
               <ContactChartIllustration />
             </div>
 
@@ -1089,7 +1088,7 @@ export default function AiDrivenDevelopmentPage() {
                 </div>
               </fieldset>
               <LoadingSubmitButton className="aid-submit">
-                診断について相談する <span aria-hidden="true">→</span>
+                無料相談を申し込む <span aria-hidden="true">→</span>
               </LoadingSubmitButton>
             </form>
           </div>
