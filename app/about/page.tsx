@@ -29,7 +29,7 @@ const principles = [
 const companyInfo: Array<[string, ReactNode]> = [
   ["会社名", "CordMark株式会社"],
   ["代表者", "橋本武士、山本圭亮"],
-  ["設立", "2026年6月"],
+  ["設立", "2026年7月"],
   ["資本金", "80万円"],
   [
     "所在地",
