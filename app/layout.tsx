@@ -19,13 +19,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja" suppressHydrationWarning>
-      <head>
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6992271318736487"
-          crossOrigin="anonymous"
-        />
-      </head>
       <body>
         <Header />
         {children}
