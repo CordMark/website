@@ -15,7 +15,7 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   { href: "/about", label: "私たちについて" },
-  { href: "#cordmark-os", label: "CordMark OS" },
+  { href: "#company-os", label: "Company OS" },
   {
     href: "#services",
     label: "事業",

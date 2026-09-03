@@ -1,6 +1,6 @@
 # CordMark Website — トップページ実装メモ(方向B「結び / Weave」)
 
-最終更新: 2026-09-03(背景と縄の描画を作り直し)
+最終更新: 2026-09-04 夜(Company OS Sectionを近未来のAIコア表現へ作り直し、アニメーション先行の構成へ)
 状態: トップページのみ新構成へ切り替え済み。About、Service、Contactは旧デザインのまま。
 
 ## 選ばれた方向
@@ -15,14 +15,20 @@
 ```text
 app/page.tsx                 新トップページ(Server Component)。Section順は構想書のとおり
 app/home/home.css            .wv 配下にScopeした新Token・Section Style。Header/Footerの上書きも含む
-app/home/ThreadCanvas.tsx    背景に固定した一枚のCanvas。地の色と、形だけが変わる一本の糸(ばらばら→縄→輪→マーク)、CordMark OSの物語
+app/home/HeroCord.tsx        Hero専用のCanvas 2D。糸だけを扱う(ばらばら→縄→マーク→消える)
+app/home/CompanyOsCanvas.tsx Company OS Sectionの全画面3D Sceneの入れ物。能力判定と遅延読込、DOMとの同期
+app/home/three/companyOsScene.ts  Three.jsのScene本体(Reactの外)。Scroll進行度で九つの幕を進める
+app/home/GroundWatch.tsx     地の色がCSSになったので、Headerが読む html[data-wv-*] を書く役だけを残した
+app/_legacy/ThreadCanvas.tsx 旧・背景固定の一枚Canvas(退避)
 app/beyond/page.tsx          Phase 2のページ(Laplace、DotCraft)。固定Canvasは使わず、`.wv-page` でHeaderと地の色をCSSで揃える
 app/Header.tsx / Footer.tsx  Headerにマーク(`.brand__mark`、docked後に表示)、Footerに大きなマークを置く
 app/home/CordMark.tsx        ブランドのシンボル(原本: cordmark-os/company/context/shared/brand/cordmark-symbol-*.svg のpathをcurrentColorで描画)
 app/_legacy/HomeLegacy.tsx   切替前のトップページ。ルーティングされない退避用。不要になれば削除
 ```
 
-追加した依存はなし(Three.js、GSAPは試した後に削除。動きはすべてCanvas 2Dと自前のScroll計測)。
+依存は `three` の完全固定(0.185.1)のみ。GSAP、Lenis、React Three Fiber、dreiは入れない。
+- R3Fを採らなかった理由: 作るのはComponent Treeではなく一本のTimelineで、宣言的なScene合成の利点が効かない。加えて `@react-three/fiber@9` のpeerが `react: ">=19 <19.3"` で、3DのためにReact本体のUpgrade経路を人質に取ることになる。
+- Three.jsは `app/home/CompanyOsCanvas.tsx`(Client)の `useEffect` 内で `await import()` する。Server Componentで `next/dynamic` の `ssr: false` は使えない(Next 16でBuildが落ちる)。この形なら初期JSは1バイトも増えず、three(gzip前 約540KB)は遅延Chunkに入る。
 
 ## 構成の考え方(2026-09-03 背景固定型)
 
@@ -42,9 +48,18 @@ app/_legacy/HomeLegacy.tsx   切替前のトップページ。ルーティング
 - **Header**はCanvasが`html[data-wv-ground]`にdark/lightを書き、地が暗い間だけ透過・生成り文字。Scrollが始まったら(`data-wv-scrolled="1"`)暗い地の上でも半透明の夜色を敷き、本文がNavの下を素通りしないようにする。
 - **Mobile(≤880px)と`prefers-reduced-motion`**では固定を解除して縦並び。Reduced Motionでは時間による動きを止め、Scroll時だけ再描画。糸は編まれた状態、物語はHuman Decisionの静止状態。
 
+## 二つのOSの呼び分け(2026-09-04)
+
+ユーザーの指示: **売っているProductは Company OS**、**CordMark OS は自社運営のための社内OSで、販売しない**。
+
+- サイトの中心Section(`#company-os`)は Company OS。実装者のQuestion → Human Decision → 開発可能な仕様 → 開発再開、という流れは Company OS の First MVP。
+- `#cordmark-os` は別Sectionにして、「Company OSが目指す姿を自社の会社運営で先に実践している社内OS」として書く。販売Productとして並べない。
+- Header、Footer、metadata、`/beyond` のPhase 1の具体物もすべて Company OS。
+- **未解決**: `cordmark-os` Repository側の文書は、2026-09-01のcommit `c1f5e15`(Rename Company OS to CordMark OS)以降、**売り物のほうを「CordMark OS」「市場向けCordMark OS」と呼んでいる**(`company/projects/company-os/README.md` の `name: CordMark OS`、`docs/product-spec/README.md`)。サイトはユーザーの最新の指示に従っているので、現状サイトとRepositoryの呼称が逆。どちらかへ揃える必要がある。
+
 ## 実装上の判断
 
-- **中心の呼び方**: CordMark OS Sectionの中心は「会社を知るAI」。Canvas内のLabelは `AI · CONTEXT`。
+- **中心の呼び方**: Company OS Sectionの中心は「会社を知るAI」。3Dには文字を描かない(役職名はDOMのLabel)。
 - **朱の規則**: 朱(`--wv-vermilion`)はHuman Decisionにだけ使う。中心には現れない。製品Thesisと`decisions/2026-08-29-human-only-core.md`の「最終的なDecisionと責任は人」に対応する視覚規則。
 - **3Dをやめた経緯**: 最初はThree.js / React Three Fiberで撚り糸を作ったが、「操作しても結ばれた状態に届きにくい」「展開案(Canvas 2D)の質感の方が好み」「3Dっぽくない方がよい」でCanvas 2Dへ。次に「Sectionの切り分けをやめて連続させたい」で一枚Canvasへ。
 - **Metadata**: `app/layout.tsx`のtitle/descriptionを新メッセージへ。OG画像(`public/og.png`)は旧デザインのまま。要更新。

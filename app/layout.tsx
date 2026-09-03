@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://cordmark-website.vercel.app"),
   title: "CordMark | ばらばらの線が、ひとつの意思に結ばれる。",
   description:
-    "CordMarkは、テクノロジーによる物質的な充足を精神的な豊かさへ還元することを目指す会社です。会社の意思と日々の仕事をつなぐCordMark OSを中心に、組織・業務改善、AI駆動開発支援、受託・共同開発を行います。",
+    "CordMarkは、テクノロジーによる物質的な充足を精神的な豊かさへ還元することを目指す会社です。会社の意思と日々の仕事をつなぐCompany OSを中心に、組織・業務改善、AI駆動開発支援、受託・共同開発を行います。",
   icons: {
     icon: "/assets/favicon.png",
   },
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     siteName: "CordMark",
     title: "CordMark | ばらばらの線が、ひとつの意思に結ばれる。",
     description:
-      "人の意思を現実へ運ぶ力としてAIを扱い、会社の意思と日々の仕事をつなぐCordMark OSをつくる会社です。",
+      "人の意思を現実へ運ぶ力としてAIを扱い、会社の意思と日々の仕事をつなぐCompany OSをつくる会社です。",
     images: [
       {
         url: "/og.png",
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "CordMark | ばらばらの線が、ひとつの意思に結ばれる。",
     description:
-      "人の意思を現実へ運ぶ力としてAIを扱い、会社の意思と日々の仕事をつなぐCordMark OSをつくる会社です。",
+      "人の意思を現実へ運ぶ力としてAIを扱い、会社の意思と日々の仕事をつなぐCompany OSをつくる会社です。",
     images: ["/og.png"],
   },
 };

@@ -1,6 +1,6 @@
 const footerLinks = [
   { label: "私たちについて", href: "/about" },
-  { label: "CordMark OS", href: "/#cordmark-os" },
+  { label: "Company OS", href: "/#company-os" },
   { label: "事業", href: "/#services" },
   { label: "考え方", href: "/#principles" },
   { label: "プライバシー", href: "/privacy-policy" },

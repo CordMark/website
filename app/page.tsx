@@ -1,7 +1,9 @@
 import { Noto_Sans_JP, Noto_Serif_JP } from "next/font/google";
 import { Footer } from "./Footer";
+import { CompanyOsCanvas } from "./home/CompanyOsCanvas";
 import { CordMark } from "./home/CordMark";
-import { ThreadCanvas } from "./home/ThreadCanvas";
+import { GroundWatch } from "./home/GroundWatch";
+import { HeroCord } from "./home/HeroCord";
 import "./home/home.css";
 
 const serif = Noto_Serif_JP({
@@ -26,21 +28,42 @@ const chain = [
   "時間、自由、尊厳、他者との関わりへ戻る",
 ];
 
-const osSteps = [
-  { tag: "01 SIGNAL", title: "実装者が止まる", body: "人の回答や判断がないと進めないことに気づく。Questionが中心へ流れる。" },
-  { tag: "02 CONTEXT", title: "中心が背景を結ぶ", body: "過去のDecision、仕様、会話をつなぎ、答えるべき人を整理する。" },
-  { tag: "03 HUMAN DECISION", title: "人が決める", body: "権限を持つ人のところで朱の印が押される。AIは決めない。", human: true },
-  { tag: "04 SPECIFICATION", title: "開発可能な形へ", body: "Decisionは背景と一緒に実装者へ戻り、仕様として手渡される。" },
-  { tag: "05 ACTION · TRACE", title: "再開し、痕跡が残る", body: "開発が再開する。Decisionは中心に残り、経営者は後から追える。" },
+const companyOsSteps = [
+  {
+    tag: "01 検知 / SIGNAL",
+    title: "埋もれた判断を見つける",
+    body: "決めるべきことは、日常の質問、顧客の回答、仕様変更の中に埋まっている。まずそれを、判断すべきものとして取り出す。",
+  },
+  {
+    tag: "02 整理 / CONTEXT",
+    title: "背景・選択肢・影響を揃える",
+    body: "なぜ必要か、何が決まっていないか、選ぶと何が起きるか。答える人が、説明を受け直さずに答えられる形にする。",
+  },
+  {
+    tag: "03 振分 / ROUTING",
+    title: "答えられる人へ、決められる人へ",
+    body: "階層を一段ずつ上げるのではない。誰が答えを持ち、誰に権限があるかで、直接その人へ届ける。",
+  },
+  {
+    tag: "04 判断 / HUMAN DECISION",
+    title: "決めるのは、人間",
+    body: "AIが届けるのは判断材料まで。確定と責任は人が持つ。誰が、何を根拠に決めたのかが、決定と一緒に残る。",
+    human: true,
+  },
+  {
+    tag: "05 反映 / ACTION",
+    title: "仕様・タスク・履歴へ",
+    body: "決定と理由が実行へつながり、次に参照できる履歴として残る。使われるほど、判断の文脈が会社に貯まる。",
+  },
 ];
 
 const practices = [
   {
     index: "PRODUCT",
-    title: "CordMark OSの企画・開発・展開",
+    title: "Company OSの企画・開発・展開",
     body: "会社の意思と日々の仕事をつなぐProductをつくる。顧客の現場で得た知見を、契約と機密性を守った範囲でProductへ還元する。",
-    href: "#cordmark-os",
-    link: "CordMark OSについて",
+    href: "#company-os",
+    link: "Company OSについて",
   },
   {
     index: "SUPPORT",
@@ -102,11 +125,12 @@ function External() {
 export default function Home() {
   return (
     <div className={`wv ${serif.variable} ${sans.variable}`}>
-      <ThreadCanvas />
+      <GroundWatch />
       <main id="top" className="site-main">
         {/* 1. Hero — 人の意思を主語にする。Scrollで糸が編まれる */}
         <section className="wv-hero" data-ground="night" aria-labelledby="wv-hero-heading">
           <div className="wv-hero__pin">
+            <HeroCord />
             <div className="wv-hero__scrim" aria-hidden="true" />
             <div className="wv-hero__copy">
               <p className="wv-label">CordMark — Marking a more human future</p>
@@ -120,8 +144,8 @@ export default function Home() {
                 異なる経験と文脈が、摩擦を経て一本の意思になる。AIはその意思を現実へ運ぶ力であり、人の判断に置き換わるものではありません。
               </p>
               <div className="wv-hero__actions">
-                <a className="wv-button" href="#cordmark-os">
-                  CordMark OS <Arrow />
+                <a className="wv-button" href="#company-os">
+                  Company OS <Arrow />
                 </a>
                 <a className="wv-button wv-button--ghost" href="#purpose">
                   会社の考え方 <Arrow />
@@ -164,53 +188,49 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 3. CordMark OS — 糸が中心の輪になり、Questionが会社を一周する(Scroll連動) */}
-        <section className="wv-os wv-act" id="cordmark-os" data-ground="paper" aria-labelledby="wv-os-heading">
+        {/* 3. Company OS — 売っているProduct。全画面の3D Sceneが成り立ちを見せる(Scroll連動) */}
+        <section className="wv-os wv-act" id="company-os" data-ground="night" aria-labelledby="wv-os-heading">
           <div className="wv-os__pin">
+            <CompanyOsCanvas />
             <div className="wv-inner wv-os__grid">
-              <div className="wv-os__copy">
-                <p className="wv-label">CordMark OS</p>
+              {/* Shown alone while the scene plays. No body text yet — the
+                  picture gets a screen and a half to itself. */}
+              <div className="wv-os__overview">
+                <p className="wv-label">Company OS</p>
                 <h2 className="wv-h2" id="wv-os-heading">
-                  会社の文脈を、
+                  中心にあるのはAI。
                   <br />
-                  ひとつに結ぶ。
+                  階層ではない。
                 </h2>
-                <p className="wv-lead">
-                  散らばった目的、背景、Question、Decisionを、会社を知るAIが持ち続けられるContextへ結び、必要な人へ問いと判断材料を届ける。決めるのは、人です。
+                <p className="wv-os__overview-lead">
+                  現場も、PMも、経営も、同じ中心へつながる。問いも、答えも、判断も、そこを通って必要な人へ届く。
                 </p>
-                <ol className="wv-os__steps" aria-label="CordMark OSの流れ">
-                  {osSteps.map((step) => (
+              </div>
+
+              <div className="wv-os__copy">
+                <p className="wv-label">Company OS</p>
+                <p className="wv-lead">
+                  現場を止めず、経営が重要判断を見失わない。埋もれた判断を見つけ、背景と選択肢を整理し、答えられる人と決められる人へ届ける。AIが決めるのではなく、人が判断できる状態を用意します。
+                </p>
+                <ol className="wv-os__steps" aria-label="Company OSの流れ">
+                  {companyOsSteps.map((step) => (
                     <li key={step.tag} className={step.human ? "is-human" : undefined}>
                       <span className="wv-os__tag">{step.tag}</span>
                       <b>{step.title}</b>
-                      <p>{step.body}</p>
+                      <p>
+                        <span>{step.body}</span>
+                      </p>
                     </li>
                   ))}
                 </ol>
-                <p className="wv-os__status">STATUS · 開発・検証中 / 最終的なDecisionと責任は人が持つ</p>
-              </div>
-              <div className="wv-os__stage" aria-hidden="true">
-                <div className="wv-os__legend">
-                  <span>
-                    <i style={{ background: "#a8683c" }} />
-                    CONTEXT
-                  </span>
-                  <span>
-                    <i style={{ background: "#26231f" }} />
-                    QUESTION
-                  </span>
-                  <span>
-                    <i style={{ background: "#b5482e" }} />
-                    HUMAN DECISION
-                  </span>
-                </div>
+                <p className="wv-os__status">STATUS · 構想と設計を整備中 / 実装は未着手</p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* CordMark OS — 三つの役割(固定区間の後に置く) */}
-        <section className="wv-section wv-os-roles" data-ground="paper" aria-label="CordMark OSの三つの役割">
+        {/* Company OS — 三つの役割(固定区間の後に置く) */}
+        <section className="wv-section wv-os-roles" data-ground="paper" aria-label="Company OSの三つの役割">
           <div className="wv-inner">
             <ul className="wv-roles">
               <li>
@@ -229,6 +249,35 @@ export default function Home() {
           </div>
         </section>
 
+        {/* CordMark OS — 売り物ではない。自社運営で先に実践している社内OS */}
+        <section
+          className="wv-section wv-practice-os"
+          id="cordmark-os"
+          data-ground="paper"
+          aria-labelledby="wv-practice-os-heading"
+        >
+          <div className="wv-inner wv-practice-os__grid">
+            <div>
+              <p className="wv-label">CordMark OS</p>
+              <h2 className="wv-h2" id="wv-practice-os-heading">
+                自分たちの会社で、
+                <br />
+                先に実践する。
+              </h2>
+            </div>
+            <div>
+              <p className="wv-lead">
+                Company OSが目指す「会社全体のOS」を、CordMark自身の会社運営で先に実践しています。会社とProjectの現在の文脈をRepositoryに保ち、AIが観測と実行を進め、人は理解と意思決定に集中する。この社内OSをCordMark OSと呼んでいます。
+              </p>
+              <p className="wv-lead">
+                CordMark
+                OSは販売するProductではありません。どのような文脈があれば仕事を任せられるのか、どこで人の判断が必要になるのかを、自分たちの経営で確かめる場所です。ここで分かったことが、Company OSへ戻ります。
+              </p>
+              <p className="wv-os__status">STATUS · 設計中 / 実装は未着手</p>
+            </div>
+          </div>
+        </section>
+
         {/* 4. What we do — 三つの実践 */}
         <section className="wv-section wv-services" id="services" data-ground="paper2" aria-labelledby="wv-services-heading">
           <div className="wv-inner">
@@ -240,7 +289,7 @@ export default function Home() {
                 </h2>
               </div>
               <p className="wv-lead">
-                受託・共同開発で顧客の現場を理解し、そこで得た知見を組織・業務改善の支援とCordMark OSへ還元する。支援とProductで得た知見は、次の開発Projectへ戻る。三つは別々のサービスではなく、顧客の現実に根ざした新しい働き方をつくる一つの流れです。
+                受託・共同開発で顧客の現場を理解し、そこで得た知見を組織・業務改善の支援とCompany OSへ還元する。支援とProductで得た知見は、次の開発Projectへ戻る。三つは別々のサービスではなく、顧客の現実に根ざした新しい働き方をつくる一つの流れです。
               </p>
             </div>
             <div className="wv-practices">
@@ -258,7 +307,7 @@ export default function Home() {
               ))}
             </div>
             <p className="wv-practice__loop">
-              受託・共同開発 → 現場の理解と信頼 → 組織・業務改善とAI駆動開発の支援 → CordMark OSの導入・展開 → 次の開発Projectへ
+              受託・共同開発 → 現場の理解と信頼 → 組織・業務改善とAI駆動開発の支援 → Company OSの導入・展開 → 次の開発Projectへ
             </p>
           </div>
         </section>
@@ -321,11 +370,11 @@ export default function Home() {
                 </div>
                 <h3>意思と実行を、つなぐ。</h3>
                 <p>
-                  会社の意思決定と日々の仕事をつなぎ、人が判断と創造に集中できる状態を、顧客の現場からつくる。CordMark OS、組織・業務改善の支援、受託・共同開発。
+                  会社の意思決定と日々の仕事をつなぎ、人が判断と創造に集中できる状態を、顧客の現場からつくる。Company OS、組織・業務改善の支援、受託・共同開発。
                 </p>
                 <div className="wv-horizon__links">
-                  <a className="wv-link" href="#cordmark-os">
-                    CordMark OS <Arrow />
+                  <a className="wv-link" href="#company-os">
+                    Company OS <Arrow />
                   </a>
                   <a className="wv-link" href="/service/ai-driven-development">
                     AI駆動開発支援 <Arrow />

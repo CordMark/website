@@ -54,9 +54,9 @@ export default function Beyond() {
               <div>
                 <dt>PHASE 1 · AI-NATIVE</dt>
                 <dd>
-                  社会をAIネイティブにする。会社の意思と実行をつなぐCordMark OS、組織・業務改善、受託・共同開発。
-                  <a className="wv-link" href="/#cordmark-os">
-                    CordMark OS <Arrow />
+                  社会をAIネイティブにする。会社の意思と実行をつなぐCompany OS、組織・業務改善、受託・共同開発。
+                  <a className="wv-link" href="/#company-os">
+                    Company OS <Arrow />
                   </a>
                 </dd>
               </div>
@@ -147,7 +147,7 @@ export default function Beyond() {
                 問いは、行き来する。
               </h2>
               <p className="wv-lead">
-                ここで見つけた「人に残るもの」の問いは、CordMark OSの設計に戻る。現場でAIを据える中で生まれる違和感は、次の探索の種になる。
+                ここで見つけた「人に残るもの」の問いは、Company OSの設計に戻る。現場でAIを据える中で生まれる違和感は、次の探索の種になる。
               </p>
             </div>
             <a className="wv-button wv-button--ink" href="/contact">
