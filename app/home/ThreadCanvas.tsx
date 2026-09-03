@@ -9,8 +9,8 @@ import { useEffect, useRef } from "react";
  * in the viewport and only changes shape as the reader scrolls.
  *
  *   Hero        loose strands            → woven cord      (weave progress)
- *   Purpose /   the woven cord rests behind the text
- *   Focus       the cord curls into a ring                  (curl progress)
+ *   Purpose     the woven cord rests behind the text, then
+ *               curls into a ring                          (curl progress)
  *   CordMark OS the ring is the core; people around it; a Question travels
  *               the company in step with the scroll        (story progress)
  *   exit        the ring splits into the CordMark mark (two linked rings)
@@ -205,7 +205,7 @@ export function ThreadCanvas() {
         const b = rects[i].c;
         if (a === b) continue;
         const y = rects[i].r.top;
-        const span = i === 1 ? H * (narrowQuery.matches ? 0.38 : 0.7) : H * 0.26;
+        const span = i === 1 ? H * (narrowQuery.matches ? 0.3 : 0.42) : H * 0.26;
         const y0 = i === 1 ? y - span : y - span * 0.5;
         const y1 = i === 1 ? y + 1 : y + span * 0.5;
         if (y1 < 0 || y0 > H) continue;
@@ -715,7 +715,7 @@ export function ThreadCanvas() {
         if (docked) document.documentElement.dataset.wvMark = "docked";
         else delete document.documentElement.dataset.wvMark;
       }
-      const quiet = pC < 1 && heroScroll >= 1 ? 0.55 : 1; // rests behind Purpose / Focus
+      const quiet = pC < 1 && heroScroll >= 1 ? 0.55 : 1; // rests behind Purpose
 
       if (alpha > 0.01) {
         drawCord({ pW, pC, pM, center, R, alpha: alpha * quiet * (narrow && pC < 0.5 ? 0.6 : 1), t, narrow });

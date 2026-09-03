@@ -23,7 +23,7 @@ const chain = [
   "実行の負担が減る",
   "人に余力が生まれる",
   "人が考え、決め、創造できる",
-  "時間、自由、尊厳、他者との関わりへ還元される",
+  "時間、自由、尊厳、他者との関わりへ戻る",
 ];
 
 const osSteps = [
@@ -164,40 +164,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 3. Current focus — 二つの段階を短く示し、CordMark OSへ入る橋 */}
-        <section className="wv-section wv-focus wv-act" id="focus" data-ground="paper" aria-labelledby="wv-focus-heading">
-          <div className="wv-inner wv-act__col">
-            <div>
-              <p className="wv-label">Current Focus</p>
-              <h2 className="wv-h2" id="wv-focus-heading">
-                いまは、AIを社会に据えることから。
-              </h2>
-              <p className="wv-lead">
-                会社の意思と実行をAIでつなぎ、人が判断と創造に集中できる状態をつくる。その先にある、AIが行き渡ったあとの人の生き方も、同じ視野の中にあります。
-              </p>
-            </div>
-            <ol className="wv-phases" aria-label="二つの段階">
-              <li className="is-now">
-                <div className="wv-tree__meta">
-                  <span>PHASE 1</span>
-                  <span>AI-NATIVE</span>
-                </div>
-                <h3>社会をAIネイティブにする</h3>
-                <p>会社の意思と実行をつなぐCordMark OS。組織・業務改善とAI駆動開発の支援、受託・共同開発。</p>
-              </li>
-              <li>
-                <div className="wv-tree__meta">
-                  <span>PHASE 2</span>
-                  <span>BEYOND</span>
-                </div>
-                <h3>その先の、人の営みを考える</h3>
-                <p>遊び、学び、競技、創作、交流。2v2の戦略ボードゲームLaplace、メディアDotCraft。</p>
-              </li>
-            </ol>
-          </div>
-        </section>
-
-        {/* 4. CordMark OS — 糸が中心の輪になり、Questionが会社を一周する(Scroll連動) */}
+        {/* 3. CordMark OS — 糸が中心の輪になり、Questionが会社を一周する(Scroll連動) */}
         <section className="wv-os wv-act" id="cordmark-os" data-ground="paper" aria-labelledby="wv-os-heading">
           <div className="wv-os__pin">
             <div className="wv-inner wv-os__grid">
@@ -262,7 +229,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 5. What we do — 三つの実践 */}
+        {/* 4. What we do — 三つの実践 */}
         <section className="wv-section wv-services" id="services" data-ground="paper2" aria-labelledby="wv-services-heading">
           <div className="wv-inner">
             <div className="wv-services__head">
@@ -296,7 +263,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 6. Principles — 判断の仕方 */}
+        {/* 5. Principles — 判断の仕方 */}
         <section className="wv-section wv-principles" id="principles" data-ground="paper" aria-labelledby="wv-principles-heading">
           <div className="wv-inner">
             <p className="wv-label">Principles</p>
@@ -315,7 +282,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 7. Origin — CordMarkと縄文。細い線がここで痕跡になる */}
+        {/* 6. Origin — CordMarkと縄文。細い線がここで痕跡になる */}
         <section className="wv-section wv-origin" id="origin" data-ground="charcoal" aria-labelledby="wv-origin-heading">
           <div className="wv-inner wv-origin__grid">
             <div>
@@ -337,7 +304,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 8. Two phases — 全体を見渡す締め。Phase 2は/beyondへ */}
+        {/* 7. Two phases — 全体を見渡す締め。Phase 2は/beyondへ */}
         <section className="wv-section wv-horizons" id="horizons" data-ground="paper" aria-labelledby="wv-horizons-heading">
           <div className="wv-inner">
             <p className="wv-label">Two Phases</p>
@@ -384,7 +351,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 9. Contact — 対話へ */}
+        {/* 8. Contact — 対話へ */}
         <section className="wv-section wv-contact" id="contact" data-ground="paper2" aria-labelledby="wv-contact-heading">
           <div className="wv-inner wv-contact__grid">
             <div>

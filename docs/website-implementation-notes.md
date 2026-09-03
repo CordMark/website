@@ -28,10 +28,10 @@ app/_legacy/HomeLegacy.tsx   切替前のトップページ。ルーティング
 
 ユーザーの判断は二段階で変わった。まず「Sectionを切り分けるより、Scrollで重なり連続する方が洗練される」、次に「糸が文書と一緒に流れ去るのはおかしい。糸は背景の同じ位置にずっと居て、Scrollとともに結び目になっていく絵」。左右分割ではなく背景。最終的に次の構成にした。
 
-- **一枚の固定Canvas**(`.wv-thread`)がViewport全体を覆い、各Sectionの`data-ground`(night / paper / paper2 / charcoal)を読んで地の色を塗る。境界は26vhのGradientで溶かし、Hero→Purposeだけ70vh(Mobileは38vh)かけて夜から紙へ。中間色は無彩色の灰にならないよう暖色の石色へ寄せる。全面に静止した紙の粒子(overlay 11%)を重ねる。Heroの暖色の光と、CSSのScrim・SCROLLの表示は見出しと一緒にJSで消す(消さないと紙への溶け込みの中に円錐状の明るい帯が出る)。SectionのCSS背景はすべて透明で、文章は糸の上を流れる。
+- **一枚の固定Canvas**(`.wv-thread`)がViewport全体を覆い、各Sectionの`data-ground`(night / paper / paper2 / charcoal)を読んで地の色を塗る。境界は26vhのGradientで溶かし、Hero→Purposeだけ42vh(Mobileは30vh)かけて夜から紙へ。中間色は無彩色の灰にならないよう暖色の石色へ寄せる。全面に静止した紙の粒子(overlay 11%)を重ねる。Heroの暖色の光と、CSSのScrim・SCROLLの表示は見出しと一緒にJSで消す(消さないと紙への溶け込みの中に円錐状の明るい帯が出る)。SectionのCSS背景はすべて透明で、文章は糸の上を流れる。
 - **糸は「中心線＋その周りを撚る6本」**として描く。中心線に対する法線方向に `sin(撚り位相)` のずれを与え、`cos(撚り位相)` を奥行きとして、全体を薄く一筆で描いた上に手前に来る区間だけを濃く太く重ねる(2 pass)。これで縄の「上下の交差」が出る。Scroll量に応じて中心線の形だけを補間する。A ばらばら(6本が各自漂う) → B 縄(横一本、ゆるい波) → C 輪(CordMark OSの中心) → D マーク(名刺の二重の輪)。
-  - A→B: Heroの固定区間(300svh)のScroll量。一斉に編まれるのではなく、右端から柔らかい前線が左へ進み、各strandは `JOIN_DELAY` の順に時間差で巻き込まれる(点ごとの進行度 q で位置をmix)。区間の9割ほどで編み終わり、見出しは後半(0.55〜0.85)で薄くなる。ユーザーの要望「ばらばらから少しずつまとまる。早すぎ・不自然はNG」に対応。
-  - B: PurposeとFocusの背後で静止(左側は薄く、右側は濃い)。
+  - A→B: Heroの固定区間(260svh)のScroll量。一斉に編まれるのではなく、右端から柔らかい前線が左へ進み、各strandは `JOIN_DELAY` の順に時間差で巻き込まれる(点ごとの進行度 q で位置をmix)。区間の9割ほどで編み終わり、見出しは後半(0.55〜0.85)で薄くなる。ユーザーの要望「ばらばらから少しずつまとまる。早すぎ・不自然はNG」に対応。
+  - B: Purposeの背後で静止(左側は薄く、右側は濃い)。
   - B→C: 「縄が巻き取られて輪になる」弧のModel。中心線は円弧で、最初は半径が巨大(ほぼ直線)、進むにつれ弧の長さが W→2πR に縮み、開き角が 2π に閉じる。点ごとの線形補間だとY字に折れるので採らない。輪の位置は右列の`.wv-os__stage`の中心。中心には `AI / CONTEXT` のLabel。
   - C: CordMark OSの固定区間(280svh)のScroll量を物語の時間(0〜18秒相当)に写像。人の輪、Questionの往復、朱のHuman Decision。左の5段は`is-active`で追従。
   - C→D: 物語の終盤(14.6〜18秒相当)で二重の輪へ。
@@ -52,10 +52,10 @@ app/_legacy/HomeLegacy.tsx   切替前のトップページ。ルーティング
 ## 時代の二つの段階(2026-09-03 追加)
 
 ユーザーの整理: 軸は「Work / Life」ではなく「時代の段階」。Phase 1 = AIを社会に適用する(CordMark OS、支援、受託)。Phase 2 = AIが行き渡った先の人の生き方を模索する(Laplace、DotCraft)。どちらにもWorkもLifeもあり、順序はあるが並走している。いまはPhase 1に重心。
-- トップの Current Focus は PHASE 1 / PHASE 2 の2枚(`.wv-phases`)、Two Horizons は「二つの段階を、同時に進める」に改題し、Phase 2側は `/beyond` へ送る。
+- トップの Current Focus Section は 2026-09-03 夜に削除(末尾の Two Phases とほぼ同じ役割で冗長だった)。Purpose の直後に CordMark OS が来る。二つの段階は末尾の Two Phases(`.wv-horizon`)だけで示し、Phase 2側は `/beyond` へ送る。
 - `/beyond` は中間トップ(a16b5bd)のLaplace / DotCraft Sectionを新パレットで組み直したもの。盤面画像と `.craft` の素材はそのまま使う。Headerのナビに「Phase 2」を追加。
 - ラベルは英字の PHASE 1 / PHASE 2。日本語の固定名は付けない。
-- **文言の規則(2026-09-03 夜)**: 「順序はあるが並走している」ことを文章で説明しない。「同時に進めている」「すでに動いている」「NOW · IN PARALLEL」のような、時系列を弁明する語は使わない。二つの段階は事実として並べるだけにし、並走は両方に具体物(CordMark OS / Laplace、DotCraft)があることで伝える。副Labelは AI-NATIVE / BEYOND。二つの段階の言い方は「社会をAIネイティブに。その先の、人の営みを考える。」に統一(Two Phasesの見出し、Current Focus・/beyondのCardも同じ語彙)。「AI」の語が連続しないよう、Phase 1のCardは「意思と実行を、つなぐ」、Phase 2は「人に残る営みを、形にする」と別の角度で言い直す。Current Focus は CordMark OS へ入る短い橋、末尾の Two Phases は全体を見渡す締めとして役割を分ける。
+- **文言の規則(2026-09-03 夜)**: 「順序はあるが並走している」ことを文章で説明しない。「同時に進めている」「すでに動いている」「NOW · IN PARALLEL」のような、時系列を弁明する語は使わない。二つの段階は事実として並べるだけにし、並走は両方に具体物(CordMark OS / Laplace、DotCraft)があることで伝える。副Labelは AI-NATIVE / BEYOND。二つの段階の言い方は「社会をAIネイティブに。その先の、人の営みを考える。」に統一(Two Phasesの見出し、/beyondのCardも同じ語彙)。「AI」の語が連続しないよう、Phase 1のCardは「意思と実行を、つなぐ」、Phase 2は「人に残る営みを、形にする」と別の角度で言い直す。Current Focus は削除し、Two Phases が全体を見渡す締めになる。
 - Two Phases の Card(`.wv-horizon`)は Hover で上辺に撚り糸の帯(`::before`、repeating-linear-gradient を scaleX で左から渡し、その後ゆっくり撚りが流れる)、6px の浮き、暖色の影、隣の Card は opacity 0.6(`:has`)。Reduced Motion では動きなし。
 - 本文に `palt` を掛けない(見出しのみ)。本文は `.wv-lead` 0.03em、小段落 0.02〜0.04em の字間。
 
