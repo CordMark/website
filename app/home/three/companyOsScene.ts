@@ -724,6 +724,8 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
   let height = 0;
   /** how high the composition sits, leaving the bottom of the screen to the words */
   let lift = 0.9;
+  /** 0 on a wide window, 1 on a narrow one: the ring pulls back and slides less */
+  let narrow = 0;
   /** context the company owns. Monotonic: scrolling back up does not undo it. */
   let memoryHeld = 0;
 
@@ -740,6 +742,7 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
     camera.updateProjectionMatrix();
     // a squarer window has less room below the ball; lift it a little more
     lift = 0.9 + clamp((tall - 0.6) * 0.8, 0, 0.5);
+    narrow = clamp((1200 - width) / 400);
     const s = quality === "low" ? 0.85 : 1;
     dustMat.uniforms.uScale.value = s;
     fieldMat.uniforms.uScale.value = s;
@@ -798,14 +801,14 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
     const b = SHOTS[k + 1];
     const t = smooth(clamp((p - a.p) / Math.max(1e-6, b.p - a.p)));
     const el = ((a.el + (b.el - a.el) * t) * Math.PI) / 180;
-    const dist = a.dist + (b.dist - a.dist) * t;
+    const dist = (a.dist + (b.dist - a.dist) * t) * (1 + narrow * 0.18);
     shotTarget.set(
       a.target[0] + (b.target[0] - a.target[0]) * t,
       (a.target[1] + (b.target[1] - a.target[1]) * t) * (1 + (lift - 0.9) * (1 - Math.min(1, p / 0.3))),
       a.target[2] + (b.target[2] - a.target[2]) * t,
     );
     // slide the view: the target moves left, so the scene sits to the right
-    shotTarget.x -= a.sx + (b.sx - a.sx) * t;
+    shotTarget.x -= (a.sx + (b.sx - a.sx) * t) * (1 - narrow * 0.55);
     camera.position.set(shotTarget.x, shotTarget.y + Math.sin(el) * dist, shotTarget.z + Math.cos(el) * dist);
     camera.lookAt(shotTarget);
     world.position.set(0, 0, 0);

@@ -244,7 +244,7 @@ export function CompanyOsCanvas() {
         if (!el) continue;
         const say = SAYS[i];
         const q = projected[say.role];
-        const s = clamp(9.5 / Math.max(1, q.depth), 0.85, 1.45);
+        const s = clamp(9.5 / Math.max(1, q.depth), 0.85, vw < 1100 ? 1.15 : 1.45);
         el.style.fontSize = `${(13.5 * s).toFixed(1)}px`;
         const w = el.offsetWidth || 220;
         const h = el.offsetHeight || 40;
