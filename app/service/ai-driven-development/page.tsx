@@ -1,5 +1,33 @@
+import type { Metadata } from "next";
 import { QueryFormStatus } from "../../FormStatus";
 import { LoadingSubmitButton } from "../../LoadingSubmitButton";
+
+const pageTitle = "AI駆動開発支援 | CordMark";
+const pageDescription =
+  "仕様策定・実装・レビュー・テスト・ドキュメントまで、開発プロセス全体をAI前提に再設計。2週間の診断から6週間の実装パイロット、定着まで支援します。";
+
+export const metadata: Metadata = {
+  title: pageTitle,
+  description: pageDescription,
+  openGraph: {
+    title: pageTitle,
+    description: pageDescription,
+    images: [
+      {
+        url: "/assets/ai-driven-development-hero.webp",
+        width: 1448,
+        height: 1086,
+        alt: "AI駆動開発支援",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: pageTitle,
+    description: pageDescription,
+    images: ["/assets/ai-driven-development-hero.webp"],
+  },
+};
 
 type AidIconType =
   | "bars"

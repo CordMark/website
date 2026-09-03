@@ -35,4 +35,5 @@ playwright-report/
 test-results/
 *.png
 !public/assets/*.png
+!public/og.png
 .vercel

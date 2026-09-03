@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type NavItem = {
   href: string;
@@ -13,17 +13,17 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
-  { href: "/about", label: "About" },
+  { href: "/about", label: "私たちについて" },
+  { href: "#cordmark-os", label: "CordMark OS" },
   {
     href: "#services",
-    label: "Services",
+    label: "事業",
     children: [
-      { href: "/service/ai-driven-development", label: "AI-Driven Development" },
-      { href: "/service/ai-native-company", label: "AI Native Company Transformation" },
+      { href: "/service/ai-driven-development", label: "AI駆動開発支援" },
+      { href: "/service/ai-native-company", label: "AI Native Company" },
     ],
   },
-  { href: "#how-we-work", label: "How We Work" },
-  { href: "#cases", label: "Cases" },
+  { href: "#principles", label: "考え方" },
 ];
 
 const mobileMenuId = "mobile-navigation";
@@ -31,11 +31,16 @@ const mobileMenuId = "mobile-navigation";
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLElement>(null);
+  const toggleRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
   const isHome = pathname === "/";
   const navHref = (href: string) => (href.startsWith("#") ? (isHome ? href : `/${href}`) : href);
   const brandHref = isHome ? "#top" : "/";
-  const closeMenu = () => setIsMenuOpen(false);
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+    toggleRef.current?.focus();
+  };
 
   useEffect(() => {
     const updateHeader = () => setIsScrolled(window.scrollY > 10);
@@ -52,7 +57,23 @@ export function Header() {
     const previousOverflow = document.body.style.overflow;
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setIsMenuOpen(false);
+        closeMenu();
+      }
+
+      if (event.key === "Tab") {
+        const links = Array.from(menuRef.current?.querySelectorAll<HTMLElement>("a, button") ?? []);
+        const first = links[0];
+        const last = links.at(-1);
+
+        if (!first || !last) return;
+
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
       }
     };
 
@@ -63,6 +84,12 @@ export function Header() {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", closeOnEscape);
     };
+  }, [isMenuOpen]);
+
+  useEffect(() => {
+    if (isMenuOpen) {
+      menuRef.current?.querySelector<HTMLAnchorElement>("a")?.focus();
+    }
   }, [isMenuOpen]);
 
   useEffect(() => {
@@ -84,7 +111,11 @@ export function Header() {
   }, []);
 
   return (
-    <header className={`site-header${isScrolled ? " is-scrolled" : ""}${isMenuOpen ? " is-menu-open" : ""}`}>
+    <header
+      className={`site-header${isScrolled ? " is-scrolled" : ""}${isMenuOpen ? " is-menu-open" : ""}${
+        isHome && !isMenuOpen ? " site-header--over-dark" : ""
+      }`}
+    >
       <a className="brand" href={brandHref} aria-label="CordMark home">
         CordMark
       </a>
@@ -118,14 +149,15 @@ export function Header() {
 
       <div className="header-actions">
         <a className="header-contact" href="/contact">
-          Contact
+          相談する
         </a>
         <button
+          ref={toggleRef}
           className="mobile-menu-toggle"
           type="button"
           aria-controls={mobileMenuId}
           aria-expanded={isMenuOpen}
-          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+          aria-label={isMenuOpen ? "メニューを閉じる" : "メニューを開く"}
           onClick={() => setIsMenuOpen((current) => !current)}
         >
           <span className="mobile-menu-toggle__lines" aria-hidden="true">
@@ -139,12 +171,18 @@ export function Header() {
       <button
         className="mobile-menu-overlay"
         type="button"
-        aria-label="Close menu"
+        aria-label="メニューを閉じる"
         tabIndex={isMenuOpen ? 0 : -1}
         onClick={closeMenu}
       />
 
-      <aside className="mobile-menu-panel" id={mobileMenuId} aria-hidden={!isMenuOpen}>
+      <aside
+        ref={menuRef}
+        className="mobile-menu-panel"
+        id={mobileMenuId}
+        aria-hidden={!isMenuOpen}
+        inert={!isMenuOpen}
+      >
         <nav className="mobile-menu-nav" aria-label="Mobile navigation">
           {navItems.map((item) => (
             item.children ? (
@@ -181,7 +219,7 @@ export function Header() {
             )
           ))}
           <a className="mobile-menu-contact" href="/contact" onClick={closeMenu}>
-            Contact
+            相談する
           </a>
         </nav>
       </aside>

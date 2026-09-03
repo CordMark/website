@@ -1,422 +1,396 @@
 import { Footer } from "./Footer";
+import { LaplaceFeature } from "./LaplaceFeature";
 
-const trustItems = [
-  "Enterprise AI",
-  "AI Native Studio",
-  "Strategy",
-  "Workflow",
-  "Agent",
-  "Product",
-  "Governance",
-  "Implementation",
+const challengeCards = [
+  {
+    number: "01",
+    label: "FOR ENGINEERING",
+    title: "開発チームのAI活用を、個人技から標準プロセスへ。",
+    body: "仕様策定・実装・レビュー・テストをつなぎ、スピードと品質を同時に測れる開発体験を設計します。",
+    href: "/service/ai-driven-development",
+    link: "AI駆動開発を見る",
+  },
+  {
+    number: "02",
+    label: "FOR BUSINESS",
+    title: "部門ごとのAI活用を、会社全体のCompanyOSへ。",
+    body: "経営・営業・CS・管理の業務とナレッジを横断し、会社そのものをAI前提に再設計します。",
+    href: "/service/ai-native-company",
+    link: "AI Native Companyを見る",
+  },
+  {
+    number: "03",
+    label: "FOR LEADERS",
+    title: "PoCの次に進めない状態から、投資判断できるロードマップへ。",
+    body: "テーマの優先順位、Before / AfterのKPI、実装範囲を明らかにし、次の一手を具体化します。",
+    href: "/contact",
+    link: "課題を相談する",
+  },
 ];
 
 const services = [
   {
-    number: "01",
-    title: "AI-DRIVEN DEVELOPMENT",
-    lead: "開発組織をAI前提のプロセスへ再設計する。",
-    body:
-      "仕様策定、実装、レビュー、テスト、ドキュメント作成、開発マネジメントにAIを組み込み、開発リードタイム、レビュー待ち時間、手戻り率、AI利用率の改善まで支援します。",
-    image: "/assets/website-wave-field.webp",
+    index: "01",
+    overline: "AI-DRIVEN DEVELOPMENT",
+    title: "開発組織を、AI前提のプロセスへ。",
+    body: "ツール導入に留まらず、要件からリリースまでの流れを再設計。チーム標準として使われ、改善し続ける状態をつくります。",
+    facts: ["2週間のプロセス診断", "6週間の実装パイロット", "KPI設計・定着支援"],
+    image: "/assets/ai-driven-development-hero.webp",
     href: "/service/ai-driven-development",
   },
   {
-    number: "02",
-    title: "AI NATIVE COMPANY TRANSFORMATION",
-    lead: "会社全体をAI前提の業務構造へ再設計する。",
-    body:
-      "営業、CS、採用、管理部門、開発、マーケティングにAI Agentやワークフローを組み込み、意思決定・業務実行・ナレッジ活用が回る状態をつくります。",
-    image: "/assets/website-cube-system.webp",
+    index: "02",
+    overline: "AI NATIVE COMPANY / COMPANY OS",
+    title: "開発が速くなった次は、組織の速度を上げる。",
+    body: "AIで開発が速くなるほど、次のボトルネックは営業とエンジニアなど、部門をまたぐコミュニケーションに移ります。会話や判断の背景が社内に蓄積・共有されるCompany OSを実装し、組織全体の速度へつなげます。",
+    facts: ["営業と開発のコンテキストを接続", "会話・判断の背景を組織知に", "部門横断のCompany OSを実装"],
+    image: "/assets/ai-native-company-hero.webp",
     href: "/service/ai-native-company",
   },
 ];
 
-const stats = [
-  ["50+", "AI Use Cases Designed"],
-  ["20+", "Workflows Implemented"],
-  ["10+", "AI Agents Built"],
-  ["0", "POC For POC's Sake"],
+const companyOsLayers = [
+  { number: "01", title: "経営・意思決定", detail: "判断材料と選択肢を、常に更新される状態へ" },
+  { number: "02", title: "業務・ワークフロー", detail: "部門をまたぐ仕事を、人とAIが協働する流れへ" },
+  { number: "03", title: "ナレッジ・データ", detail: "散在する知識を、実務で使える共通基盤へ" },
+  { number: "04", title: "プロダクト・顧客体験", detail: "AIを機能ではなく、体験そのものに組み込む" },
+  { number: "05", title: "ガバナンス・学習", detail: "安全に使い、効果を測り、更新し続ける仕組みへ" },
 ];
 
-const howWorkItems = [
+const process = [
+  {
+    step: "01",
+    title: "診る",
+    english: "Diagnose",
+    body: "業務、開発、データ、意思決定の流れを可視化し、本当のボトルネックを特定します。",
+  },
+  {
+    step: "02",
+    title: "組み替える",
+    english: "Redesign",
+    body: "人とAIの役割を定め、成果から逆算してプロセスとKPIを組み替えます。",
+  },
+  {
+    step: "03",
+    title: "つくる",
+    english: "Build",
+    body: "AI Agent、Workflow、業務アプリ、開発環境を、現場で使える形まで実装します。",
+  },
+  {
+    step: "04",
+    title: "根づかせる",
+    english: "Operate",
+    body: "利用状況と効果を測り、チーム標準として改善が続く運用へ落とし込みます。",
+  },
+];
+
+const implementationAreas = [
+  {
+    tag: "DEVELOPMENT",
+    title: "AI駆動の開発フロー",
+    body: "仕様策定、実装、レビュー、テスト、ドキュメントを一続きの体験へ。",
+    image: "/assets/implementation-development.webp",
+  },
+  {
+    tag: "WORKFLOW",
+    title: "部門業務のAIワークフロー",
+    body: "問い合わせ、提案、議事録、レポート作成を、判断を残しながら効率化。",
+    image: "/assets/implementation-workflow.webp",
+  },
+  {
+    tag: "KNOWLEDGE",
+    title: "社内ナレッジAI",
+    body: "散在する文書や知見をつなぎ、部門ごとの実務に答えられる仕組みへ。",
+    image: "/assets/implementation-agent.webp",
+  },
+  {
+    tag: "PRODUCT",
+    title: "既存プロダクトのAI機能",
+    body: "分析、提案、生成、自動実行を組み込み、顧客体験そのものを再設計。",
+    image: "/assets/implementation-product.webp",
+  },
+];
+
+const horizons = [
   {
     number: "01",
-    title: "Diagnose",
-    lead: "現行の業務・開発プロセスを可視化し、AIを入れるべき箇所を特定する。",
-    image: "/assets/how-we-work-diagnose.webp",
+    overline: "THE NEXT DECADE",
+    title: "会社と働き方を、AIで構造から変える。",
+    body: "企業、教育、介護をはじめとする領域で、AIを中核に据えた新しい仕組みをつくる。これが、いま私たちが集中する第一段階です。",
   },
   {
     number: "02",
-    title: "Redesign",
-    lead: "人間とAIの役割分担から、プロセスを再設計する。",
-    image: "/assets/how-we-work-redesign.webp",
-  },
-  {
-    number: "03",
-    title: "Build",
-    lead: "プロンプト、RAG、AI Agent、業務アプリ、開発環境を実装する。",
-    image: "/assets/how-we-work-build.webp",
-  },
-  {
-    number: "04",
-    title: "Measure & Operate",
-    lead: "Before/AfterのKPIを測定し、現場で使われ続ける運用に落とし込む。",
-    image: "/assets/how-we-work-measure-operate.webp",
+    overline: "AFTER AI TRANSFORMATION",
+    title: "生まれた余白に、人間の営みをつくる。",
+    body: "人と人が競い、遊び、つながり、文化を刻む。Laplaceをはじめ、AIの先に残るエンターテインメントやコミュニティも構想しています。",
   },
 ];
 
-const workVisualImages = {
-  development: "/assets/implementation-development.webp",
-  workflow: "/assets/implementation-workflow.webp",
-  agent: "/assets/implementation-agent.webp",
-  product: "/assets/implementation-product.webp",
-} as const;
-
-type WorkVisualVariant = keyof typeof workVisualImages;
-
-const works: Array<{
-  visual: WorkVisualVariant;
-  category: string;
-  title: string;
-  description: string;
-  kpi: string;
-}> = [
-  {
-    visual: "development",
-    category: "AI-DRIVEN DEVELOPMENT",
-    title: "開発プロセスのAI化",
-    description:
-      "仕様策定、実装、レビュー、テスト、ドキュメント作成にAIを組み込み、開発チームの生産性を測定可能な形で改善。",
-    kpi: "開発リードタイム / PR作成時間 / レビュー待ち時間",
-  },
-  {
-    visual: "workflow",
-    category: "AI NATIVE WORKFLOW",
-    title: "営業・CS・管理業務のAI化",
-    description:
-      "提案書作成、問い合わせ対応、議事録、ナレッジ検索などをAI Agentやワークフローとして実装。",
-    kpi: "作業時間 / 一次回答時間 / 修正率",
-  },
-  {
-    visual: "agent",
-    category: "Enterprise AI Agent",
-    title: "社内ナレッジAIアシスタント",
-    description:
-      "社内ドキュメント、FAQ、業務マニュアルを横断検索し、部門ごとの実務回答を生成。",
-    kpi: "検索時間 / 回答精度 / 利用回数",
-  },
-  {
-    visual: "product",
-    category: "AI Product Implementation",
-    title: "既存SaaSへのAI機能実装",
-    description:
-      "分析、提案、生成、自動実行などのAI機能を既存プロダクトへ組み込み、顧客価値を再設計。",
-    kpi: "機能利用率 / 継続率 / 作業完了率",
-  },
-];
-
-const philosophyPrinciples = [
-  {
-    icon: "human",
-    title: "Human-first",
-    body: "すべての意思決定の中心に、人の価値と創造性を置く。",
-  },
-  {
-    icon: "structure",
-    title: "Structure over tools",
-    body: "一時的なツール導入ではなく、持続可能な構造設計を行う。",
-  },
-  {
-    icon: "implementation",
-    title: "Implementation, not slogans",
-    body: "言葉ではなく、成果を生む実装にこだわる。",
-  },
-] as const;
-
-const rotatingWorks = [...works, ...works.slice(0, 3)];
-
-type PhilosophyIconType = (typeof philosophyPrinciples)[number]["icon"];
-
-function PhilosophyIcon({ type }: { type: PhilosophyIconType }) {
-  if (type === "human") {
-    return (
-      <svg viewBox="0 0 32 32" aria-hidden="true">
-        <path d="M16 15.2a4.9 4.9 0 1 0 0-9.8 4.9 4.9 0 0 0 0 9.8Z" />
-        <path d="M7.2 27.2v-2.4c0-4.3 3.5-7.8 7.8-7.8h2c4.3 0 7.8 3.5 7.8 7.8v2.4" />
-        <path d="M11.5 27.2h9" />
-      </svg>
-    );
-  }
-
-  if (type === "structure") {
-    return (
-      <svg viewBox="0 0 32 32" aria-hidden="true">
-        <path d="m16 4.2 10.1 5.9v11.8L16 27.8 5.9 21.9V10.1L16 4.2Z" />
-        <path d="M16 16v11.8" />
-        <path d="m5.9 10.1 10.1 5.9 10.1-5.9" />
-        <path d="M16 4.2V16" />
-      </svg>
-    );
-  }
-
+function ArrowIcon() {
   return (
-    <svg viewBox="0 0 32 32" aria-hidden="true">
-      <path d="M6.2 25.8h20" />
-      <path d="M8.4 22.8v-5.1" />
-      <path d="M14 22.8V12.9" />
-      <path d="M19.6 22.8V9.2" />
-      <path d="M25.2 22.8V5.8" />
-      <path d="m6.2 15.6 7.8-6.4 5.6 3.6 6.2-7" />
-      <path d="M25.8 5.8v6.3h-6.2" />
+    <svg viewBox="0 0 20 20" aria-hidden="true">
+      <path d="M4 10h11" />
+      <path d="m11 5 5 5-5 5" />
     </svg>
   );
 }
 
-function WorkVisual({ variant }: { variant: WorkVisualVariant }) {
-  return (
-    <div className="work-visual" aria-hidden="true">
-      <img className="work-visual__image" src={workVisualImages[variant]} alt="" loading="lazy" decoding="async" />
-    </div>
-  );
-}
-
-export default function Home() {
+export default function HomeLegacy() {
   return (
     <>
-      <main id="top" className="site-main">
-        <section className="hero-section" aria-labelledby="hero-heading">
-          <div className="hero-section__copy">
-            <h1 id="hero-heading">
-              Transform work.
-              <br />
-              With AI Native
-              <br />
-              systems.
+      <main id="top" className="site-main home-v2">
+        <section className="cm-hero" aria-labelledby="cm-hero-heading">
+          <div className="cm-hero__copy">
+            <p className="cm-eyebrow">
+              <span /> COMPANY OS / AI NATIVE IMPLEMENTATION
+            </p>
+            <h1 id="cm-hero-heading">
+              <span>AIを、会社の</span>
+              <span className="cm-hero__accent">「使える仕組み」に。</span>
             </h1>
-            <p className="hero-section__lead">
-              <span>企業の意思決定、業務プロセス、プロダクト開発を、AI前提の構造へ再設計する。</span>
-              <br />
-              <span>私たちは、構想だけで終わらせず、現場で動くAI Nativeな仕組みまで実装します。</span>
+            <p className="cm-hero__lead">
+              AIチャットボットを足すだけでは、会社は変わらない。CordMarkは、経営・意思決定・業務・ナレッジ・プロダクトの中核にAIを据え、会社をひとつのOSとして再設計します。
             </p>
-            <a className="button button--dark" href="#services">
-              AI Native Strategy <span aria-hidden="true">→</span>
-            </a>
+            <div className="cm-hero__actions">
+              <a className="cm-button cm-button--primary" href="/contact">
+                無料で相談する <ArrowIcon />
+              </a>
+              <a className="cm-button cm-button--ghost" href="#services">
+                支援内容を見る <ArrowIcon />
+              </a>
+            </div>
+            <dl className="cm-hero__facts" aria-label="CordMarkの支援範囲">
+              <div>
+                <dt>01</dt>
+                <dd>会社の中核にAIを据える</dd>
+              </div>
+              <div>
+                <dt>02</dt>
+                <dd>開発組織と事業部門に対応</dd>
+              </div>
+              <div>
+                <dt>03</dt>
+                <dd>KPIで効果を可視化</dd>
+              </div>
+            </dl>
           </div>
-          <div className="hero-section__visual" aria-hidden="true">
-            <img src="/assets/website-ribbon-system.webp" alt="" loading="eager" fetchPriority="high" decoding="async" />
+
+          <div className="cm-hero__visual" aria-hidden="true">
+            <div className="cm-hero__visual-frame">
+              <img
+                src="/assets/website-ribbon-system.webp"
+                alt=""
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
+              />
+              <span className="cm-hero__visual-label cm-hero__visual-label--strategy">STRATEGY</span>
+              <span className="cm-hero__visual-label cm-hero__visual-label--workflow">WORKFLOW</span>
+              <span className="cm-hero__visual-label cm-hero__visual-label--agent">AGENT</span>
+              <span className="cm-hero__visual-label cm-hero__visual-label--measure">MEASURE</span>
+              <span className="cm-hero__visual-status">SYSTEM / ONLINE</span>
+            </div>
           </div>
         </section>
 
-        <section className="trust-strip" aria-label="AI Native capabilities">
-          {trustItems.map((item) => (
-            <span key={item}>{item}</span>
-          ))}
-        </section>
+        <div className="cm-signal" aria-label="CordMarkの提供価値">
+          <p>FROM AI TOOLS TO COMPANY OS</p>
+          <span>構想</span><i />
+          <span>業務設計</span><i />
+          <span>実装</span><i />
+          <span>運用</span>
+        </div>
 
-        <section className="split-section who-section" id="about">
-          <div className="split-section__copy">
-            <p className="section-label">Who We Are</p>
-            <h2>
-              AIを導入するのではなく、
-              <br />
-              会社の動き方そのものをAI前提に変える。
-            </h2>
-            <p>
-              私たちは、企業のAI Native化を構想から実装まで担うパートナーです。
-              生成AI、AI Agent、業務自動化、データ基盤、プロダクト開発を横断し、
-              経営戦略と現場業務のあいだにある断絶を埋めます。
-            </p>
-            <p>
-              単発のPoCやツール導入ではなく、日々の業務・意思決定・顧客体験に
-              AIが組み込まれた状態をつくります。
-            </p>
-            <a className="text-link" href="/about">
-              More About Us <span aria-hidden="true">→</span>
-            </a>
+        <section className="cm-challenges" aria-labelledby="cm-challenges-heading">
+          <div className="cm-section-heading">
+            <p className="cm-kicker">START WITH YOUR CHALLENGE</p>
+            <h2 id="cm-challenges-heading">いまの課題から、入口を選べます。</h2>
+            <p>テーマが固まっていなくても構いません。近い状態から、最小の一歩を設計します。</p>
           </div>
-          <div className="who-section__image" aria-hidden="true">
-            <img src="/assets/website-who-we-are-layer-stack.webp" alt="" loading="lazy" decoding="async" />
-          </div>
-        </section>
-
-        <section className="services-section" id="services">
-          <div className="section-head">
-            <p className="section-label">What We Do</p>
-            <a className="text-link text-link--top" href="#contact">
-              View All Services <span aria-hidden="true">→</span>
-            </a>
-          </div>
-          <div className="service-grid">
-            {services.map((service) => (
-              <a className="service-tile" href={service.href} key={service.href}>
-                <div className="service-tile__copy">
-                  <span className="service-tile__number">{service.number}</span>
-                  <h3>{service.title}</h3>
-                  <p className="service-tile__lead">{service.lead}</p>
-                  <p>{service.body}</p>
-                  <span className="service-tile__button">
-                    詳細を見る <span aria-hidden="true">→</span>
-                  </span>
+          <div className="cm-challenge-grid">
+            {challengeCards.map((item) => (
+              <a className="cm-challenge-card" href={item.href} key={item.number}>
+                <div className="cm-challenge-card__meta">
+                  <span>{item.number}</span>
+                  <span>{item.label}</span>
                 </div>
-                <img src={service.image} alt="" aria-hidden="true" loading="lazy" decoding="async" />
+                <h3>{item.title}</h3>
+                <p>{item.body}</p>
+                <span className="cm-text-link">
+                  {item.link} <ArrowIcon />
+                </span>
               </a>
             ))}
           </div>
         </section>
 
-        <section className="stats-band" aria-label="AI Native principles">
-          <img
-            className="stats-band__image"
-            src="/assets/website-data-mesh.webp"
-            alt=""
-            aria-hidden="true"
-            loading="lazy"
-            decoding="async"
-          />
-          <div className="stats-band__items">
-            {stats.map(([value, label]) => (
-              <div className="stat" key={label}>
-                <strong>{value}</strong>
-                <span>{label}</span>
-              </div>
-            ))}
+        <section className="cm-services" id="services" aria-labelledby="cm-services-heading">
+          <div className="cm-section-heading cm-section-heading--light">
+            <p className="cm-kicker">SERVICES</p>
+            <h2 id="cm-services-heading">変える単位に合わせた、2つの支援。</h2>
+            <p>共通するのは、診断で終わらず、実装と運用までつなげることです。</p>
           </div>
-          <p>
-            AI Native化は、AIを試すことではありません。
-            <br />
-            事業の中で使われ続け、成果を生む構造へ落とし込むことです。
-          </p>
-        </section>
 
-        <section className="how-work-section" id="how-we-work">
-          <div className="how-work-section__head">
-            <p className="section-label">How We Work</p>
-            <span className="how-work-section__marker">
-              Workflow <span aria-hidden="true">→</span>
-            </span>
-          </div>
-          <div className="how-work-grid">
-            {howWorkItems.map((item) => (
-              <article className="how-work-item" key={item.number}>
-                <span className="how-work-item__number">{item.number}</span>
-                <h3>{item.title}</h3>
-                <p>{item.lead}</p>
-                <div className="how-work-item__visual" aria-hidden="true">
-                  <img src={item.image} alt="" loading="lazy" decoding="async" />
+          <div className="cm-service-list">
+            {services.map((service) => (
+              <article className="cm-service-card" key={service.index}>
+                <div className="cm-service-card__visual">
+                  <img src={service.image} alt="" loading="lazy" decoding="async" />
+                  <span>{service.index}</span>
+                </div>
+                <div className="cm-service-card__copy">
+                  <p className="cm-service-card__overline">{service.overline}</p>
+                  <h3>{service.title}</h3>
+                  <p>{service.body}</p>
+                  <ul>
+                    {service.facts.map((fact) => (
+                      <li key={fact}>{fact}</li>
+                    ))}
+                  </ul>
+                  <a className="cm-button cm-button--light" href={service.href}>
+                    詳しく見る <ArrowIcon />
+                  </a>
                 </div>
               </article>
             ))}
           </div>
         </section>
 
-        <section className="works-section" id="cases">
-          <div className="section-head">
-            <p className="section-label">Implementation Areas</p>
-            <a className="text-link text-link--top" href="#contact">
-              View All Use Cases <span aria-hidden="true">→</span>
-            </a>
-          </div>
-          <div className="works-carousel" aria-label="Implementation area use cases">
-            <div className="works-track">
-              {rotatingWorks.map((work, index) => (
-                <article
-                  className="work-card"
-                  key={`${work.category}-${index}`}
-                  aria-hidden={index >= works.length ? "true" : undefined}
-                >
-                  <WorkVisual variant={work.visual} />
-                  <div className="work-card__body">
-                    <p className="work-card__category">{work.category}</p>
-                    <h3>{work.title}</h3>
-                    <p className="work-card__description">{work.description}</p>
-                    <p className="work-card__kpi">
-                      <strong>KPI:</strong> {work.kpi}
-                    </p>
-                  </div>
-                </article>
-              ))}
+        <section className="cm-company-os" aria-labelledby="cm-company-os-heading">
+          <div className="cm-company-os__intro">
+            <div className="cm-section-heading">
+              <p className="cm-kicker">COMPANY OS</p>
+              <h2 id="cm-company-os-heading">AIを追加するのではなく、会社の中核に据える。</h2>
             </div>
+            <p>
+              チャットボットや単発の自動化は、変革の入口にすぎません。経営の判断から現場の仕事、顧客に届く体験までをつなぎ、AIが組織全体を動かす基盤として機能する状態をつくります。
+            </p>
+          </div>
+          <div className="cm-company-os__system" aria-label="CompanyOSを構成する5つのレイヤー">
+            <p className="cm-company-os__core">AI CORE</p>
+            <ol>
+              {companyOsLayers.map((layer) => (
+                <li key={layer.number}>
+                  <span>{layer.number}</span>
+                  <div>
+                    <h3>{layer.title}</h3>
+                    <p>{layer.detail}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
           </div>
         </section>
 
-        <section className="philosophy-section" id="philosophy">
-          <img
-            className="philosophy-section__bg"
-            src="/assets/website-philosophy-stairs-bg.webp"
-            alt=""
-            aria-hidden="true"
-            loading="lazy"
-            decoding="async"
-          />
-          <div className="philosophy-section__copy">
-            <p className="section-label">Philosophy</p>
-            <h2>
-              AI Native化とは、
-              <br />
-              人を減らすことではなく、
-              <br />
-              人間が担うべき仕事を再定義することだ。
-            </h2>
+        <section className="cm-process" id="how-we-work" aria-labelledby="cm-process-heading">
+          <div className="cm-process__intro">
+            <div className="cm-section-heading">
+              <p className="cm-kicker">HOW WE WORK</p>
+              <h2 id="cm-process-heading">AIを入れる前に、仕事の流れを変える。</h2>
+            </div>
             <p>
-              AIは単なる効率化のための道具ではありません。企業にとってのAIは、情報を読み取り、
-              判断を助け、実行を支え、学習を積み重ねていく、業務の新しい基盤です。
+              成果が出ない原因は、AIの性能ではなく、使う構造にあることが少なくありません。だから私たちは、現場を診るところから始めます。
             </p>
-            <p>
-              だから私たちは、AIを「便利な道具」としてではなく、組織の構造を変える力として扱います。
-              人間がすべてを抱え込む会社から、人間とAIが分散的に考え、動き、学習する会社へ。
-              その移行を、構想ではなく実装として支援します。
-            </p>
-            <a className="text-link" href="/about">
-              More About Us <span aria-hidden="true">→</span>
-            </a>
           </div>
-          <div className="philosophy-principles" aria-label="AI Native philosophy principles">
-            {philosophyPrinciples.map((item) => (
-              <article className="philosophy-principle" key={item.title}>
-                <div className="philosophy-principle__head">
-                  <PhilosophyIcon type={item.icon} />
+          <ol className="cm-process-list">
+            {process.map((item) => (
+              <li key={item.step}>
+                <div className="cm-process-list__number">{item.step}</div>
+                <div>
+                  <p>{item.english}</p>
                   <h3>{item.title}</h3>
                 </div>
                 <p>{item.body}</p>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section className="cm-implementation" id="cases" aria-labelledby="cm-implementation-heading">
+          <div className="cm-section-heading">
+            <p className="cm-kicker">WHAT WE BUILD</p>
+            <h2 id="cm-implementation-heading">“使える”を、具体的な形にする。</h2>
+            <p>検討資料だけではなく、現場の仕事に組み込まれる仕組みをつくります。</p>
+          </div>
+          <div className="cm-implementation-grid">
+            {implementationAreas.map((item) => (
+              <article className="cm-implementation-card" key={item.tag}>
+                <div className="cm-implementation-card__image">
+                  <img src={item.image} alt="" loading="lazy" decoding="async" />
+                </div>
+                <p>{item.tag}</p>
+                <h3>{item.title}</h3>
+                <span>{item.body}</span>
               </article>
             ))}
           </div>
         </section>
 
-        <section className="media-section" id="media" aria-labelledby="media-heading">
-          <div className="media-section__copy">
-            <p className="section-label">Media</p>
-            <h2 id="media-heading" className="media-section__logo-heading">
-              <img src="/assets/dotcraft-transparent.webp" alt="Dot Craft" loading="lazy" decoding="async" />
+        <section className="cm-identity" id="philosophy" aria-labelledby="cm-identity-heading">
+          <div className="cm-identity__statement">
+            <p className="cm-kicker">OUR POINT OF VIEW</p>
+            <h2 id="cm-identity-heading">
+              AIの先で、人間は
+              <br />
+              何をするのか。
             </h2>
             <p>
-              AIとテクノロジーを、実装する側の視点で読み解く。
-              <br />
-              CordMarkが運営するYouTubeメディアです。
+              CordMarkは「縄文」に由来する名前です。人に余白が生まれたとき、土器に縄目を刻んだように、私たちは何を競い、何をつくり、誰とつながるのか。AIによる構造変革の、その先までを見据えています。
             </p>
+            <a className="cm-text-link cm-text-link--light" href="/about">
+              CordMarkについて <ArrowIcon />
+            </a>
+          </div>
+          <div className="cm-horizons">
+            {horizons.map((horizon) => (
+              <article key={horizon.number}>
+                <div className="cm-horizons__meta">
+                  <span>{horizon.number}</span>
+                  <p>{horizon.overline}</p>
+                </div>
+                <h3>{horizon.title}</h3>
+                <p>{horizon.body}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <LaplaceFeature />
+
+        <section className="cm-media" aria-labelledby="cm-media-heading">
+          <div className="cm-media__copy">
+            <p className="cm-kicker">MEDIA / FIELD NOTES</p>
+            <h2 id="cm-media-heading">思考の種を生む。</h2>
+            <p>
+              「最終的に、人間には何が残るのか」。AIを現場でどう使うかだけでなく、その先の社会と人間の営みまで考えるYouTubeメディア、DotCraftを運営しています。
+            </p>
+            <ul className="cm-media__topics" aria-label="DotCraftで扱うテーマ">
+              <li>LOOP ENGINEERING</li>
+              <li>AI AGENTS</li>
+              <li>AI &amp; SOCIETY</li>
+            </ul>
             <a
-              className="media-section__button"
+              className="cm-button cm-button--media"
               href="https://dotcraft.cordmark.co.jp"
               target="_blank"
               rel="noreferrer"
             >
-              DotCraft Ch 公式サイト <span aria-hidden="true">→</span>
+              DotCraftを見る <ArrowIcon />
             </a>
           </div>
-          <div className="media-section__visual" aria-hidden="true">
-            <img src="/assets/dotcraft-transparent.webp" alt="" loading="lazy" decoding="async" />
+          <div className="cm-media__visual">
+            <img src="/assets/dotcraft-transparent.webp" alt="DotCraft" loading="lazy" decoding="async" />
           </div>
         </section>
 
-        <section className="final-cta" id="contact">
-          <div className="final-cta__copy">
-            <p className="section-label">Next Step</p>
-            <h2>Let&apos;s build your AI Native company.</h2>
-            <p>AIを試す段階から、AIで事業を動かす段階へ。</p>
+        <section className="cm-final" id="contact" aria-labelledby="cm-final-heading">
+          <p className="cm-kicker">NEXT STEP</p>
+          <div>
+            <h2 id="cm-final-heading">まだ曖昧な課題から、話しましょう。</h2>
+            <p>AIを入れる場所が決まっていなくても大丈夫です。現状を伺い、最初の一歩を一緒に整理します。</p>
           </div>
-          <a className="button button--dark final-cta__button" href="/contact">
-            Contact Us <span aria-hidden="true">→</span>
+          <a className="cm-button cm-button--primary" href="/contact">
+            無料で相談する <ArrowIcon />
           </a>
         </section>
       </main>

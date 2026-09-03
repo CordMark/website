@@ -151,7 +151,7 @@ export default function PrivacyPolicyPage() {
                   </p>
                   <p>
                     <ContactIcon type="mail" />
-                    <a href="mailto:info@cordmark.jp">info@cordmark.jp</a>
+                    <a href="mailto:info@cordmark.co.jp">info@cordmark.co.jp</a>
                   </p>
                   <p>
                     <ContactIcon type="pin" />

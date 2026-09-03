@@ -24,6 +24,8 @@ export function ServiceGuideDownload() {
   const [isOpen, setIsOpen] = useState(false);
   const titleId = useId();
   const descriptionId = useId();
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
   const firstInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -49,6 +51,26 @@ export function ServiceGuideDownload() {
       if (event.key === "Escape") {
         setIsOpen(false);
       }
+
+      if (event.key === "Tab") {
+        const focusable = Array.from(
+          dialogRef.current?.querySelectorAll<HTMLElement>(
+            'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled])',
+          ) ?? [],
+        );
+        const first = focusable[0];
+        const last = focusable.at(-1);
+
+        if (!first || !last) return;
+
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -56,12 +78,20 @@ export function ServiceGuideDownload() {
     return () => {
       document.body.style.overflow = originalOverflow;
       window.removeEventListener("keydown", handleKeyDown);
+      triggerRef.current?.focus();
     };
   }, [isOpen]);
 
   return (
     <div className="contact-next-step__actions">
-      <button className="contact-download" type="button" onClick={() => setIsOpen(true)} aria-haspopup="dialog">
+      <button
+        ref={triggerRef}
+        className="contact-download"
+        type="button"
+        onClick={() => setIsOpen(true)}
+        aria-haspopup="dialog"
+        aria-expanded={isOpen}
+      >
         サービス資料をダウンロードする <span aria-hidden="true">→</span>
       </button>
 
@@ -74,7 +104,14 @@ export function ServiceGuideDownload() {
       {isOpen && (
         <div className="contact-modal" role="presentation">
           <button className="contact-modal__backdrop" type="button" aria-label="閉じる" onClick={() => setIsOpen(false)} />
-          <div className="contact-modal__dialog" role="dialog" aria-modal="true" aria-labelledby={titleId} aria-describedby={descriptionId}>
+          <div
+            ref={dialogRef}
+            className="contact-modal__dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={titleId}
+            aria-describedby={descriptionId}
+          >
             <button className="contact-modal__close" type="button" aria-label="閉じる" onClick={() => setIsOpen(false)}>
               ×
             </button>

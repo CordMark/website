@@ -11,20 +11,8 @@ const SERVICE_GUIDE_PATH = "/docs/cordmark-service-guide.pdf";
 const formTypes = {
   general: {
     label: "お問い合わせ",
-    required: ["company", "name", "email"],
-    fields: [
-      "company",
-      "name",
-      "role",
-      "email",
-      "company-size",
-      "department",
-      "ai-status",
-      "message",
-      "budget",
-      "meeting-date",
-      "interest-area",
-    ],
+    required: ["company", "name", "email", "interest-area"],
+    fields: ["company", "name", "email", "interest-area", "message"],
   },
   "ai-driven-development": {
     label: "AI駆動開発 無料相談",
@@ -37,14 +25,9 @@ const formTypes = {
     fields: [
       "company",
       "name",
-      "role",
       "email",
-      "company-size",
-      "department",
-      "ai-status",
       "consultation",
-      "budget",
-      "date",
+      "message",
     ],
   },
   "service-guide": {

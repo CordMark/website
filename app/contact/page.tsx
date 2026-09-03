@@ -10,36 +10,10 @@ export const metadata: Metadata = {
     "CordMarkへのお問い合わせページです。AI Native化、AI駆動開発、AI Agent / Workflowに関するご相談を受け付けています。",
 };
 
-const companySizeOptions = ["〜99名", "100〜499名", "500〜999名", "1,000名以上"];
-
-const departmentOptions = [
-  "経営企画・DX推進",
-  "開発・プロダクト",
-  "営業・CS",
-  "管理部門",
-  "全社横断",
-];
-
-const aiStatusOptions = [
-  "未導入",
-  "一部社員が個人利用している",
-  "一部業務で導入済み",
-  "PoC・検証中",
-  "全社展開を検討中",
-];
-
-const budgetOptions = [
-  "未定",
-  "〜300万円",
-  "300〜500万円",
-  "500〜1,000万円",
-  "1,000万円以上",
-];
-
-const interestAreas = [
+const consultationOptions = [
   "AI-Driven Development",
   "AI Native Company Transformation",
-  "まだ決まってない",
+  "まだ決まっていない・相談しながら整理したい",
 ];
 
 function RequiredBadge() {
@@ -79,37 +53,35 @@ function ContactSelect({
 export default function ContactPage() {
   return (
     <>
-      <main id="top" className="contact-page site-main">
+      <main id="top" className="contact-page contact-v2 site-main">
         <section className="contact-hero" aria-labelledby="contact-heading">
           <div className="contact-hero__content">
-            <p className="contact-kicker">Contact Us</p>
+            <p className="contact-kicker">LET&apos;S TALK</p>
             <h1 id="contact-heading">
-              <span>AI Native化</span>
-              <span>について相談する</span>
+              <span>まずは、課題の</span>
+              <span>整理から話しましょう。</span>
             </h1>
             <p>
-              AI活用の構想段階から、
-              <br className="contact-mobile-break" />
-              診断・設計・実装・定着まで、
+              テーマが固まっていなくても大丈夫です。
               <br />
-              貴社の状況に合わせて
-              <br className="contact-mobile-break" />
-              最適なご支援をご提案します。
+              現状を伺い、最初の一歩を一緒に整理します。
             </p>
           </div>
+          <aside className="contact-v2__promise" aria-label="ご相談について">
+            <p>FIRST CONVERSATION</p>
+            <strong>無料相談</strong>
+            <span>担当者より2営業日以内にご連絡します</span>
+          </aside>
         </section>
 
         <section className="contact-form-section" id="contact" aria-labelledby="contact-form-heading">
           <div className="contact-section-head">
-            <h2 id="contact-form-heading">お問い合わせフォーム</h2>
+            <p className="contact-kicker">CONTACT FORM</p>
+            <h2 id="contact-form-heading">5項目で送信できます。</h2>
             <p>
-              下記フォームをご入力いただくと、
-              <br className="contact-mobile-break" />
-              担当者より2営業日以内にご連絡いたします。
+              まだ具体的な依頼内容や予算が決まっていなくても構いません。
               <br />
-              まずは情報交換や、
-              <br className="contact-mobile-break" />
-              壁打ちだけでもお気軽にご相談ください。
+              分かる範囲でお聞かせください。
             </p>
           </div>
 
@@ -134,12 +106,7 @@ export default function ContactPage() {
               <input id="name" name="name" type="text" placeholder="例）山田 太郎" required />
             </div>
 
-            <div className="contact-field">
-              <label htmlFor="role">役職</label>
-              <input id="role" name="role" type="text" placeholder="例）事業責任者" />
-            </div>
-
-            <div className="contact-field">
+            <div className="contact-field contact-field--full">
               <label htmlFor="email">
                 メールアドレス <RequiredBadge />
               </label>
@@ -152,48 +119,27 @@ export default function ContactPage() {
               />
             </div>
 
-            <ContactSelect id="company-size" label="従業員規模" options={companySizeOptions} />
-            <ContactSelect id="department" label="対象にしたい部門" options={departmentOptions} />
-
             <ContactSelect
-              id="ai-status"
-              label="現在のAI活用状況"
-              options={aiStatusOptions}
+              id="interest-area"
+              label="相談テーマ"
+              options={consultationOptions}
               className="contact-field--full"
+              required
             />
 
             <div className="contact-field contact-field--full contact-field--textarea">
-              <label htmlFor="message">相談したい内容</label>
+              <label htmlFor="message">相談したいこと・現在の状況</label>
               <textarea
                 id="message"
                 name="message"
                 maxLength={500}
-                placeholder="例）AI活用の進め方や、業務への適用可否を相談したい など"
+                placeholder="例）開発チームでAIツールを使い始めたが、個人利用に留まっている。進め方から相談したい。"
               />
-              <span className="contact-counter">0 / 500</span>
+              <span className="contact-counter">500文字まで</span>
             </div>
-
-            <ContactSelect id="budget" label="予算感" options={budgetOptions} />
-
-            <div className="contact-field">
-              <label htmlFor="meeting-date">希望面談日時</label>
-              <input id="meeting-date" name="meeting-date" type="date" />
-            </div>
-
-            <fieldset className="contact-checks">
-              <legend>相談したい領域（複数選択可）</legend>
-              <div className="contact-checks__grid">
-                {interestAreas.map((area) => (
-                  <label key={area}>
-                    <input name="interest-area" type="checkbox" value={area} />
-                    <span>{area}</span>
-                  </label>
-                ))}
-              </div>
-            </fieldset>
 
             <LoadingSubmitButton className="contact-submit">
-              送信する <span aria-hidden="true">→</span>
+              無料相談を申し込む <span aria-hidden="true">→</span>
             </LoadingSubmitButton>
 
             <p className="contact-policy">

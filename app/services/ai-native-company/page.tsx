@@ -1,1 +1,5 @@
-export { default } from "../../service/ai-native-company/page";
+import { permanentRedirect } from "next/navigation";
+
+export default function LegacyAiNativeCompanyPage() {
+  permanentRedirect("/service/ai-native-company");
+}

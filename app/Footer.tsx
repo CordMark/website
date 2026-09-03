@@ -1,9 +1,9 @@
 const footerLinks = [
-  { label: "About", href: "/about" },
-  { label: "Services", href: "/#services" },
-  { label: "How We Work", href: "/#how-we-work" },
-  { label: "Cases", href: "/#cases" },
-  { label: "Privacy Policy", href: "/privacy-policy" },
+  { label: "私たちについて", href: "/about" },
+  { label: "CordMark OS", href: "/#cordmark-os" },
+  { label: "事業", href: "/#services" },
+  { label: "考え方", href: "/#principles" },
+  { label: "プライバシー", href: "/privacy-policy" },
 ];
 
 type FooterProps = {

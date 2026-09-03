@@ -1,6 +1,34 @@
 import { Footer } from "../../Footer";
+import type { Metadata } from "next";
 import { QueryFormStatus } from "../../FormStatus";
 import { LoadingSubmitButton } from "../../LoadingSubmitButton";
+
+const pageTitle = "CompanyOS / AI Native Company変革支援 | CordMark";
+const pageDescription =
+  "AIを会社の中核に据え、意思決定・業務・ナレッジ・データ・ガバナンスをひとつのCompanyOSとして再設計。3〜4週間で実装ロードマップを具体化します。";
+
+export const metadata: Metadata = {
+  title: pageTitle,
+  description: pageDescription,
+  openGraph: {
+    title: pageTitle,
+    description: pageDescription,
+    images: [
+      {
+        url: "/assets/ai-native-company-hero.webp",
+        width: 1448,
+        height: 1086,
+        alt: "AI Native Company変革支援",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: pageTitle,
+    description: pageDescription,
+    images: ["/assets/ai-native-company-hero.webp"],
+  },
+};
 
 type AncIconType =
   | "agent"
@@ -725,7 +753,7 @@ export default function AiNativeCompanyPage() {
       <main id="top" className="anc-page site-main">
         <section className="anc-hero" aria-labelledby="anc-heading">
           <div className="anc-hero__copy">
-            <p className="anc-kicker">AI Native Company Transformation</p>
+            <p className="anc-kicker">CompanyOS / AI Native Company Transformation</p>
             <h1 id="anc-heading">
               会社を、
               <br />
@@ -734,11 +762,11 @@ export default function AiNativeCompanyPage() {
               Operating Systemへ。
             </h1>
             <p className="anc-lead">
-              AIツールの導入ではなく、意思決定、業務プロセス、
+              AIツールを足すのではなく、AIを会社の中核に据える。
               <br />
-              ナレッジ、データ、ガバナンスまでを再設計。
+              意思決定、業務、ナレッジ、データ、顧客体験、ガバナンスをつなぎ、
               <br />
-              人間とAIが効率的に考え、動き、学習する会社をつくります。
+              人間とAIがともに考え、動き、学習するCompanyOSを実装します。
             </p>
             <div className="anc-actions">
               <a className="anc-primary" href="#contact">
@@ -786,11 +814,10 @@ export default function AiNativeCompanyPage() {
               <h2 id="anc-definition-heading">
                 目的は、AIを使うことではなく、
                 <br />
-                AIで成果が出る会社に変えること。
+                AIを会社の中核に据えること。
               </h2>
               <p>
-                個人のツール活用から、会社全体の判断・業務・学習の仕組みへ。
-                AIを組み込んだ運用に変えることで、継続的な成果をつくります。
+                チャットボットは、数あるインターフェースのひとつにすぎません。経営から現場、顧客体験までをつなぎ、会社全体がAIとともに判断・実行・学習する構造へ変えることで、継続的な成果をつくります。
               </p>
             </div>
             <dl className="anc-shift-list">
@@ -911,6 +938,7 @@ export default function AiNativeCompanyPage() {
         <section className="anc-section anc-contact" id="contact" aria-labelledby="anc-contact-heading">
           <p className="anc-kicker">お問い合わせフォーム</p>
           <h2 id="anc-contact-heading">AI Native化に関するご相談はこちらから。</h2>
+          <p className="anc-form-note">会社名・氏名・メールアドレスのみ必須です。まだ構想段階でも構いません。</p>
           <form className="anc-form" action="/api/contact" method="post">
             <input type="hidden" name="formType" value="ai-native-company" />
             <input type="hidden" name="redirectTo" value="/service/ai-native-company#contact" />
@@ -928,49 +956,10 @@ export default function AiNativeCompanyPage() {
               <input name="name" type="text" placeholder="山田 太郎" required />
             </label>
             <label>
-              <span>役職</span>
-              <input name="role" type="text" placeholder="事業責任者" />
-            </label>
-            <label>
               <span>メールアドレス</span>
               <input name="email" type="email" placeholder="taro.yamada@cordmark.co.jp" required />
             </label>
-            <label>
-              <span>従業員規模</span>
-              <select name="company-size" defaultValue="">
-                <option value="" disabled>
-                  選択してください
-                </option>
-                <option>〜99名</option>
-                <option>100〜499名</option>
-                <option>500名〜</option>
-              </select>
-            </label>
-            <label>
-              <span>対象にしたい部門</span>
-              <select name="department" defaultValue="">
-                <option value="" disabled>
-                  選択してください
-                </option>
-                <option>営業・CS</option>
-                <option>管理部門</option>
-                <option>開発・プロダクト</option>
-                <option>全社横断</option>
-              </select>
-            </label>
-            <label>
-              <span>現在のAI活用状況</span>
-              <select name="ai-status" defaultValue="">
-                <option value="" disabled>
-                  選択してください
-                </option>
-                <option>未導入</option>
-                <option>一部社員個人利用</option>
-                <option>部分導入済み</option>
-                <option>PoC</option>
-              </select>
-            </label>
-            <label>
+            <label className="anc-form__full">
               <span>相談したい内容</span>
               <select name="consultation" defaultValue="">
                 <option value="" disabled>
@@ -981,20 +970,13 @@ export default function AiNativeCompanyPage() {
                 <option>実装支援</option>
               </select>
             </label>
-            <label>
-              <span>予算感</span>
-              <select name="budget" defaultValue="">
-                <option value="" disabled>
-                  選択してください
-                </option>
-                <option>200〜500万円</option>
-                <option>500〜1000万円</option>
-                <option>1000万円以上</option>
-              </select>
-            </label>
-            <label>
-              <span>希望面談日時</span>
-              <input name="date" type="date" />
+            <label className="anc-form__full">
+              <span>現在の状況（任意）</span>
+              <textarea
+                name="message"
+                maxLength={500}
+                placeholder="例）複数部門でAIを試しているが、全社展開の優先順位と効果測定を整理したい。"
+              />
             </label>
             <LoadingSubmitButton>
               送信する <span aria-hidden="true">→</span>
@@ -1008,7 +990,7 @@ export default function AiNativeCompanyPage() {
             <p>AIを試す段階から、AIで事業を動かす段階へ。</p>
           </div>
           <a className="button" href="#contact">
-            Contact Us <span aria-hidden="true">→</span>
+            無料で相談する <span aria-hidden="true">→</span>
           </a>
         </section>
       </main>
