@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { CordMark } from "./home/CordMark";
 
 type NavItem = {
   href: string;
@@ -117,6 +118,11 @@ export function Header() {
       }`}
     >
       <a className="brand" href={brandHref} aria-label="CordMark home">
+        {isHome ? (
+          <span className="brand__mark" aria-hidden="true">
+            <CordMark />
+          </span>
+        ) : null}
         CordMark
       </a>
 

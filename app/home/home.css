@@ -1,0 +1,995 @@
+/* ------------------------------------------------------------
+   CordMark top page — Direction B「結び / Weave」
+   Scoped under .wv so the existing pages keep their own styles.
+   ------------------------------------------------------------ */
+
+.wv {
+  --wv-night: #1b1f1c;
+  --wv-night-2: #242b26;
+  --wv-charcoal: #24221f;
+  --wv-paper: #f1ece1;
+  --wv-paper-2: #e9e2d3;
+  --wv-linen: #ede7da;
+  --wv-ink: #26231f;
+  --wv-ink-2: #4a4640;
+  --wv-stone: #8b8578;
+  --wv-line: #ddd6c8;
+  --wv-line-dark: #3a3f3a;
+  --wv-copper: #a8683c;
+  --wv-copper-light: #c98a55;
+  --wv-moss: #4e6b57;
+  --wv-vermilion: #b5482e;
+  --wv-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --wv-x: clamp(22px, 5vw, 88px);
+  --wv-max: 1240px;
+
+  position: relative;
+  z-index: 0;
+  color: var(--wv-ink);
+  background: var(--wv-paper);
+  font-family: var(--wv-sans), "Hiragino Sans", "Yu Gothic", Meiryo, sans-serif;
+  font-feature-settings: "palt";
+  line-height: 1.9;
+}
+
+.wv .wv-thread {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.wv main > section {
+  position: relative;
+  z-index: 1;
+}
+
+.wv main {
+  display: block;
+}
+
+.wv h1,
+.wv h2,
+.wv h3,
+.wv p {
+  margin: 0;
+}
+
+.wv h2,
+.wv h3 {
+  text-wrap: balance;
+}
+
+.wv .wv-serif {
+  font-family: var(--wv-serif), "Hiragino Mincho ProN", "Yu Mincho", serif;
+}
+
+.wv .wv-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--wv-copper);
+}
+
+.wv .wv-section {
+  padding: clamp(80px, 11vw, 160px) var(--wv-x);
+}
+
+.wv .wv-inner {
+  width: min(var(--wv-max), 100%);
+  margin: 0 auto;
+}
+
+.wv .wv-h2 {
+  font-family: var(--wv-serif), "Hiragino Mincho ProN", serif;
+  font-weight: 400;
+  font-size: clamp(28px, 3.4vw, 44px);
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  margin-top: 22px;
+}
+
+.wv .wv-lead {
+  max-width: 34em;
+  margin-top: 24px;
+  font-size: 15px;
+  line-height: 2.05;
+  color: var(--wv-ink-2);
+}
+
+.wv .wv-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid currentColor;
+  color: var(--wv-copper);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  transition: gap 0.25s ease, opacity 0.2s ease;
+}
+
+.wv .wv-link:hover {
+  gap: 16px;
+}
+
+.wv .wv-link svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.wv .wv-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 22px;
+  border: 1px solid var(--wv-copper-light);
+  color: var(--wv-linen);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  transition: background 0.25s ease, color 0.25s ease, gap 0.25s ease;
+}
+
+.wv .wv-button:hover {
+  background: var(--wv-copper-light);
+  color: var(--wv-night);
+  gap: 18px;
+}
+
+.wv .wv-button--ghost {
+  border-color: rgba(237, 231, 218, 0.35);
+}
+
+.wv .wv-button--ghost:hover {
+  background: rgba(237, 231, 218, 0.12);
+  color: var(--wv-linen);
+}
+
+.wv .wv-button--ink {
+  border-color: var(--wv-ink);
+  color: var(--wv-ink);
+}
+
+.wv .wv-button--ink:hover {
+  background: var(--wv-ink);
+  color: var(--wv-linen);
+}
+
+.wv .wv-button svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.wv :focus-visible {
+  outline: 2px solid var(--wv-copper-light);
+  outline-offset: 4px;
+}
+
+.wv .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Header over the dark hero ---------- */
+
+html[data-wv-ground="dark"] .site-header.site-header--over-dark {
+  color: #ede7da;
+  background: transparent;
+  box-shadow: none;
+}
+
+html[data-wv-ground="dark"] .site-header.site-header--over-dark .header-contact {
+  color: #ede7da;
+  border-color: rgba(237, 231, 218, 0.45);
+  background: transparent;
+}
+
+html[data-wv-ground="dark"] .site-header.site-header--over-dark .mobile-menu-toggle__lines span {
+  background: #ede7da;
+}
+
+html[data-wv-ground="dark"] .site-header.site-header--over-dark .site-nav__menu {
+  color: #050505;
+}
+
+html[data-wv-ground="light"] .site-header.site-header--over-dark {
+  background: rgba(241, 236, 225, 0.92);
+  backdrop-filter: blur(8px);
+}
+
+/* once the page has moved, a dark ground gets a quiet backdrop so the copy does not run under the nav */
+html[data-wv-ground="dark"][data-wv-scrolled="1"] .site-header.site-header--over-dark {
+  background: rgba(27, 31, 28, 0.72);
+  backdrop-filter: blur(8px);
+}
+
+/* ---------- The mark, once the cord has become it ---------- */
+
+.site-header .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.site-header .brand__mark {
+  display: inline-block;
+  width: 34px;
+  height: 22px;
+  opacity: 0;
+  transform: translateY(2px) scale(0.85);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.site-header .brand__mark svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+html[data-wv-mark="docked"] .site-header .brand__mark {
+  opacity: 1;
+  transform: none;
+}
+
+.wv .site-footer__mark {
+  display: block;
+  width: 72px;
+  height: auto;
+  margin-bottom: 14px;
+  color: var(--wv-linen);
+}
+
+/* ---------- Hero ---------- */
+
+.wv .wv-hero {
+  height: 300svh;
+  margin-top: calc(var(--header-h) * -1);
+  color: var(--wv-linen);
+}
+
+.wv .wv-hero__pin {
+  position: sticky;
+  top: 0;
+  display: grid;
+  align-items: center;
+  height: 100svh;
+  padding: calc(var(--header-h) + clamp(24px, 6vh, 72px)) var(--wv-x) clamp(48px, 8vh, 96px);
+  overflow: hidden;
+}
+
+.wv .wv-hero__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(27, 31, 28, 0.88) 0%, rgba(27, 31, 28, 0.66) 40%, rgba(27, 31, 28, 0) 64%);
+}
+
+.wv .wv-hero__copy {
+  position: relative;
+  z-index: 2;
+  width: min(var(--wv-max), 100%);
+  margin: 0 auto;
+  will-change: opacity;
+}
+
+.wv .wv-hero__copy > * {
+  max-width: 640px;
+}
+
+.wv .wv-hero h1 {
+  font-family: var(--wv-serif), "Hiragino Mincho ProN", "Yu Mincho", serif;
+  font-weight: 300;
+  font-size: clamp(30px, 4.8vw, 62px);
+  line-height: 1.42;
+  letter-spacing: 0.05em;
+  margin-top: 28px;
+  text-wrap: balance;
+}
+
+.wv .wv-hero__lead {
+  margin-top: 28px;
+  max-width: 30em;
+  font-size: clamp(14px, 1.05vw, 15.5px);
+  font-weight: 400;
+  line-height: 2.05;
+  color: #d9d3c5;
+}
+
+.wv .wv-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 40px;
+}
+
+.wv .wv-hero__hint {
+  position: absolute;
+  right: var(--wv-x);
+  bottom: 22px;
+  z-index: 2;
+  font-family: var(--wv-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: #7e8a80;
+}
+
+/* ---------- Purpose ---------- */
+
+.wv .wv-purpose {
+  background: transparent;
+}
+
+
+.wv .wv-purpose .wv-act__col {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: clamp(40px, 6vw, 96px);
+  align-items: start;
+}
+
+.wv .wv-focus .wv-act__col {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(40px, 6vw, 96px);
+  align-items: start;
+}
+
+.wv .wv-purpose__statement {
+  font-family: var(--wv-serif), "Hiragino Mincho ProN", serif;
+  font-weight: 400;
+  font-size: clamp(30px, 3.8vw, 50px);
+  line-height: 1.55;
+  letter-spacing: 0.05em;
+  margin-top: 26px;
+}
+
+.wv .wv-chain {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  border-top: 1px solid var(--wv-line);
+}
+
+.wv .wv-chain li {
+  display: grid;
+  grid-template-columns: 2.4em 1fr;
+  gap: 16px;
+  align-items: baseline;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--wv-line);
+  font-size: clamp(16px, 1.4vw, 20px);
+  line-height: 1.6;
+  opacity: 0.3;
+  transform: translateY(8px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.wv .wv-chain li.is-on {
+  opacity: 1;
+  transform: none;
+}
+
+.wv .wv-chain li span {
+  font-family: var(--wv-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--wv-stone);
+}
+
+.wv .wv-chain li:last-child {
+  color: var(--wv-copper);
+}
+
+
+/* ---------- Current focus ---------- */
+
+.wv .wv-focus {
+  background: transparent;
+}
+
+.wv .wv-tree {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 14px;
+}
+
+.wv .wv-tree li {
+  position: relative;
+  padding: 22px 26px;
+  border: 1px solid var(--wv-line);
+  background: var(--wv-paper);
+}
+
+.wv .wv-tree li + li {
+  margin-left: clamp(24px, 4vw, 56px);
+}
+
+.wv .wv-tree li + li::before {
+  content: "";
+  position: absolute;
+  top: -15px;
+  left: -1px;
+  width: 1px;
+  height: 15px;
+  background: var(--wv-line);
+}
+
+.wv .wv-tree li.is-now {
+  border-color: var(--wv-copper);
+}
+
+.wv .wv-tree .wv-tree__meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-family: var(--wv-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--wv-stone);
+}
+
+.wv .wv-tree li.is-now .wv-tree__meta {
+  color: var(--wv-copper);
+}
+
+.wv .wv-tree h3 {
+  margin-top: 10px;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.wv .wv-tree p {
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 1.9;
+  color: var(--wv-ink-2);
+}
+
+/* ---------- CordMark OS ---------- */
+
+.wv .wv-os {
+  min-height: 280svh;
+  padding: 0 var(--wv-x);
+  background: transparent;
+}
+
+.wv .wv-os__pin {
+  position: sticky;
+  top: 0;
+  display: grid;
+  align-items: center;
+  min-height: 100svh;
+  padding: calc(var(--header-h) + 16px) 0 24px;
+}
+
+.wv .wv-os__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: clamp(32px, 5vw, 80px);
+  align-items: center;
+}
+
+.wv .wv-os__copy .wv-lead {
+  margin-top: 18px;
+  font-size: 14px;
+}
+
+.wv .wv-os__stage {
+  position: relative;
+  aspect-ratio: 1 / 0.9;
+  max-height: calc(100svh - var(--header-h) - 60px);
+  min-height: 360px;
+}
+
+.wv .wv-os__steps {
+  list-style: none;
+  margin: 24px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0;
+  border-top: 1px solid var(--wv-line);
+}
+
+.wv .wv-os__steps li {
+  display: grid;
+  grid-template-columns: 9.5em 1fr;
+  gap: 4px 14px;
+  align-items: baseline;
+  padding: 9px 0 9px 12px;
+  border-bottom: 1px solid var(--wv-line);
+  border-left: 2px solid transparent;
+  transition: border-color 0.4s ease, opacity 0.4s ease;
+  opacity: 0.55;
+}
+
+.wv .wv-os__steps li.is-active {
+  opacity: 1;
+  border-left-color: var(--wv-copper);
+}
+
+.wv .wv-os__steps li.is-human.is-active {
+  border-left-color: var(--wv-vermilion);
+}
+
+.wv .wv-os__tag {
+  font-family: var(--wv-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--wv-stone);
+}
+
+.wv .wv-os__steps li.is-human .wv-os__tag {
+  color: var(--wv-vermilion);
+}
+
+.wv .wv-os__steps b {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.wv .wv-os__steps p {
+  grid-column: 2;
+  font-size: 12.5px;
+  line-height: 1.7;
+  color: var(--wv-ink-2);
+}
+
+.wv .wv-os-roles {
+  padding-top: clamp(24px, 4vw, 48px);
+  background: transparent;
+}
+
+.wv .wv-os__legend {
+  position: absolute;
+  left: 4px;
+  bottom: 0;
+  display: flex;
+  gap: 18px;
+  font-family: var(--wv-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--wv-stone);
+}
+
+.wv .wv-os__legend i {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 6px;
+  border-radius: 50%;
+}
+
+.wv .wv-roles {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: 44em;
+}
+
+.wv .wv-roles li {
+  display: grid;
+  grid-template-columns: 7.5em 1fr;
+  gap: 14px;
+  padding: 12px 0;
+  border-top: 1px solid var(--wv-line);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.wv .wv-roles li:last-child {
+  border-bottom: 1px solid var(--wv-line);
+}
+
+.wv .wv-roles b {
+  font-weight: 700;
+}
+
+.wv .wv-roles span {
+  color: var(--wv-ink-2);
+}
+
+.wv .wv-os__status {
+  margin-top: 16px;
+  font-family: var(--wv-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--wv-stone);
+}
+
+/* ---------- What we do ---------- */
+
+.wv .wv-services {
+  background: transparent;
+}
+
+.wv .wv-services__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(32px, 5vw, 80px);
+  align-items: end;
+}
+
+.wv .wv-practices {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  margin-top: clamp(40px, 5vw, 64px);
+  border: 1px solid var(--wv-line);
+  background: var(--wv-paper);
+}
+
+.wv .wv-practice {
+  display: flex;
+  flex-direction: column;
+  padding: 30px 28px 32px;
+  border-right: 1px solid var(--wv-line);
+  transition: background 0.3s ease;
+}
+
+.wv .wv-practice:last-child {
+  border-right: 0;
+}
+
+.wv .wv-practice:hover {
+  background: #f6f2e9;
+}
+
+.wv .wv-practice__meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-family: var(--wv-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--wv-stone);
+}
+
+.wv .wv-practice h3 {
+  margin-top: 16px;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+}
+
+.wv .wv-practice p {
+  flex: 1;
+  margin-top: 12px;
+  font-size: 14px;
+  line-height: 1.9;
+  color: var(--wv-ink-2);
+}
+
+.wv .wv-practice .wv-link {
+  margin-top: 24px;
+  align-self: flex-start;
+}
+
+.wv .wv-practice__loop {
+  margin-top: 28px;
+  font-size: 13px;
+  line-height: 1.9;
+  color: var(--wv-stone);
+}
+
+/* ---------- Principles ---------- */
+
+.wv .wv-principles {
+  background: transparent;
+}
+
+.wv .wv-principles__list {
+  list-style: none;
+  margin: clamp(40px, 5vw, 64px) 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(28px, 4vw, 56px) clamp(40px, 6vw, 96px);
+}
+
+.wv .wv-principle {
+  padding-top: 22px;
+  border-top: 1px solid var(--wv-ink);
+}
+
+.wv .wv-principle span {
+  font-family: var(--wv-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--wv-stone);
+}
+
+.wv .wv-principle h3 {
+  margin-top: 12px;
+  font-family: var(--wv-serif), "Hiragino Mincho ProN", serif;
+  font-weight: 400;
+  font-size: clamp(22px, 2.2vw, 28px);
+  letter-spacing: 0.04em;
+}
+
+.wv .wv-principle p {
+  margin-top: 14px;
+  max-width: 30em;
+  font-size: 14px;
+  line-height: 2;
+  color: var(--wv-ink-2);
+}
+
+/* ---------- Origin ---------- */
+
+.wv .wv-origin {
+  position: relative;
+  padding-bottom: clamp(150px, 18vw, 250px); /* room for the cord-mark band */
+  color: var(--wv-linen);
+  background: transparent;
+}
+
+.wv .wv-origin__grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(32px, 5vw, 80px);
+  align-items: center;
+}
+
+.wv .wv-origin .wv-h2 {
+  color: var(--wv-linen);
+}
+
+.wv .wv-origin .wv-lead {
+  color: #c9c3b4;
+}
+
+.wv .wv-origin__note {
+  padding: 26px 28px;
+  border: 1px solid var(--wv-line-dark);
+  background: rgba(27, 31, 28, 0.55);
+  font-size: 14px;
+  line-height: 2;
+  color: #c9c3b4;
+}
+
+.wv .wv-origin__note b {
+  display: block;
+  margin-bottom: 8px;
+  font-family: var(--wv-serif), serif;
+  font-weight: 400;
+  font-size: 18px;
+  color: var(--wv-linen);
+}
+
+/* ---------- Two horizons ---------- */
+
+.wv .wv-horizons {
+  background: transparent;
+}
+
+.wv .wv-horizons__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(28px, 4vw, 56px);
+  margin-top: clamp(40px, 5vw, 64px);
+}
+
+.wv .wv-horizon {
+  padding: 30px 30px 32px;
+  border: 1px solid var(--wv-line);
+  background: var(--wv-paper-2);
+}
+
+.wv .wv-horizon.is-now {
+  border-color: var(--wv-copper);
+}
+
+.wv .wv-horizon__meta {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--wv-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--wv-stone);
+}
+
+.wv .wv-horizon.is-now .wv-horizon__meta {
+  color: var(--wv-copper);
+}
+
+.wv .wv-horizon h3 {
+  margin-top: 16px;
+  font-family: var(--wv-serif), serif;
+  font-weight: 400;
+  font-size: clamp(22px, 2.2vw, 28px);
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+}
+
+.wv .wv-horizon p {
+  margin-top: 14px;
+  font-size: 14px;
+  line-height: 2;
+  color: var(--wv-ink-2);
+}
+
+.wv .wv-horizon__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 26px;
+  margin-top: 22px;
+}
+
+.wv .wv-horizon__links .wv-link {
+  color: var(--wv-ink);
+}
+
+/* ---------- Contact ---------- */
+
+.wv .wv-contact {
+  background: transparent;
+}
+
+.wv .wv-contact__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) auto;
+  gap: clamp(32px, 5vw, 80px);
+  align-items: end;
+}
+
+/* ---------- Footer within the new palette ---------- */
+
+.wv .site-footer {
+  position: relative;
+  z-index: 1;
+  color: var(--wv-linen);
+  background: var(--wv-night);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 1100px) {
+  .wv .wv-practices {
+    grid-template-columns: 1fr;
+  }
+
+  .wv .wv-practice {
+    border-right: 0;
+    border-bottom: 1px solid var(--wv-line);
+  }
+
+  .wv .wv-practice:last-child {
+    border-bottom: 0;
+  }
+}
+
+@media (max-width: 880px) {
+  .wv .wv-hero {
+    height: auto;
+  }
+
+  .wv .wv-hero__pin {
+    position: static;
+    height: auto;
+    min-height: calc(100svh - var(--header-h));
+    padding-top: calc(var(--header-h) + 56px);
+  }
+
+  .wv .wv-os {
+    min-height: auto;
+  }
+
+  .wv .wv-os__pin {
+    position: static;
+    min-height: auto;
+    padding: clamp(80px, 11vw, 160px) 0 0;
+  }
+
+  .wv .wv-os__steps li {
+    grid-template-columns: 1fr;
+  }
+
+  .wv .wv-os__steps p {
+    grid-column: 1;
+  }
+
+  .wv .wv-hero__scrim {
+    background: linear-gradient(180deg, rgba(27, 31, 28, 0.9) 0%, rgba(27, 31, 28, 0.7) 55%, rgba(27, 31, 28, 0.25) 100%);
+  }
+
+  .wv .wv-hero__hint {
+    display: none;
+  }
+
+  .wv .wv-act .wv-act__col,
+  .wv .wv-os__grid,
+  .wv .wv-services__head,
+  .wv .wv-origin__grid,
+  .wv .wv-horizons__grid,
+  .wv .wv-contact__grid,
+  .wv .wv-principles__list {
+    grid-template-columns: 1fr;
+  }
+
+  .wv .wv-os__stage {
+    min-height: 360px;
+    max-height: none;
+    aspect-ratio: 1 / 1;
+  }
+
+  .wv .wv-tree li + li {
+    margin-left: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wv .wv-link,
+  .wv .wv-button,
+  .wv .wv-practice,
+  .wv .wv-chain li,
+  .wv .wv-os__steps li {
+    transition: none;
+  }
+
+  .wv .wv-chain li {
+    opacity: 1;
+    transform: none;
+  }
+
+  .wv .wv-hero {
+    height: auto;
+  }
+
+  .wv .wv-hero__pin {
+    position: static;
+    height: auto;
+    min-height: calc(100svh - var(--header-h));
+  }
+
+  .wv .wv-os {
+    min-height: auto;
+  }
+
+  .wv .wv-os__pin {
+    position: static;
+    min-height: auto;
+    padding: clamp(80px, 11vw, 160px) 0 0;
+  }
+}
+
+/* ---------- Brand mark ---------- */
+
+.wv .wv-origin__mark {
+  display: block;
+  width: 104px;
+  height: auto;
+  margin-bottom: 28px;
+  color: var(--wv-linen);
+}
+
+.wv .wv-nowrap {
+  display: inline-block;
+}

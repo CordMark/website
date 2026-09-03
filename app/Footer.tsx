@@ -6,6 +6,8 @@ const footerLinks = [
   { label: "プライバシー", href: "/privacy-policy" },
 ];
 
+import { CordMark } from "./home/CordMark";
+
 type FooterProps = {
   homeLinks?: boolean;
 };
@@ -17,6 +19,7 @@ export function Footer({ homeLinks = false }: FooterProps) {
   return (
     <footer className="site-footer">
       <div className="site-footer__brand">
+        {homeLinks ? <CordMark className="site-footer__mark" /> : null}
         <a className="brand brand--footer" href={brandHref} aria-label="CordMark home">
           CordMark
         </a>
