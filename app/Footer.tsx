@@ -10,16 +10,18 @@ import { CordMark } from "./home/CordMark";
 
 type FooterProps = {
   homeLinks?: boolean;
+  /** show the brand mark above the wordmark (pages that use the .wv palette) */
+  mark?: boolean;
 };
 
-export function Footer({ homeLinks = false }: FooterProps) {
+export function Footer({ homeLinks = false, mark = homeLinks }: FooterProps) {
   const formatHref = (href: string) => (homeLinks && href.startsWith("/#") ? href.slice(1) : href);
   const brandHref = homeLinks ? "#top" : "/";
 
   return (
     <footer className="site-footer">
       <div className="site-footer__brand">
-        {homeLinks ? <CordMark className="site-footer__mark" /> : null}
+        {mark ? <CordMark className="site-footer__mark" /> : null}
         <a className="brand brand--footer" href={brandHref} aria-label="CordMark home">
           CordMark
         </a>

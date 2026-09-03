@@ -25,6 +25,7 @@ const navItems: NavItem[] = [
     ],
   },
   { href: "#principles", label: "考え方" },
+  { href: "/beyond", label: "Phase 2" },
 ];
 
 const mobileMenuId = "mobile-navigation";
@@ -118,11 +119,9 @@ export function Header() {
       }`}
     >
       <a className="brand" href={brandHref} aria-label="CordMark home">
-        {isHome ? (
-          <span className="brand__mark" aria-hidden="true">
-            <CordMark />
-          </span>
-        ) : null}
+        <span className="brand__mark" aria-hidden="true">
+          <CordMark />
+        </span>
         CordMark
       </a>
 

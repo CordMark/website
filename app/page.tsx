@@ -164,42 +164,34 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 3. Current focus — いまは「働く」から */}
+        {/* 3. Current focus — 二つの段階を短く示し、CordMark OSへ入る橋 */}
         <section className="wv-section wv-focus wv-act" id="focus" data-ground="paper" aria-labelledby="wv-focus-heading">
           <div className="wv-inner wv-act__col">
             <div>
               <p className="wv-label">Current Focus</p>
               <h2 className="wv-h2" id="wv-focus-heading">
-                いまは、働くことから。
+                いまは、AIを社会に据えることから。
               </h2>
               <p className="wv-lead">
-                CordMarkの視野は、AI時代の人の生き方全体にあります。その最初の領域として、いまは人の働き方、とくにソフトウェア開発における新しい働き方に取り組んでいます。組織の意思決定と日々の仕事をつなぎ、人が判断と創造に集中できる状態をつくることが、現在の主領域です。
+                会社の意思と実行をAIでつなぎ、人が判断と創造に集中できる状態をつくる。その先にある、AIが行き渡ったあとの人の生き方も、同じ視野の中にあります。
               </p>
             </div>
-            <ol className="wv-tree" aria-label="事業の全体像">
-              <li>
-                <div className="wv-tree__meta">
-                  <span>CORDMARK</span>
-                  <span>PURPOSE</span>
-                </div>
-                <h3>AI時代の人の生き方</h3>
-                <p>テクノロジーの進化によって、人がより豊かに生きられる状態をつくる。</p>
-              </li>
+            <ol className="wv-phases" aria-label="二つの段階">
               <li className="is-now">
                 <div className="wv-tree__meta">
-                  <span>WORK</span>
-                  <span>NOW</span>
+                  <span>PHASE 1</span>
+                  <span>AI-NATIVE</span>
                 </div>
-                <h3>人の働き方</h3>
-                <p>会社の意思と実行をつなぐ。中心Productは CordMark OS。</p>
+                <h3>社会をAIネイティブにする</h3>
+                <p>会社の意思と実行をつなぐCordMark OS。組織・業務改善とAI駆動開発の支援、受託・共同開発。</p>
               </li>
               <li>
                 <div className="wv-tree__meta">
-                  <span>LIFE</span>
-                  <span>NEXT</span>
+                  <span>PHASE 2</span>
+                  <span>BEYOND</span>
                 </div>
-                <h3>仕事以外の人の活動</h3>
-                <p>遊び、学び、競技、創作、交流。AI時代にも人が自ら行う価値のある活動へ。</p>
+                <h3>その先の、人の営みを考える</h3>
+                <p>遊び、学び、競技、創作、交流。2v2の戦略ボードゲームLaplace、メディアDotCraft。</p>
               </li>
             </ol>
           </div>
@@ -345,22 +337,24 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 8. Two horizons — WorkからLifeへ */}
+        {/* 8. Two phases — 全体を見渡す締め。Phase 2は/beyondへ */}
         <section className="wv-section wv-horizons" id="horizons" data-ground="paper" aria-labelledby="wv-horizons-heading">
           <div className="wv-inner">
-            <p className="wv-label">Two Horizons</p>
+            <p className="wv-label">Two Phases</p>
             <h2 className="wv-h2" id="wv-horizons-heading">
-              AIネイティブな社会の、その先へ。
+              社会をAIネイティブに。
+              <br />
+              その先の、人の営みを考える。
             </h2>
             <div className="wv-horizons__grid">
               <article className="wv-horizon is-now">
                 <div className="wv-horizon__meta">
-                  <span>NOW</span>
-                  <span>WORK</span>
+                  <span>PHASE 1</span>
+                  <span>AI-NATIVE</span>
                 </div>
-                <h3>組織の意思と実行をつなぐ。</h3>
+                <h3>意思と実行を、つなぐ。</h3>
                 <p>
-                  人が判断と創造に集中できる働き方をつくる。CordMark OS、組織・業務改善、受託・共同開発を通じて、顧客の現場で確かめながら進めています。
+                  会社の意思決定と日々の仕事をつなぎ、人が判断と創造に集中できる状態を、顧客の現場からつくる。CordMark OS、組織・業務改善の支援、受託・共同開発。
                 </p>
                 <div className="wv-horizon__links">
                   <a className="wv-link" href="#cordmark-os">
@@ -373,19 +367,16 @@ export default function Home() {
               </article>
               <article className="wv-horizon">
                 <div className="wv-horizon__meta">
-                  <span>NEXT</span>
-                  <span>LIFE</span>
+                  <span>PHASE 2</span>
+                  <span>BEYOND</span>
                 </div>
-                <h3>生まれた余白に、人の営みをつくる。</h3>
+                <h3>人に残る営みを、形にする。</h3>
                 <p>
-                  遊び、学び、競技、創作、交流。AI時代にも人が自ら行う価値のある活動へ広げていく構想です。考えることと対人競技の面白さを形にした戦略ボードゲームLaplaceや、AIの先の社会と人間を考えるメディアDotCraftは、その探索です。
+                  技術が行き渡ったあとにも、人が自ら行う価値のある営みがある。仲間の心理を読み合う2v2の戦略ボードゲームLaplace、社会と人間の先を考えるメディアDotCraft。
                 </p>
                 <div className="wv-horizon__links">
-                  <a className="wv-link" href="https://www.laplace.zone/" target="_blank" rel="noreferrer">
-                    Laplace <External />
-                  </a>
-                  <a className="wv-link" href="https://dotcraft.cordmark.co.jp" target="_blank" rel="noreferrer">
-                    DotCraft <External />
+                  <a className="wv-link" href="/beyond">
+                    Phase 2を見る <Arrow />
                   </a>
                 </div>
               </article>

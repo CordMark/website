@@ -16,7 +16,8 @@
 app/page.tsx                 新トップページ(Server Component)。Section順は構想書のとおり
 app/home/home.css            .wv 配下にScopeした新Token・Section Style。Header/Footerの上書きも含む
 app/home/ThreadCanvas.tsx    背景に固定した一枚のCanvas。地の色と、形だけが変わる一本の糸(ばらばら→縄→輪→マーク)、CordMark OSの物語
-app/Header.tsx / Footer.tsx  トップページのみ、Headerにマーク(`.brand__mark`、docked後に表示)、Footerに大きなマークを置く
+app/beyond/page.tsx          Phase 2のページ(Laplace、DotCraft)。固定Canvasは使わず、`.wv-page` でHeaderと地の色をCSSで揃える
+app/Header.tsx / Footer.tsx  Headerにマーク(`.brand__mark`、docked後に表示)、Footerに大きなマークを置く
 app/home/CordMark.tsx        ブランドのシンボル(原本: cordmark-os/company/context/shared/brand/cordmark-symbol-*.svg のpathをcurrentColorで描画)
 app/_legacy/HomeLegacy.tsx   切替前のトップページ。ルーティングされない退避用。不要になれば削除
 ```
@@ -48,11 +49,21 @@ app/_legacy/HomeLegacy.tsx   切替前のトップページ。ルーティング
 - **3Dをやめた経緯**: 最初はThree.js / React Three Fiberで撚り糸を作ったが、「操作しても結ばれた状態に届きにくい」「展開案(Canvas 2D)の質感の方が好み」「3Dっぽくない方がよい」でCanvas 2Dへ。次に「Sectionの切り分けをやめて連続させたい」で一枚Canvasへ。
 - **Metadata**: `app/layout.tsx`のtitle/descriptionを新メッセージへ。OG画像(`public/og.png`)は旧デザインのまま。要更新。
 
+## 時代の二つの段階(2026-09-03 追加)
+
+ユーザーの整理: 軸は「Work / Life」ではなく「時代の段階」。Phase 1 = AIを社会に適用する(CordMark OS、支援、受託)。Phase 2 = AIが行き渡った先の人の生き方を模索する(Laplace、DotCraft)。どちらにもWorkもLifeもあり、順序はあるが並走している。いまはPhase 1に重心。
+- トップの Current Focus は PHASE 1 / PHASE 2 の2枚(`.wv-phases`)、Two Horizons は「二つの段階を、同時に進める」に改題し、Phase 2側は `/beyond` へ送る。
+- `/beyond` は中間トップ(a16b5bd)のLaplace / DotCraft Sectionを新パレットで組み直したもの。盤面画像と `.craft` の素材はそのまま使う。Headerのナビに「Phase 2」を追加。
+- ラベルは英字の PHASE 1 / PHASE 2。日本語の固定名は付けない。
+- **文言の規則(2026-09-03 夜)**: 「順序はあるが並走している」ことを文章で説明しない。「同時に進めている」「すでに動いている」「NOW · IN PARALLEL」のような、時系列を弁明する語は使わない。二つの段階は事実として並べるだけにし、並走は両方に具体物(CordMark OS / Laplace、DotCraft)があることで伝える。副Labelは AI-NATIVE / BEYOND。二つの段階の言い方は「社会をAIネイティブに。その先の、人の営みを考える。」に統一(Two Phasesの見出し、Current Focus・/beyondのCardも同じ語彙)。「AI」の語が連続しないよう、Phase 1のCardは「意思と実行を、つなぐ」、Phase 2は「人に残る営みを、形にする」と別の角度で言い直す。Current Focus は CordMark OS へ入る短い橋、末尾の Two Phases は全体を見渡す締めとして役割を分ける。
+- Two Phases の Card(`.wv-horizon`)は Hover で上辺に撚り糸の帯(`::before`、repeating-linear-gradient を scaleX で左から渡し、その後ゆっくり撚りが流れる)、6px の浮き、暖色の影、隣の Card は opacity 0.6(`:has`)。Reduced Motion では動きなし。
+- 本文に `palt` を掛けない(見出しのみ)。本文は `.wv-lead` 0.03em、小段落 0.02〜0.04em の字間。
+
 ## 会社Contextとの整合
 
 - 導入・検証の数字は出していない。`STATUS · 開発・検証中`のみ。
 - 秘書 / 共有の秘書 / 参謀は製品Thesisの長期構想として、機能の約束にならない書き方にしている。
-- Laplace、DotCraftはTwo Horizonsで「Lifeの探索」として接続。
+- Laplace、DotCraftはPhase 2の探索として `/beyond` に接続。
 
 ## ブランド素材
 
