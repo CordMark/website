@@ -55,9 +55,9 @@
    Company OS is a product with its own identity, so this one section leaves
    the paper-and-ink palette behind for the product's own deep navy. */
 .wv .wv-os {
-  --os-field-core: #0b2036;
-  --os-field-mid: #08172b;
-  --os-field-edge: #050c17;
+  --os-field-core: #131b1f;
+  --os-field-mid: #10171b;
+  --os-field-edge: #0c1114;
   --os-teal: #2fd4c8;
   --os-cyan: #4de8ff;
   --os-node: #9db4bd;
@@ -80,11 +80,11 @@
   background:
     radial-gradient(circle at 1px 1px, rgba(139, 178, 204, 0.05) 1px, transparent 1.6px) 0 0 / 22px 22px,
     radial-gradient(
-      58% 46% at var(--os-cx, 50%) 48%,
+      70% 60% at 50% 46%,
       var(--os-field-core) 0%,
-      var(--os-field-mid) 38%,
-      var(--os-field-edge) 66%,
-      rgba(5, 12, 23, 0) 88%
+      var(--os-field-mid) 45%,
+      var(--os-field-edge) 75%,
+      rgba(12, 17, 20, 0) 100%
     ),
     var(--wv-night);
   transition: background-position 0.6s ease;
@@ -113,12 +113,76 @@
   opacity: 0;
   white-space: nowrap;
   font-family: var(--wv-mono);
-  font-size: 10.5px;
-  letter-spacing: 0.14em;
+  font-size: 12px;
+  letter-spacing: 0.16em;
   color: var(--os-node);
   text-shadow: 0 1px 12px rgba(5, 12, 23, 0.9);
   transition: opacity 0.3s ease;
   will-change: transform, opacity;
+}
+
+/* What a person says, and what comes back to them. One line of question, a
+   short tag of the answer. Hangs below the role name. */
+.wv .wv-os__say {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: grid;
+  gap: 3px;
+  opacity: 0;
+  white-space: nowrap;
+  font-family: var(--wv-mono);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  line-height: 1.7;
+  color: #e3ddcf;
+  text-shadow: 0 1px 10px rgba(5, 12, 23, 0.95), 0 0 24px rgba(5, 12, 23, 0.8);
+  transition: opacity 0.35s ease;
+  will-change: transform, opacity;
+}
+
+/* what the person said: their words, in brackets */
+.wv .wv-os__say .is-q::before,
+.wv .wv-os__say .is-human::before {
+  content: "\300C";
+  color: var(--os-node);
+  margin-right: 0.15em;
+}
+
+.wv .wv-os__say .is-q::after,
+.wv .wv-os__say .is-human::after {
+  content: "\300D";
+  color: var(--os-node);
+  margin-left: 0.15em;
+}
+
+/* what came back, and from where */
+.wv .wv-os__say .is-os {
+  color: var(--os-teal);
+  padding-left: 0.6em;
+}
+
+.wv .wv-os__say .is-os::before {
+  content: "COMPANY OS";
+  display: inline-block;
+  margin-right: 0.8em;
+  padding: 0.1em 0.5em;
+  border: 1px solid rgba(47, 212, 200, 0.45);
+  border-radius: 2px;
+  font-size: 0.7em;
+  letter-spacing: 0.18em;
+  vertical-align: 0.15em;
+  color: var(--os-teal);
+  opacity: 0.9;
+}
+
+.wv .wv-os__say .is-human {
+  color: #e2643f;
+}
+
+.wv .wv-os__say .is-human::before,
+.wv .wv-os__say .is-human::after {
+  color: rgba(226, 100, 63, 0.6);
 }
 
 .wv main > section {
@@ -603,6 +667,8 @@ body:has(.wv-page) .site-header {
   display: grid;
   grid-template-areas: "stack";
   align-items: center;
+  /* fills the pinned screen, so the headline can sit low and a caption high */
+  align-self: stretch;
 }
 
 .wv .wv-os__overview,
@@ -615,9 +681,9 @@ body:has(.wv-page) .site-header {
 .wv .wv-os__overview {
   position: relative;
   align-self: end;
-  max-width: 27em;
+  max-width: 40em;
   margin: 0 auto;
-  padding-bottom: clamp(24px, 6vh, 72px);
+  padding-bottom: clamp(32px, 9vh, 110px);
   text-align: center;
   transition: opacity 0.24s ease, transform 0.24s ease;
 }
@@ -630,9 +696,9 @@ body:has(.wv-page) .site-header {
   pointer-events: none;
   background: radial-gradient(
     54% 56% at 50% 58%,
-    rgba(5, 12, 23, 0.9) 0%,
-    rgba(5, 12, 23, 0.72) 46%,
-    rgba(5, 12, 23, 0) 100%
+    rgba(12, 17, 20, 0.9) 0%,
+    rgba(12, 17, 20, 0.72) 46%,
+    rgba(12, 17, 20, 0) 100%
   );
 }
 
@@ -642,37 +708,73 @@ body:has(.wv-page) .site-header {
 
 .wv .wv-os__overview-lead {
   margin: 22px auto 0;
-  max-width: 24em;
+  max-width: 30em;
   font-size: 14px;
   line-height: 2.05;
   letter-spacing: 0.03em;
   color: #b9c6d4;
 }
 
-/* Phase 3 — the explanation, in a column, while the scene sits beside it. */
+/* Phase 3 — one caption per beat. The scene keeps the middle of the screen;
+   the caption takes the upper left, and only the beat that is playing is
+   readable. Nothing is listed: each beat arrives on its own. */
 .wv .wv-os__copy {
   position: relative;
-  max-width: 30em;
-  padding: clamp(20px, 2.6vw, 34px) clamp(22px, 2.8vw, 40px);
-  margin-left: clamp(-22px, -2.8vw, -40px);
   transition: opacity 0.3s ease 0.22s, transform 0.3s ease 0.22s;
 }
 
-/* The words sit in their own pool of dark. It bleeds past the text and fades
-   out completely, so it reads as depth rather than a panel with an edge. */
-.wv .wv-os__copy::before {
-  content: "";
-  position: absolute;
-  inset: -22% -22% -22% -60%;
-  z-index: -1;
+.wv .wv-os__copy-lead {
+  max-width: 34em;
+  margin-top: 0;
+  font-size: 14px;
+  line-height: 2.05;
+  letter-spacing: 0.03em;
+  color: #cec8ba;
+}
+
+/* The closing: back to the middle, like the opening, once the scene has gone */
+.wv .wv-os__closing {
+  grid-area: stack;
+  display: none;
+  align-self: center;
+  justify-self: center;
+  max-width: 40em;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(14px);
   pointer-events: none;
-  background: radial-gradient(
-    58% 52% at 40% 50%,
-    rgba(5, 12, 23, 0.94) 0%,
-    rgba(5, 12, 23, 0.86) 44%,
-    rgba(5, 12, 23, 0.5) 70%,
-    rgba(5, 12, 23, 0) 100%
-  );
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.wv .wv-os[data-os-scene="on"] .wv-os__closing {
+  display: block;
+}
+
+.wv .wv-os__closing .wv-h2 {
+  color: var(--wv-linen);
+}
+
+.wv .wv-os[data-os-phase="closing"] .wv-os__closing {
+  opacity: 1;
+  transform: none;
+  transition-delay: 0.2s;
+}
+
+/* pinned, the last beat has no caption: the closing block is its words */
+.wv .wv-os[data-os-scene="on"] .wv-os__steps li:last-child {
+  display: none;
+}
+
+.wv .wv-os[data-os-phase="closing"] .wv-os__copy,
+.wv .wv-os[data-os-phase="closing"] .wv-os__index {
+  opacity: 0;
+  pointer-events: none;
+  transition-delay: 0s;
+}
+
+.wv .wv-os[data-os-phase="closing"] .wv-os__overview {
+  opacity: 0;
+  pointer-events: none;
 }
 
 /* Only one of the two is ever readable, and they cross-fade. */
@@ -694,6 +796,146 @@ body:has(.wv-page) .site-header {
   margin-bottom: clamp(28px, 5vw, 56px);
 }
 
+/* pinned: captions, upper left, one at a time */
+.wv .wv-os[data-os-scene="on"] .wv-os__copy {
+  align-self: start;
+  justify-self: start;
+  width: min(36em, 100%);
+  padding-top: clamp(16px, 7vh, 88px);
+}
+
+/* the beat index: lower left, where nothing else lives */
+.wv .wv-os__index {
+  display: none;
+}
+
+.wv .wv-os[data-os-scene="on"] .wv-os__index {
+  grid-area: stack;
+  align-self: end;
+  justify-self: start;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 26px;
+  list-style: none;
+  margin: 0;
+  padding: 0 0 clamp(20px, 5vh, 56px);
+  font-family: var(--wv-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--wv-stone);
+  transition: opacity 0.3s ease 0.22s;
+}
+
+.wv .wv-os__index li {
+  position: relative;
+  padding-top: 10px;
+  opacity: 0.55;
+  transition: opacity 0.35s ease, color 0.35s ease;
+}
+
+.wv .wv-os__index li::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.35;
+  transition: opacity 0.35s ease;
+}
+
+.wv .wv-os__index li.is-active {
+  opacity: 1;
+  color: var(--os-teal);
+}
+
+.wv .wv-os__index li.is-human.is-active {
+  color: var(--wv-vermilion);
+}
+
+.wv .wv-os__index li.is-active::before {
+  opacity: 1;
+}
+
+.wv .wv-os[data-os-phase="overview"] .wv-os__index,
+.wv .wv-os[data-os-phase="shift"] .wv-os__index {
+  opacity: 0;
+  transition-delay: 0s;
+}
+
+/* a narrower window has less room beside the ball */
+@media (max-width: 1200px) {
+  .wv .wv-os[data-os-scene="on"] .wv-os__copy {
+    width: min(22em, 100%);
+  }
+
+  .wv .wv-os[data-os-scene="on"] .wv-os__steps b {
+    font-size: clamp(22px, 2.4vw, 28px);
+  }
+
+  .wv .wv-os[data-os-scene="on"] .wv-os__steps li > p {
+    font-size: 13px;
+  }
+}
+
+.wv .wv-os[data-os-scene="on"] .wv-os__copy-lead {
+  display: none;
+}
+
+.wv .wv-os[data-os-scene="on"] .wv-os__steps {
+  display: grid;
+  grid-template-areas: "cap";
+  margin: 0;
+  border: 0;
+}
+
+.wv .wv-os[data-os-scene="on"] .wv-os__steps li {
+  grid-area: cap;
+  display: block;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+  pointer-events: none;
+}
+
+.wv .wv-os[data-os-scene="on"] .wv-os__steps li.is-active {
+  opacity: 1;
+  transform: none;
+  transition-delay: 0.12s;
+}
+
+.wv .wv-os[data-os-scene="on"] .wv-os__tag {
+  display: block;
+  margin-bottom: 16px;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: var(--os-teal);
+}
+
+.wv .wv-os[data-os-scene="on"] .wv-os__steps b {
+  display: block;
+  font-family: var(--wv-serif), "Hiragino Mincho ProN", serif;
+  font-weight: 400;
+  font-size: clamp(26px, 2.9vw, 42px);
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  color: var(--wv-linen);
+}
+
+.wv .wv-os[data-os-scene="on"] .wv-os__steps li > p {
+  display: block;
+  margin-top: 20px;
+  max-width: 30em;
+  font-size: 15px;
+  line-height: 2.05;
+  color: #b9c6d4;
+  opacity: 1;
+  overflow: visible;
+}
+
 /* No scene at all — reduced motion, or no WebGL. The two blocks can no longer
    share one grid cell and cross-fade, so they simply stack and both read. */
 .wv .wv-os[data-os-scene="off"] .wv-os__grid,
@@ -713,8 +955,7 @@ body:has(.wv-page) .site-header {
 }
 
 .wv .wv-os[data-os-scene="off"] .wv-os__overview::before,
-.wv .wv-os[data-os-scene="static"] .wv-os__overview::before,
-.wv .wv-os[data-os-scene="off"] .wv-os__copy::before {
+.wv .wv-os[data-os-scene="static"] .wv-os__overview::before {
   content: none;
 }
 
@@ -724,9 +965,6 @@ body:has(.wv-page) .site-header {
 }
 
 .wv .wv-os[data-os-scene="off"] .wv-os__copy {
-  max-width: none;
-  margin-left: 0;
-  padding: 0;
   opacity: 1;
   transform: none;
 }
@@ -746,16 +984,7 @@ body:has(.wv-page) .site-header {
   display: none;
 }
 
-.wv .wv-os__copy .wv-h2 {
-  color: var(--wv-linen);
-}
-
-.wv .wv-os__copy .wv-lead {
-  margin-top: 18px;
-  font-size: 14px;
-  color: #cec8ba;
-}
-
+/* the plain list, for the static and off modes */
 .wv .wv-os__steps {
   list-style: none;
   margin: 26px 0 0;
@@ -770,16 +999,9 @@ body:has(.wv-page) .site-header {
   grid-template-columns: 9.5em 1fr;
   gap: 0 14px;
   align-items: baseline;
-  padding: 8px 0 8px 12px;
+  padding: 10px 0 10px 12px;
   border-bottom: 1px solid rgba(237, 231, 218, 0.16);
   border-left: 2px solid transparent;
-  transition: border-color 0.4s ease, opacity 0.4s ease;
-  opacity: 0.4;
-}
-
-.wv .wv-os__steps li.is-active {
-  opacity: 1;
-  border-left-color: var(--os-teal);
 }
 
 .wv .wv-os .wv-label {
@@ -787,52 +1009,10 @@ body:has(.wv-page) .site-header {
 }
 
 .wv .wv-os__tag {
-  color: #7d93a8;
-}
-
-/* Closed steps keep only their tag and title; the body opens for the step the
-   scene is currently on. Without this the five bodies overflow the pinned
-   screen and the text starts colliding. */
-.wv .wv-os__steps p {
-  display: grid;
-  grid-template-rows: 0fr;
-  overflow: hidden;
-  transition: grid-template-rows 0.45s ease, opacity 0.35s ease, margin-top 0.45s ease;
-  opacity: 0;
-  margin-top: 0;
-}
-
-.wv .wv-os__steps p > * {
-  min-height: 0;
-}
-
-.wv .wv-os__steps li.is-active p {
-  grid-template-rows: 1fr;
-  opacity: 1;
-  margin-top: 4px;
-}
-
-.wv .wv-os[data-os-scene="off"] .wv-os__steps li,
-.wv .wv-os[data-os-scene="static"] .wv-os__steps li {
-  opacity: 1;
-}
-
-.wv .wv-os[data-os-scene="off"] .wv-os__steps p,
-.wv .wv-os[data-os-scene="static"] .wv-os__steps p {
-  grid-template-rows: 1fr;
-  opacity: 1;
-  margin-top: 4px;
-}
-
-.wv .wv-os__steps li.is-human.is-active {
-  border-left-color: var(--wv-vermilion);
-}
-
-.wv .wv-os__tag {
   font-family: var(--wv-mono);
   font-size: 10px;
   letter-spacing: 0.12em;
-  color: var(--wv-stone);
+  color: #7d93a8;
 }
 
 .wv .wv-os__steps li.is-human .wv-os__tag {
@@ -847,50 +1027,10 @@ body:has(.wv-page) .site-header {
 
 .wv .wv-os__steps li > p {
   grid-column: 2;
+  margin-top: 4px;
   font-size: 12.5px;
   line-height: 1.7;
   color: #b9b3a5;
-}
-
-.wv .wv-os-roles {
-  padding-top: clamp(56px, 7vw, 96px);
-}
-
-.wv .wv-roles {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  max-width: 44em;
-}
-
-.wv .wv-roles li {
-  display: grid;
-  grid-template-columns: 7.5em 1fr;
-  gap: 14px;
-  padding: 12px 0;
-  border-top: 1px solid var(--wv-line);
-  font-size: 14px;
-  line-height: 1.8;
-}
-
-.wv .wv-roles li:last-child {
-  border-bottom: 1px solid var(--wv-line);
-}
-
-.wv .wv-roles b {
-  font-weight: 700;
-}
-
-.wv .wv-roles span {
-  color: var(--wv-ink-2);
-}
-
-.wv .wv-os__status {
-  margin-top: 16px;
-  font-family: var(--wv-mono);
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  color: var(--wv-stone);
 }
 
 /* ---------- What we do ---------- */
@@ -1577,34 +1717,7 @@ body:has(.wv-page) .site-header {
   }
 }
 
-/* ---------- CordMark OS — the one we run ourselves, not the one we sell ---------- */
-
-.wv .wv-practice-os {
-  padding-top: clamp(64px, 8vw, 120px);
-  padding-bottom: clamp(64px, 8vw, 120px);
-}
-
-.wv .wv-practice-os__grid {
-  display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-  gap: clamp(28px, 5vw, 88px);
-  align-items: start;
-}
-
-.wv .wv-practice-os__grid > div:first-child {
-  border-left: 2px solid var(--wv-copper);
-  padding-left: clamp(16px, 2vw, 28px);
-}
-
-.wv .wv-practice-os .wv-lead + .wv-lead {
-  margin-top: 18px;
-}
-
 @media (max-width: 880px) {
-  .wv .wv-practice-os__grid {
-    grid-template-columns: 1fr;
-  }
-
   /* Unpinned there is no scroll distance to scrub the story along, so the
      scene stops being a backdrop and becomes a block of its own, above the
      words. Text and scene never share the same space — putting the words on

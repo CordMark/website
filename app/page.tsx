@@ -28,32 +28,43 @@ const chain = [
   "時間、自由、尊厳、他者との関わりへ戻る",
 ];
 
+/**
+ * One spec change, through three roles, back into the day's work. Each beat
+ * is a scene, not a stage of the mechanism: who asked, what came back, what
+ * changed. `say` is what appears beside the person in the scene — one line
+ * of question and a short tag of what returned. Never a chat UI.
+ */
 const companyOsSteps = [
   {
-    tag: "01 検知 / SIGNAL",
-    title: "埋もれた判断を見つける",
-    body: "決めるべきことは、日常の質問、顧客の回答、仕様変更の中に埋まっている。まずそれを、判断すべきものとして取り出す。",
+    tag: "01 / ANSWER",
+    title: "まず、AIに聞ける。",
+    body: "コードと過去の決定を知るAIが、根拠付きで答える。エンジニアの手は止まらない。",
   },
   {
-    tag: "02 整理 / CONTEXT",
-    title: "背景・選択肢・影響を揃える",
-    body: "なぜ必要か、何が決まっていないか、選ぶと何が起きるか。答える人が、説明を受け直さずに答えられる形にする。",
+    tag: "02 / ASK",
+    title: "問いは、背景を連れて届く。",
+    body: "答えるべき人へ、なぜ必要か、何が決まっていないか、選ぶと何が起きるかを添えて届く。説明を受け直さなくていい。",
   },
   {
-    tag: "03 振分 / ROUTING",
-    title: "答えられる人へ、決められる人へ",
-    body: "階層を一段ずつ上げるのではない。誰が答えを持ち、誰に権限があるかで、直接その人へ届ける。",
-  },
-  {
-    tag: "04 判断 / HUMAN DECISION",
-    title: "決めるのは、人間",
-    body: "AIが届けるのは判断材料まで。確定と責任は人が持つ。誰が、何を根拠に決めたのかが、決定と一緒に残る。",
+    tag: "03 / DECIDE",
+    title: "決めるのは、人。",
+    body: "AIが営業の知る顧客の事情まで集め、PMが決める。誰が、何を根拠に決めたかが、決定と一緒に残り、経営には知らされる。",
     human: true,
   },
   {
-    tag: "05 反映 / ACTION",
-    title: "仕様・タスク・履歴へ",
-    body: "決定と理由が実行へつながり、次に参照できる履歴として残る。使われるほど、判断の文脈が会社に貯まる。",
+    tag: "04 / ACT",
+    title: "決定は、その日の仕事に戻る。",
+    body: "決定と理由が仕様とタスクになり、止まっていた開発が動き出す。",
+  },
+  {
+    tag: "05 / VISIBILITY",
+    title: "重要な判断が、現場の状況ごと届く。",
+    body: "整えられた報告を待たない。決定の経緯と現場の声が、そのまま経営に届く。「できています」の裏で育つ問題を、手遅れになる前に知る。",
+  },
+  {
+    tag: "06 / AI-NATIVE",
+    title: "会社が、AIネイティブに生まれ変わる。",
+    body: "全員がAIを学ぶ必要はない。いつもの仕事の裏側でAIが動き、使うほど会社を知る。AIを導入した、その先へ。",
   },
 ];
 
@@ -198,19 +209,21 @@ export default function Home() {
               <div className="wv-os__overview">
                 <p className="wv-label">Company OS</p>
                 <h2 className="wv-h2" id="wv-os-heading">
-                  中心にあるのはAI。
+                  <span className="wv-nowrap">現場を止めない。</span>
                   <br />
-                  階層ではない。
+                  <span className="wv-nowrap">重要な判断を、見失わない。</span>
                 </h2>
                 <p className="wv-os__overview-lead">
-                  現場も、PMも、経営も、同じ中心へつながる。問いも、答えも、判断も、そこを通って必要な人へ届く。
+                  作業はAIに置き換わっていく。エンジニアリングだけでなく、あらゆる業務で。その先で詰まるのは、問いが答えを待ち、判断が上がってくるまでの時間。
                 </p>
               </div>
 
+              {/* One caption per beat, at the bottom, under the scene. Without
+                  a scene (reduced motion, no WebGL, narrow screens) they read
+                  as a plain list. */}
               <div className="wv-os__copy">
-                <p className="wv-label">Company OS</p>
-                <p className="wv-lead">
-                  現場を止めず、経営が重要判断を見失わない。埋もれた判断を見つけ、背景と選択肢を整理し、答えられる人と決められる人へ届ける。AIが決めるのではなく、人が判断できる状態を用意します。
+                <p className="wv-os__copy-lead">
+                  一つの仕様変更が、三つの立場を通って仕事に戻るまで。AIが決めるのではなく、人が判断できる状態を用意します。
                 </p>
                 <ol className="wv-os__steps" aria-label="Company OSの流れ">
                   {companyOsSteps.map((step) => (
@@ -223,57 +236,31 @@ export default function Home() {
                     </li>
                   ))}
                 </ol>
-                <p className="wv-os__status">STATUS · 構想と設計を整備中 / 実装は未着手</p>
               </div>
-            </div>
-          </div>
-        </section>
 
-        {/* Company OS — 三つの役割(固定区間の後に置く) */}
-        <section className="wv-section wv-os-roles" data-ground="paper" aria-label="Company OSの三つの役割">
-          <div className="wv-inner">
-            <ul className="wv-roles">
-              <li>
-                <b>一人ひとりには</b>
-                <span>仕事を覚え、整理し、思い出させる秘書</span>
-              </li>
-              <li>
-                <b>Projectには</b>
-                <span>背景と過去のDecisionをつなぐ、共有の秘書</span>
-              </li>
-              <li>
-                <b>組織には</b>
-                <span>決めるべき問いと選択肢を整理する参謀</span>
-              </li>
-            </ul>
-          </div>
-        </section>
+              {/* The last beat is not a caption. It comes back to the middle,
+                  the way the section opened, while the scene behind it goes
+                  out. Pinned screens only; the list above carries it elsewhere. */}
+              <div className="wv-os__closing" aria-hidden="true">
+                <p className="wv-label">Company OS</p>
+                <p className="wv-h2">
+                  <span className="wv-nowrap">会社が、AIネイティブに</span>
+                  <br />
+                  <span className="wv-nowrap">生まれ変わる。</span>
+                </p>
+                <p className="wv-os__overview-lead">
+                  全員がAIを学ぶ必要はない。いつもの仕事の裏側でAIが動き、使うほど会社を知る。AIを導入した、その先へ。
+                </p>
+              </div>
 
-        {/* CordMark OS — 売り物ではない。自社運営で先に実践している社内OS */}
-        <section
-          className="wv-section wv-practice-os"
-          id="cordmark-os"
-          data-ground="paper"
-          aria-labelledby="wv-practice-os-heading"
-        >
-          <div className="wv-inner wv-practice-os__grid">
-            <div>
-              <p className="wv-label">CordMark OS</p>
-              <h2 className="wv-h2" id="wv-practice-os-heading">
-                自分たちの会社で、
-                <br />
-                先に実践する。
-              </h2>
-            </div>
-            <div>
-              <p className="wv-lead">
-                Company OSが目指す「会社全体のOS」を、CordMark自身の会社運営で先に実践しています。会社とProjectの現在の文脈をRepositoryに保ち、AIが観測と実行を進め、人は理解と意思決定に集中する。この社内OSをCordMark OSと呼んでいます。
-              </p>
-              <p className="wv-lead">
-                CordMark
-                OSは販売するProductではありません。どのような文脈があれば仕事を任せられるのか、どこで人の判断が必要になるのかを、自分たちの経営で確かめる場所です。ここで分かったことが、Company OSへ戻ります。
-              </p>
-              <p className="wv-os__status">STATUS · 設計中 / 実装は未着手</p>
+              {/* where we are in the six beats — pinned screens only */}
+              <ol className="wv-os__index" aria-hidden="true">
+                {companyOsSteps.map((step) => (
+                  <li key={step.tag} className={step.human ? "is-human" : undefined}>
+                    {step.tag.replace(" / ", " ")}
+                  </li>
+                ))}
+              </ol>
             </div>
           </div>
         </section>

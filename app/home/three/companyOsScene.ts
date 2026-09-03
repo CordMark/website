@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 
 /**
  * The Company OS scene.
@@ -9,10 +10,10 @@ import * as THREE from "three";
  *
  * What it has to say, in one picture:
  *
- *   The company is not a ladder. There is no line from junior to senior to
- *   executive. Every role connects to the same core, and everything — a
- *   question, an answer, a decision, the visibility an executive needs —
- *   travels through that core. That is the product.
+ *   One change in a spec travels through three people and comes back as the
+ *   day's work. Nobody stops. The executive sees only the decision that
+ *   mattered. The thing in the middle is a ball of threads — the same cord the
+ *   hero wove, now holding the company's context.
  *
  * Rules it never breaks:
  *
@@ -20,56 +21,116 @@ import * as THREE from "three";
  *   2. The core never decides. The one warm colour in an otherwise cool scene
  *      belongs to the human decision, and appears only there.
  *
- * The beats, over the pinned progress p:
+ * The beats, over the pinned progress p (they match STEP_AT in the canvas):
  *
- *   arrive    0.00–0.12  the core lights; the company assembles around it
- *   whole     0.10–0.22  the whole picture, at rest — read it before it moves
- *   signal    0.22–0.34  an engineer stops; the question travels to the core
- *   context   0.32–0.44  the core gathers the background around the question
- *   route     0.42–0.56  three paths open at once: answer / ask / decide
- *   decide    0.54–0.66  a person decides. The one warm light in the scene
- *   act       0.64–0.74  it returns as work, and the trace stays in the core
- *   asset     0.72–0.84  the core thickens — context the company now owns
- *   company   0.82–1.00  pull back: one cell of many, the whole company
+ *   arrive      0.00–0.12  the core lights; the company assembles around it
+ *   whole       0.10–0.30  the whole picture, at rest — read it before it moves
+ *   answer      0.34–0.46  sales asks; the core answers, with grounds. The
+ *                          engineer is never touched
+ *   ask         0.46–0.58  the engineer asks; the core gathers the background
+ *                          and opens one path, to the PM
+ *   decide      0.58–0.70  the hub gathers what sales knows and hands it to
+ *                          the PM; the PM decides. The one warm light. The
+ *                          executive is told, not asked
+ *   act         0.70–0.80  it returns to the engineer as work; the trace stays
+ *   visibility  0.80–0.90  the engineer's raw worry and the decision reach
+ *                          the executive together, before it is too late
+ *   ai-native   0.90–1.00  the scaffolding withdraws; the threads thicken
  */
 
-/* ---------- palette: taken from the product's own proposal deck ---------- */
+/* ---------- palette ---------- */
 const DEEP = new THREE.Color("#0d2a55");
 const BLUE = new THREE.Color("#2f7de1");
 const BLUE_PALE = new THREE.Color("#8fb8f0");
 const CYAN = new THREE.Color("#38d8d0");
 const CYAN_HOT = new THREE.Color("#9ff6ee");
+const VIOLET = new THREE.Color("#8f8cf0");
+const WHITE = new THREE.Color("#ede7da");
 const SLATE = new THREE.Color("#5b6b85");
 /** the only warm colour in the scene — the human decision, nowhere else.
     Same vermilion the rest of the site uses for it. */
 const HUMAN = new THREE.Color("#b5482e");
 const HUMAN_LIT = new THREE.Color("#e2643f");
-/** every role node is this colour. Six colours would read as six ranks. */
+/** every role node is this colour. Five colours would read as five ranks. */
 const NODE = new THREE.Color("#9db4bd");
 const NODE_DIM = new THREE.Color("#3d525e");
 
 /**
- * The five roles, placed on a sphere by golden angle rather than around a
- * circle. An evenly spaced ring is a diagram, and a diagram of people around
- * a centre is read as an org chart. Here nobody is higher, nearer or larger
- * than anybody else, and two of them sit behind the core — so the core has to
- * occlude them, which is what makes it read as a real body rather than a glow.
+ * Four roles on a ring around the hub. The ring turns so that whoever is
+ * speaking in a beat comes to the front — nearest the camera, largest — and
+ * everyone else stays in view behind them. Nobody is higher than anybody
+ * else; the small elevations only keep the ring from reading as a diagram.
  */
-const R_NODE = 3.1;
+const R_NODE = 3.8;
+/** radius of the ball of threads, before CORE_SCALE */
+const R_THREAD = 1.38;
+/** The hub is small. The people and the paths between them are the story;
+    the ball is what they share, not what they look at. */
+const CORE_SCALE = 0.6;
 const ROLES = [
-  { id: "engineer", az: 0.0, el: -32.0 },
-  { id: "pm", az: 137.5, el: -19.2 },
-  { id: "lead", az: 275.0, el: -6.4 },
-  { id: "sales", az: 52.5, el: 6.4 },
-  { id: "exec", az: 190.0, el: 19.2 },
+  { id: "engineer", az: 0, el: -3 },
+  { id: "pm", az: 90, el: 4 },
+  { id: "exec", az: 180, el: 1 },
+  { id: "sales", az: 270, el: -2 },
 ];
 const ENGINEER = 0;
 const PM = 1;
-const LEAD = 2;
+const EXEC = 2;
 const SALES = 3;
-const EXEC = 4;
+
+/** which way the ring faces, over p: the azimuth (degrees) that is turned
+    to the front. Between keyframes the ring eases round the short way. In
+    the overview nobody is in front — the four stand on the diagonals, so
+    none of them hides behind the hub or under the headline. */
+const FRONT_OF = (i: number) => ROLES[i].az;
+const FRONT: [number, number][] = [
+  [0.0, 45],
+  [0.3, 45],
+  [0.36, FRONT_OF(SALES)],
+  [0.46, FRONT_OF(SALES)],
+  [0.5, FRONT_OF(ENGINEER)],
+  [0.57, FRONT_OF(ENGINEER)],
+  [0.61, FRONT_OF(PM)],
+  [0.71, FRONT_OF(PM)],
+  [0.75, FRONT_OF(ENGINEER)],
+  [0.8, FRONT_OF(ENGINEER)],
+  [0.85, FRONT_OF(EXEC)],
+  [0.9, FRONT_OF(EXEC)],
+  [0.96, 45],
+  [1.0, 45],
+];
+
+/**
+ * The camera. It hardly moves: a little above the ring, looking in. The
+ * story is told by the ring turning, not by the camera flying about.
+ */
+type Shot = {
+  p: number;
+  el: number;
+  dist: number;
+  target: [number, number, number];
+  /** how far the whole view slides to the right, in world units, so the
+      scene keeps clear of the caption in the upper left */
+  sx: number;
+};
+const SHOTS: Shot[] = [
+  // overview: front on, the hub riding high so the headline has the bottom
+  { p: 0.0, el: 18, dist: 10.6, target: [0, -0.72, 0], sx: 0 },
+  { p: 0.28, el: 18, dist: 10.6, target: [0, -0.72, 0], sx: 0 },
+  // the beats: a little higher, the ring lower on screen, clear of the caption
+  { p: 0.36, el: 22, dist: 10.2, target: [0, -0.15, 0], sx: 1.0 },
+  { p: 0.9, el: 22, dist: 10.2, target: [0, -0.15, 0], sx: 1.0 },
+  // ai-native: pull back
+  { p: 0.97, el: 16, dist: 13, target: [0, -0.2, 0], sx: 0.7 },
+  { p: 1.0, el: 16, dist: 13, target: [0, -0.2, 0], sx: 0.7 },
+];
 
 const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const smooth = (u: number) => u * u * (3 - 2 * u);
+const lerpAngle = (a: number, b: number, t: number) => {
+  let d = ((b - a + 540) % 360) - 180;
+  return a + d * t;
+};
 const ease = (u: number) => (u < 0.5 ? 2 * u * u : -1 + (4 - 2 * u) * u);
 const span = (t: number, a: number, b: number) => (t <= a ? 0 : t >= b ? 1 : ease((t - a) / (b - a)));
 const pulse = (t: number, a: number, b: number) => {
@@ -85,7 +146,10 @@ export type CompanyOsScene = {
   resize: () => void;
   dispose: () => void;
   /** screen-space positions of the role nodes, for the DOM labels */
-  projectRoles: (out: { x: number; y: number; depth: number; visible: boolean }[]) => void;
+  /** `r` is the ring's radius on screen, in px, so words can keep clear of it */
+  projectRoles: (out: { x: number; y: number; depth: number; visible: boolean; dim: number; r: number }[]) => void;
+  /** screen-space position of the core's centre, and the radius of the threads */
+  projectCore: (out: { x: number; y: number; r: number }) => void;
 };
 
 type MountOptions = {
@@ -94,13 +158,31 @@ type MountOptions = {
   onContextLost: () => void;
 };
 
+/** a soft radial glow, drawn once to a texture for the sprite in the core */
+function glowTexture(): THREE.Texture {
+  const size = 256;
+  const c = document.createElement("canvas");
+  c.width = c.height = size;
+  const ctx = c.getContext("2d")!;
+  const g = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+  g.addColorStop(0, "rgba(255,255,255,1)");
+  g.addColorStop(0.18, "rgba(255,255,255,0.55)");
+  g.addColorStop(0.5, "rgba(255,255,255,0.12)");
+  g.addColorStop(1, "rgba(255,255,255,0)");
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, size, size);
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
+
 export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
   const { canvas, quality, onContextLost } = opts;
 
   const counts = {
-    low: { field: 2600, coreDust: 900, memory: 260 },
-    mid: { field: 7000, coreDust: 2200, memory: 620 },
-    high: { field: 14000, coreDust: 4200, memory: 1100 },
+    low: { field: 2000, coreDust: 500, memory: 220, threads: 30, tube: 96 },
+    mid: { field: 5000, coreDust: 1200, memory: 520, threads: 46, tube: 128 },
+    high: { field: 9000, coreDust: 2200, memory: 900, threads: 62, tube: 160 },
   }[quality];
 
   const renderer = new THREE.WebGLRenderer({
@@ -135,10 +217,12 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
   });
 
   /* ==================================================================
-     The core.
-     Layered rather than a bloom blob: a dark inner body with animated
-     bands showing through, a fresnel shell that only lights at the rim,
-     two counter-rotating wire shells, and dust held inside.
+     The core: a ball of threads.
+     A dark disc behind it (the ground it sits on), a soft body of light
+     inside, and dozens of thin luminous loops wound around it, each turning
+     on its own axis. Front threads are bright and a little white; back
+     threads sink into the body. The body writes depth, so the far half of
+     every loop is occluded — that is what makes it a ball and not a glow.
      ================================================================== */
 
   const core = new THREE.Group();
@@ -151,6 +235,7 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
     uMemory: { value: 0 }, // how much context it holds
   };
 
+  // the body of light
   const bodyMat = new THREE.ShaderMaterial({
     uniforms: {
       ...coreUniforms,
@@ -160,11 +245,9 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
     },
     vertexShader: /* glsl */ `
       varying vec3 vN;
-      varying vec3 vP;
       varying vec3 vView;
       void main() {
         vN = normalize(normalMatrix * normal);
-        vP = position;
         vec4 mv = modelViewMatrix * vec4(position, 1.0);
         vView = normalize(-mv.xyz);
         gl_Position = projectionMatrix * mv;
@@ -172,81 +255,164 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
     `,
     fragmentShader: /* glsl */ `
       precision highp float;
-      uniform float uTime, uCharge, uThink, uMemory;
+      uniform float uCharge, uThink, uMemory;
       uniform vec3 uDeep, uCyan, uHot;
       varying vec3 vN;
-      varying vec3 vP;
       varying vec3 vView;
-
-      float hash(vec3 p){ return fract(sin(dot(p, vec3(127.1, 311.7, 74.7))) * 43758.5453); }
-      float noise(vec3 p){
-        vec3 i = floor(p), f = fract(p);
-        f = f * f * (3.0 - 2.0 * f);
-        return mix(mix(mix(hash(i), hash(i+vec3(1,0,0)), f.x),
-                       mix(hash(i+vec3(0,1,0)), hash(i+vec3(1,1,0)), f.x), f.y),
-                   mix(mix(hash(i+vec3(0,0,1)), hash(i+vec3(1,0,1)), f.x),
-                       mix(hash(i+vec3(0,1,1)), hash(i+vec3(1,1,1)), f.x), f.y), f.z);
-      }
-
       void main() {
-        float fres = 1.0 - abs(dot(normalize(vN), normalize(vView)));
-        // slow internal weather, faster while it is working
-        float t = uTime * (0.12 + uThink * 0.5);
-        float n = noise(vP * 2.1 + vec3(0.0, t, 0.0));
-        n = mix(n, noise(vP * 4.7 - vec3(t * 0.6, 0.0, t * 0.3)), 0.45);
-        // latitude bands: structure, so it does not read as a lava lamp
-        float band = smoothstep(0.55, 0.98, sin(vP.y * 11.0 + n * 3.4 + uTime * 0.35));
-
-        vec3 col = uDeep * 0.5;
-        col = mix(col, uCyan, n * 0.5 * uCharge);
-        col += uHot * band * (0.16 + uThink * 0.4) * uCharge;
-        // the rim is where it reads as a body of light rather than a ball
-        col += mix(uCyan, uHot, uThink) * pow(fres, 2.6) * (1.1 + uMemory * 0.5) * uCharge;
-
-        // the underside stays dark, so it is a body and not a lamp
-        col *= mix(0.42, 1.0, smoothstep(-0.8, 0.5, vN.y));
-
-        float a = (0.62 + 0.30 * pow(fres, 1.6) + band * 0.12 + uMemory * 0.08) * uCharge;
-        // 8-bit dither: deep navy gradients band badly without it
+        float facing = max(0.0, dot(normalize(vN), normalize(vView)));
+        float fres = 1.0 - facing;
+        // a soft light in the middle, deeper toward the rim, then a thin lit edge
+        vec3 col = uDeep * 0.35;
+        col = mix(col, uCyan, pow(facing, 2.2) * 0.55 * uCharge);
+        col += uHot * pow(facing, 6.0) * (0.18 + uThink * 0.3) * uCharge;
+        col += mix(uCyan, uHot, uThink) * pow(fres, 3.2) * (0.6 + uMemory * 0.4) * uCharge;
+        float a = (0.78 + 0.2 * pow(facing, 2.0)) * uCharge;
         float d = fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233))) * 43758.5453);
         col += (d - 0.5) / 255.0;
         gl_FragColor = vec4(col, clamp(a, 0.0, 1.0));
       }
     `,
     transparent: true,
-    // It writes depth on purpose. A light that does not occlude what is behind
-    // it is a glow; a thing that does is an object. Two roles sit behind it.
     depthWrite: true,
     depthTest: true,
   });
-  const coreBody = new THREE.Mesh(new THREE.IcosahedronGeometry(0.95, 5), bodyMat);
+  const coreBody = new THREE.Mesh(new THREE.IcosahedronGeometry(0.9, 4), bodyMat);
   core.add(coreBody);
 
-  const shellMat = (color: THREE.Color) =>
-    new THREE.MeshBasicMaterial({
-      color,
-      wireframe: true,
-      transparent: true,
-      opacity: 0,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending,
-    });
-  const shellA = new THREE.Mesh(new THREE.IcosahedronGeometry(1.28, 1), shellMat(BLUE));
-  const shellB = new THREE.Mesh(new THREE.IcosahedronGeometry(1.62, 2), shellMat(CYAN));
-  core.add(shellA, shellB);
-
-  const haloMat = new THREE.MeshBasicMaterial({
+  // the glow, a sprite so it is round from any angle and costs nothing
+  const glowTex = glowTexture();
+  const glowMat = new THREE.SpriteMaterial({
+    map: glowTex,
     color: CYAN,
     transparent: true,
     opacity: 0,
     depthWrite: false,
+    depthTest: false,
     blending: THREE.AdditiveBlending,
-    side: THREE.DoubleSide,
   });
-  const halo = new THREE.Mesh(new THREE.RingGeometry(1.85, 1.9, 96), haloMat);
-  halo.rotation.x = Math.PI / 2;
-  core.add(halo);
+  const glow = new THREE.Sprite(glowMat);
+  glow.scale.setScalar(3.4);
+  glow.renderOrder = -1;
+  core.add(glow);
 
+  // the threads: one merged geometry, one draw call. Each loop carries its own
+  // spin axis and speed as attributes, and is turned in the vertex shader.
+  const threadGeo = (() => {
+    const parts: THREE.BufferGeometry[] = [];
+    const q = new THREE.Quaternion();
+    const axis = new THREE.Vector3();
+    for (let i = 0; i < counts.threads; i++) {
+      // a circle, bent a little so no two loops are the same ellipse
+      const a1 = 0.02 + Math.random() * 0.05;
+      const a2 = Math.random() * 0.03;
+      const f1 = 2 + Math.floor(Math.random() * 3);
+      const f2 = 4 + Math.floor(Math.random() * 4);
+      const ph1 = Math.random() * Math.PI * 2;
+      const ph2 = Math.random() * Math.PI * 2;
+      const rad = R_THREAD * (0.9 + Math.random() * 0.14);
+      const pts: THREE.Vector3[] = [];
+      const n = 40;
+      for (let k = 0; k < n; k++) {
+        const t = (k / n) * Math.PI * 2;
+        const r = rad * (1 + a1 * Math.sin(f1 * t + ph1) + a2 * Math.sin(f2 * t + ph2));
+        pts.push(new THREE.Vector3(Math.cos(t) * r, Math.sin(t) * r, Math.sin(f1 * t + ph2) * rad * a1 * 1.6));
+      }
+      q.setFromEuler(new THREE.Euler(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI));
+      for (const p of pts) p.applyQuaternion(q);
+      const curve = new THREE.CatmullRomCurve3(pts, true, "catmullrom", 0.5);
+      const radius = 0.009 + Math.random() * 0.007;
+      const geo = new THREE.TubeGeometry(curve, counts.tube, radius, 3, true);
+      const count = geo.attributes.position.count;
+      axis.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
+      const aAxis = new Float32Array(count * 3);
+      const aSeed = new Float32Array(count);
+      const seed = Math.random();
+      // speed: slow, either way round. A few are noticeably quicker.
+      const speed = (Math.random() < 0.5 ? -1 : 1) * (0.05 + Math.random() * 0.12) * (Math.random() < 0.15 ? 2.2 : 1);
+      // colour pick: mostly teal, a third violet, a few pale
+      const colSel = Math.random() < 0.55 ? 0 : Math.random() < 0.75 ? 1 : 2;
+      const aInfo = new Float32Array(count * 2);
+      for (let v = 0; v < count; v++) {
+        aAxis[v * 3] = axis.x;
+        aAxis[v * 3 + 1] = axis.y;
+        aAxis[v * 3 + 2] = axis.z;
+        aSeed[v] = seed;
+        aInfo[v * 2] = speed;
+        aInfo[v * 2 + 1] = colSel;
+      }
+      geo.setAttribute("aAxis", new THREE.BufferAttribute(aAxis, 3));
+      geo.setAttribute("aSeed", new THREE.BufferAttribute(aSeed, 1));
+      geo.setAttribute("aInfo", new THREE.BufferAttribute(aInfo, 2));
+      geo.deleteAttribute("uv");
+      parts.push(geo);
+    }
+    const merged = mergeGeometries(parts, false)!;
+    parts.forEach((g) => g.dispose());
+    merged.boundingSphere = new THREE.Sphere(new THREE.Vector3(), R_THREAD * 1.3);
+    return merged;
+  })();
+
+  const threadMat = new THREE.ShaderMaterial({
+    uniforms: {
+      ...coreUniforms,
+      uTeal: { value: CYAN.clone() },
+      uViolet: { value: VIOLET.clone() },
+      uPale: { value: CYAN_HOT.clone() },
+      uWhite: { value: WHITE.clone() },
+      uRadius: { value: R_THREAD },
+    },
+    vertexShader: /* glsl */ `
+      attribute vec3 aAxis;
+      attribute float aSeed;
+      attribute vec2 aInfo;
+      uniform float uTime, uThink;
+      uniform float uRadius;
+      varying float vFront;
+      varying float vCol;
+      varying float vSeed;
+      vec3 rot(vec3 p, vec3 k, float a) {
+        float c = cos(a), s = sin(a);
+        return p * c + cross(k, p) * s + k * dot(k, p) * (1.0 - c);
+      }
+      void main() {
+        float ang = uTime * aInfo.x * (1.0 + uThink * 2.4) + aSeed * 6.2831;
+        vec3 p = rot(position, aAxis, ang);
+        vec4 mv = modelViewMatrix * vec4(p, 1.0);
+        // how far toward the camera this point sits, inside the ball
+        vec4 c = modelViewMatrix * vec4(0.0, 0.0, 0.0, 1.0);
+        vFront = clamp((mv.z - c.z) / uRadius * 0.5 + 0.5, 0.0, 1.0);
+        vCol = aInfo.y;
+        vSeed = aSeed;
+        gl_Position = projectionMatrix * mv;
+      }
+    `,
+    fragmentShader: /* glsl */ `
+      precision highp float;
+      uniform float uTime, uCharge, uThink, uMemory;
+      uniform vec3 uTeal, uViolet, uPale, uWhite;
+      varying float vFront;
+      varying float vCol;
+      varying float vSeed;
+      void main() {
+        vec3 base = vCol < 0.5 ? uTeal : (vCol < 1.5 ? uViolet : uPale);
+        // the front of the ball catches a little white; the back sinks
+        vec3 col = mix(base, uWhite, pow(vFront, 3.0) * 0.4);
+        float breathe = 0.85 + 0.15 * sin(uTime * 0.6 + vSeed * 6.2831);
+        float a = (0.06 + 0.62 * pow(vFront, 1.6)) * breathe;
+        a *= (0.75 + uThink * 0.5 + uMemory * 0.45) * uCharge;
+        gl_FragColor = vec4(col, a);
+      }
+    `,
+    transparent: true,
+    depthWrite: false,
+    depthTest: true,
+    blending: THREE.AdditiveBlending,
+  });
+  const threads = new THREE.Mesh(threadGeo, threadMat);
+  core.add(threads);
+
+  // dust held inside the ball
   const dustGeo = new THREE.BufferGeometry();
   {
     const n = counts.coreDust;
@@ -255,7 +421,7 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
     for (let i = 0; i < n; i++) {
       const u = Math.random() * 2 - 1;
       const th = Math.random() * Math.PI * 2;
-      const r = Math.cbrt(Math.random()) * 1.5;
+      const r = Math.cbrt(Math.random()) * 1.25;
       const s = Math.sqrt(1 - u * u);
       pos[i * 3] = Math.cos(th) * s * r;
       pos[i * 3 + 1] = u * r;
@@ -278,11 +444,10 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
         vec3 p = position;
         p.xz = mat2(cos(a * 0.35), -sin(a * 0.35), sin(a * 0.35), cos(a * 0.35)) * p.xz;
         p.y += sin(a) * 0.06;
-        // as context accumulates the cloud fills out toward the shell
-        p *= mix(0.72, 1.06, uMemory);
+        p *= mix(0.8, 1.08, uMemory);
         vec4 mv = modelViewMatrix * vec4(p, 1.0);
         vA = (0.35 + 0.65 * fract(aSeed * 7.3 + uTime * 0.2)) * uCharge;
-        gl_PointSize = (1.0 + aSeed * 1.7) * uScale * (7.5 / max(0.5, -mv.z));
+        gl_PointSize = (1.0 + aSeed * 1.5) * uScale * (7.5 / max(0.5, -mv.z));
         gl_Position = projectionMatrix * mv;
       }
     `,
@@ -293,7 +458,7 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
       void main() {
         float a = 1.0 - smoothstep(0.14, 0.5, length(gl_PointCoord - 0.5));
         if (a < 0.01) discard;
-        gl_FragColor = vec4(uCyan, a * vA * 0.7);
+        gl_FragColor = vec4(uCyan, a * vA * 0.5);
       }
     `,
     transparent: true,
@@ -314,7 +479,7 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
     depthWrite: false,
     blending: THREE.AdditiveBlending,
   });
-  const nodes = new THREE.InstancedMesh(new THREE.OctahedronGeometry(0.15, 0), nodeMat, ROLES.length);
+  const nodes = new THREE.InstancedMesh(new THREE.SphereGeometry(0.075, 14, 10), nodeMat, ROLES.length);
   nodes.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
   cell.add(nodes);
 
@@ -325,16 +490,17 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
     depthWrite: false,
     blending: THREE.AdditiveBlending,
   });
-  const nodeRings = new THREE.InstancedMesh(new THREE.RingGeometry(0.26, 0.28, 40), ringMat, ROLES.length);
+  const nodeRings = new THREE.InstancedMesh(new THREE.RingGeometry(0.23, 0.245, 40), ringMat, ROLES.length);
   nodeRings.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
   cell.add(nodeRings);
 
-  /** the curve each link follows: bowed, so the set never reads as a wheel */
+  /** the curve each link follows: bowed, so the set never reads as a wheel.
+      aU runs 0 at the role to 1 at the core. */
   const linkCurves = rolePos.map((p) => {
     const mid = p.clone().multiplyScalar(0.5);
     mid.y += 0.55 + Math.abs(p.y) * 0.3;
     mid.multiplyScalar(1.06);
-    const near = p.clone().normalize().multiplyScalar(1.95);
+    const near = p.clone().normalize().multiplyScalar(R_THREAD * CORE_SCALE + 0.12);
     return new THREE.CatmullRomCurve3([p.clone(), mid, near]);
   });
 
@@ -370,8 +536,9 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
         void main() {
           if (vU > uDraw) discard;
           float base = uOpacity * (0.35 + 0.65 * smoothstep(0.0, 0.25, uDraw - vU));
-          float head = smoothstep(0.09, 0.0, abs(vU - uFlow)) * uFlowAmt;
-          float a = base + head * 0.85;
+          // the head, and a tail behind it
+          float head = smoothstep(0.08, 0.0, abs(vU - uFlow)) * uFlowAmt;
+          float a = base + head * 0.9;
           if (a < 0.01) discard;
           gl_FragColor = vec4(mix(uColor, uFlowColor, head), a);
         }
@@ -457,7 +624,7 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
       const u = Math.random() * 2 - 1;
       const th = Math.random() * Math.PI * 2;
       const s = Math.sqrt(1 - u * u);
-      const r = 2.05 + Math.random() * 0.32;
+      const r = 1.85 + Math.random() * 0.3;
       pos[i * 3] = Math.cos(th) * s * r;
       pos[i * 3 + 1] = u * r * 0.72;
       pos[i * 3 + 2] = Math.sin(th) * s * r;
@@ -501,7 +668,7 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
         float a = 1.0 - smoothstep(0.12, 0.5, length(gl_PointCoord - 0.5));
         if (a < 0.01) discard;
         // a few of them are decisions a person made, and stay warm
-        gl_FragColor = vec4(vS > 0.86 ? uWarm : uCyan, a * 0.72);
+        gl_FragColor = vec4(vS > 0.88 ? uWarm : uCyan, a * 0.6);
       }
     `,
     transparent: true,
@@ -509,7 +676,7 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
     blending: THREE.AdditiveBlending,
   });
   const memory = new THREE.Points(memGeo, memMat);
-  cell.add(memory);
+  core.add(memory);
 
   /* ==================================================================
      The decision. One warm mark, on a person, once.
@@ -545,13 +712,18 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
   const tmpQ = new THREE.Quaternion();
   const tmpS = new THREE.Vector3();
   const tmpLook = new THREE.Matrix4();
-  const yAxis = new THREE.Vector3(0, 1, 0);
+  const shotTarget = new THREE.Vector3();
+  const camLocal = new THREE.Vector3();
+  /** how far each person has receded this frame, for the DOM labels */
+  const dimOut = [0, 0, 0, 0];
+  /** each person's ring radius this frame, in world units */
+  const ringWorld = [0.25, 0.25, 0.25, 0.25];
+  const camUp = new THREE.Vector3();
 
   let width = 0;
   let height = 0;
-  /** how far aside the composition moves once the explanation appears */
-  let shiftFrac = 0.22;
-  let shiftScale = 0.82;
+  /** how high the composition sits, leaving the bottom of the screen to the words */
+  let lift = 0.9;
   /** context the company owns. Monotonic: scrolling back up does not undo it. */
   let memoryHeld = 0;
 
@@ -566,11 +738,8 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
     const tall = clamp(height / Math.max(1, width), 0.5, 2);
     camera.fov = 40 + clamp((tall - 0.6) * 16, 0, 22);
     camera.updateProjectionMatrix();
-    // narrower windows leave less room beside the text, so the composition
-    // moves less far and shrinks a little more
-    const wide = width >= 1200;
-    shiftFrac = wide ? 0.22 : 0.19;
-    shiftScale = wide ? 0.82 : 0.74;
+    // a squarer window has less room below the ball; lift it a little more
+    lift = 0.9 + clamp((tall - 0.6) * 0.8, 0, 0.5);
     const s = quality === "low" ? 0.85 : 1;
     dustMat.uniforms.uScale.value = s;
     fieldMat.uniforms.uScale.value = s;
@@ -578,90 +747,137 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
   };
   resize();
 
+  /** a light running along one link. t: 0 at the role, 1 at the core. */
+  const flow = (idx: number, t: number, amt: number, colour: THREE.Color) => {
+    const m = linkMats[idx];
+    m.uniforms.uFlow.value = t;
+    m.uniforms.uFlowAmt.value = amt;
+    m.uniforms.uFlowColor.value.copy(colour);
+  };
+  const inbound = (idx: number, p: number, a: number, b: number, colour: THREE.Color) => {
+    const amt = pulse(p, a, b);
+    if (amt > 0.01) flow(idx, span(p, a, b), amt, colour);
+  };
+  const outbound = (idx: number, p: number, a: number, b: number, colour: THREE.Color, scale = 1) => {
+    const amt = pulse(p, a, b) * scale;
+    if (amt > 0.01) flow(idx, 1 - span(p, a, b), amt, colour);
+  };
+
+  const warmCyan = HUMAN_LIT.clone().lerp(CYAN_HOT, 0.45);
+
   const render = (p: number, time: number, shift: number) => {
-    // 0.00–0.30 is the overview: the whole picture, and nothing new happening.
-    // The reader gets to look before anything is explained.
     const arrive = span(p, 0.0, 0.1);
     const whole = span(p, 0.08, 0.2);
-    const signal = span(p, 0.34, 0.45);
-    const context = span(p, 0.43, 0.54);
-    const route = span(p, 0.52, 0.64);
-    const decide = span(p, 0.62, 0.73);
-    const act = span(p, 0.71, 0.8);
-    const asset = span(p, 0.78, 0.9);
+    // the beats — see the header. Each is a window of p.
+    const decide = span(p, 0.62, 0.7);
+    const act = span(p, 0.7, 0.8);
     // the tool disappears into the work: at the end the scaffolding fades and
-    // only the light is left. Not a reveal — a withdrawal.
+    // only the threads are left. Not a reveal — a withdrawal.
     const invisible = span(p, 0.9, 1.0);
 
+    // while the core is working on a question
+    const think = Math.max(pulse(p, 0.36, 0.46), pulse(p, 0.48, 0.58) * 1.0, pulse(p, 0.6, 0.68) * 0.6);
+
     // context the company owns never goes down, even scrolling back up
-    memoryHeld = Math.max(memoryHeld, Math.max(act * 0.3, asset));
+    memoryHeld = Math.max(memoryHeld, Math.max(act * 0.35, span(p, 0.8, 1.0)));
 
-    /* ---- camera and placement ---- */
-    camera.position.set(0, 0.55, 12.6 - whole * 0.6 + invisible * 1.8);
-    camera.lookAt(0, 0, 0);
-    // When the explanation appears, the whole composition moves aside and
-    // shrinks rather than being covered up. visibleW is measured from the
-    // frustum, so this holds at any window shape.
-    const visibleW = 2 * camera.position.z * Math.tan((camera.fov * Math.PI) / 360) * camera.aspect;
-    world.position.x = shift * visibleW * shiftFrac;
-    // during the overview the composition rides high, leaving the lower third
-    // to the headline; it settles back to centre once the text moves aside
-    world.position.y = (1 - shift) * 1.15;
-    world.scale.setScalar(1 - shift * (1 - shiftScale));
-    // the group is tilted and turns slowly: a constellation, not a wheel
-    cell.rotation.y = -0.3 + p * 0.55;
-    cell.rotation.x = 0.2;
-    cell.rotation.z = -0.16 + Math.sin(time * 0.04) * 0.04;
+    /* ---- the ring turns: the speaker comes to the front ---- */
+    void shift;
+    let f = 0;
+    while (f < FRONT.length - 2 && p >= FRONT[f + 1][0]) f++;
+    const fa = FRONT[f];
+    const fb = FRONT[f + 1];
+    const ft = smooth(clamp((p - fa[0]) / Math.max(1e-6, fb[0] - fa[0])));
+    const frontAz = lerpAngle(fa[1], fb[1], ft);
+    cell.rotation.set(0, (-frontAz * Math.PI) / 180, -0.04 + Math.sin(time * 0.04) * 0.03);
 
+    /* ---- camera ---- */
+    let k = 0;
+    while (k < SHOTS.length - 2 && p >= SHOTS[k + 1].p) k++;
+    const a = SHOTS[k];
+    const b = SHOTS[k + 1];
+    const t = smooth(clamp((p - a.p) / Math.max(1e-6, b.p - a.p)));
+    const el = ((a.el + (b.el - a.el) * t) * Math.PI) / 180;
+    const dist = a.dist + (b.dist - a.dist) * t;
+    shotTarget.set(
+      a.target[0] + (b.target[0] - a.target[0]) * t,
+      (a.target[1] + (b.target[1] - a.target[1]) * t) * (1 + (lift - 0.9) * (1 - Math.min(1, p / 0.3))),
+      a.target[2] + (b.target[2] - a.target[2]) * t,
+    );
+    // slide the view: the target moves left, so the scene sits to the right
+    shotTarget.x -= a.sx + (b.sx - a.sx) * t;
+    camera.position.set(shotTarget.x, shotTarget.y + Math.sin(el) * dist, shotTarget.z + Math.cos(el) * dist);
+    camera.lookAt(shotTarget);
+    world.position.set(0, 0, 0);
+    world.scale.setScalar(1);
     /* ---- core ---- */
     coreUniforms.uTime.value = time;
     coreUniforms.uCharge.value = arrive;
-    coreUniforms.uThink.value = Math.max(context * (1 - route * 0.6), pulse(p, 0.34, 0.56) * 0.8);
+    coreUniforms.uThink.value = think;
     coreUniforms.uMemory.value = memoryHeld;
-    core.scale.setScalar(0.86 + arrive * 0.14 + context * 0.06 + memoryHeld * 0.05);
-    shellA.rotation.set(time * 0.03, time * 0.06, 0);
-    shellB.rotation.set(0, -time * 0.04, time * 0.025);
-    (shellA.material as THREE.MeshBasicMaterial).opacity = arrive * 0.16;
-    (shellB.material as THREE.MeshBasicMaterial).opacity = arrive * 0.1 + context * 0.06;
-    haloMat.opacity = arrive * 0.3 + context * 0.2;
-    halo.rotation.z = time * 0.08;
+    core.scale.setScalar(CORE_SCALE * (0.86 + arrive * 0.14 + think * 0.04 + memoryHeld * 0.1));
+    // the threads keep their own slow rotation; the whole ball leans a little
+    threads.rotation.set(Math.sin(time * 0.05) * 0.08, time * 0.02, 0);
+    glowMat.opacity = arrive * (0.55 + think * 0.3 + memoryHeld * 0.15);
+    glowMat.color.copy(CYAN).lerp(CYAN_HOT, think * 0.6);
 
     /* ---- field ---- */
     fieldMat.uniforms.uTime.value = time;
-    // present at the start, thinning once the core holds the context
-    fieldMat.uniforms.uAlpha.value = (0.35 + 0.65 * (1 - context)) * arrive * (1 - invisible * 0.4);
+    fieldMat.uniforms.uAlpha.value = (0.25 + 0.45 * (1 - memoryHeld)) * arrive * (1 - invisible * 0.4);
 
     /* ---- roles and links ---- */
     nodeMat.opacity = whole * (1 - invisible);
-    ringMat.opacity = whole * 0.5 * (1 - invisible);
+    ringMat.opacity = whole * (1 - invisible);
+
+    const press = span(p, 0.665, 0.695);
+
+    // Who this beat is about. Everyone else recedes, so the path reads.
+    const w = (a0: number, b0: number) => span(p, a0 - 0.03, a0 + 0.03) * (1 - span(p, b0 - 0.03, b0 + 0.03));
+    const inStory = span(p, 0.32, 0.37) * (1 - span(p, 0.9, 0.96));
+    const focus = [0, 0, 0, 0];
+    focus[SALES] = w(0.34, 0.46);
+    focus[ENGINEER] = Math.max(w(0.46, 0.58), w(0.7, 0.8), w(0.34, 0.46) * 0.35, w(0.8, 0.9) * 0.7);
+    focus[PM] = w(0.46, 0.8);
+    focus[SALES] = Math.max(focus[SALES], w(0.58, 0.67) * 0.7);
+    focus[EXEC] = Math.max(w(0.69, 0.75) * 0.5, w(0.8, 0.9));
+
+    // Who is lit, and when. Nobody has their own colour — a palette of four
+    // would be read as four ranks. Colour only ever means state.
+    const heat = [0, 0, 0, 0];
+    heat[SALES] = pulse(p, 0.34, 0.5);
+    heat[ENGINEER] = Math.max(pulse(p, 0.46, 0.6) * 0.9, pulse(p, 0.72, 0.84), pulse(p, 0.8, 0.88) * 0.7);
+    heat[PM] = Math.max(pulse(p, 0.52, 0.66), decide * (1 - span(p, 0.76, 0.84)));
+    heat[SALES] = Math.max(heat[SALES], pulse(p, 0.58, 0.66) * 0.7);
+    heat[EXEC] = Math.max(pulse(p, 0.69, 0.76) * 0.35, pulse(p, 0.82, 0.96));
 
     for (let i = 0; i < ROLES.length; i++) {
       const appear = clamp((whole - i * 0.06) / 0.55);
-      // Who is lit, and when. Nobody has their own colour — a palette of six
-      // would be read as six ranks. Colour only ever means state.
-      let heat = 0;
-      if (i === ENGINEER) heat = Math.max(signal * (1 - route * 0.4), act);
-      if (i === PM || i === SALES) heat = route * (1 - decide * 0.5);
-      if (i === LEAD) heat = decide;
-      // the executive is kept in view; they are not asked to reply
-      if (i === EXEC) heat = route * 0.3 + decide * 0.35;
+      const h = heat[i];
+      const recede = inStory * (1 - clamp(focus[i]));
+      dimOut[i] = recede;
+      const c = NODE.clone().lerp(CYAN_HOT, h);
+      c.lerp(NODE_DIM, recede * 0.75);
+      if (i === PM) c.lerp(HUMAN_LIT, decide * (1 - span(p, 0.76, 0.84)) * 0.9);
 
-      const c = NODE.clone().lerp(CYAN_HOT, heat);
-      // while one person is deciding, everyone else recedes
-      c.lerp(NODE_DIM, decide * (1 - act) * (i === LEAD ? 0 : 0.7));
-      if (i === LEAD) c.lerp(HUMAN_LIT, decide * 0.9);
-
-      tmpQ.setFromAxisAngle(yAxis, time * 0.25 + i);
-      tmpM.compose(rolePos[i], tmpQ, tmpS.setScalar(Math.max(0.001, appear * (0.85 + heat * 0.7))));
+      tmpM.compose(
+        rolePos[i],
+        tmpQ.identity(),
+        tmpS.setScalar(Math.max(0.001, appear * (0.9 + h * 1.0) * (1 - recede * 0.4))),
+      );
       nodes.setMatrixAt(i, tmpM);
       nodes.setColorAt(i, c);
 
-      // rings face the camera, so they read as stations at any angle
-      tmpLook.lookAt(rolePos[i], camera.position, camera.up);
+      // rings only for whoever is lit; they face the camera (in the cell's frame)
+      camLocal.copy(camera.position);
+      cell.worldToLocal(camLocal);
+      tmpLook.lookAt(rolePos[i], camLocal, camera.up);
       tmpQ.setFromRotationMatrix(tmpLook);
-      tmpM.compose(rolePos[i], tmpQ, tmpS.setScalar(Math.max(0.001, appear * (1 + heat * 0.35))));
+      const ringScale = appear * (0.55 + h * 0.65) * (1 - recede * 0.5);
+      // the decision ring around the executive is wider still
+      ringWorld[i] = Math.max(0.245 * ringScale, i === PM ? 0.345 * decisionRing.scale.x * (press > 0.01 ? 1 : 0) : 0);
+      tmpM.compose(rolePos[i], tmpQ, tmpS.setScalar(Math.max(0.001, ringScale)));
       nodeRings.setMatrixAt(i, tmpM);
-      nodeRings.setColorAt(i, c);
+      nodeRings.setColorAt(i, c.clone().multiplyScalar(0.25 + h * 0.75));
     }
     nodes.instanceMatrix.needsUpdate = true;
     nodeRings.instanceMatrix.needsUpdate = true;
@@ -671,68 +887,53 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
     for (let i = 0; i < linkMats.length; i++) {
       const m = linkMats[i];
       m.uniforms.uDraw.value = clamp((whole - i * 0.05) / 0.5);
-      m.uniforms.uOpacity.value = (0.14 + route * 0.1) * (1 - invisible);
+      // the paths in use this beat are drawn firmly; the rest stay faint
+      m.uniforms.uOpacity.value = (0.1 + clamp(focus[i]) * inStory * 0.45) * (1 - invisible);
       m.uniforms.uColor.value.copy(SLATE).lerp(BLUE, 0.35);
       m.uniforms.uFlow.value = -1;
       m.uniforms.uFlowAmt.value = 0;
-      m.uniforms.uFlowColor.value.copy(CYAN_HOT);
     }
 
-    // A question leaves the engineer and runs to the core. aU runs from the
-    // role (0) to the core end (1), so 1 - t sends the head inward.
-    const inbound = pulse(p, 0.34, 0.45);
-    if (inbound > 0.01) {
-      const m = linkMats[ENGINEER];
-      m.uniforms.uFlow.value = 1 - span(p, 0.34, 0.45);
-      m.uniforms.uFlowAmt.value = inbound;
-    }
+    // 01 ANSWER — sales asks, the hub answers. The engineer is never touched.
+    inbound(SALES, p, 0.34, 0.4, CYAN_HOT);
+    outbound(SALES, p, 0.4, 0.46, CYAN_HOT);
 
-    // The core opens the paths at once. It does not send the question up a
-    // chain — it asks whoever holds the answer, and keeps the executive in view.
-    if (route > 0.01) {
-      const outFlow = 1 - span(p, 0.52, 0.64);
-      const ask = pulse(p, 0.52, 0.64);
-      // The core asks whoever holds the answer, and keeps the people who need
-      // visibility in view. It does not pass the question up a chain.
-      for (const [idx, colour, amt] of [
-        [PM, CYAN_HOT, 1],
-        [SALES, CYAN_HOT, 1],
-        // notified, not asked — dimmer, and no reply comes back
-        [EXEC, BLUE_PALE, 0.4],
-      ] as const) {
-        const m = linkMats[idx];
-        m.uniforms.uFlow.value = outFlow;
-        m.uniforms.uFlowAmt.value = ask * amt;
-        m.uniforms.uFlowColor.value.copy(colour);
-      }
-      const m = linkMats[LEAD];
-      m.uniforms.uFlow.value = outFlow;
-      m.uniforms.uFlowAmt.value = pulse(p, 0.56, 0.7) * 0.9;
-      m.uniforms.uFlowColor.value.copy(HUMAN_LIT);
-    }
+    // 02 ASK — the engineer asks; one path opens, to the PM, with the background
+    inbound(ENGINEER, p, 0.46, 0.52, CYAN_HOT);
+    outbound(PM, p, 0.52, 0.58, CYAN_HOT);
 
-    // and it comes back to the engineer as work that can be done
-    const outbound = pulse(p, 0.71, 0.81);
-    if (outbound > 0.01) {
-      const m = linkMats[ENGINEER];
-      m.uniforms.uFlow.value = span(p, 0.71, 0.81);
-      m.uniforms.uFlowAmt.value = outbound;
-      // the decision comes back together with the grounds for it
-      m.uniforms.uFlowColor.value.copy(HUMAN_LIT).lerp(CYAN_HOT, 0.45);
-    }
+    // 03 DECIDE — the hub gathers what sales knows of the customer and hands
+    // it to the PM; the PM decides. The executive is told, not asked: a dim
+    // ping, and no reply comes back.
+    inbound(SALES, p, 0.58, 0.63, CYAN);
+    outbound(PM, p, 0.62, 0.67, CYAN_HOT);
+    inbound(PM, p, 0.7, 0.735, HUMAN_LIT);
+    outbound(EXEC, p, 0.71, 0.76, BLUE_PALE, 0.4);
+
+    // 04 ACT — back to the engineer, the decision with the grounds for it
+    outbound(ENGINEER, p, 0.735, 0.8, warmCyan);
+
+    // 05 VISIBILITY — the engineer's unpolished worry comes in to the hub, and
+    // goes on to the executive together with the decision it concerns
+    inbound(ENGINEER, p, 0.81, 0.855, CYAN_HOT);
+    outbound(EXEC, p, 0.85, 0.905, warmCyan, 0.95);
 
     /* ---- the decision: one person, one warm mark ---- */
-    const press = span(p, 0.645, 0.7);
-    tmpLook.lookAt(rolePos[LEAD], camera.position, camera.up);
-    decisionRing.position.copy(rolePos[LEAD]);
+    camLocal.copy(camera.position);
+    cell.worldToLocal(camLocal);
+    tmpLook.lookAt(rolePos[PM], camLocal, camera.up);
+    decisionRing.position.copy(rolePos[PM]);
     decisionRing.quaternion.setFromRotationMatrix(tmpLook);
-    decisionWave.position.copy(rolePos[LEAD]);
+    decisionWave.position.copy(rolePos[PM]);
     decisionWave.quaternion.copy(decisionRing.quaternion);
-    decisionMat.opacity = press * (1 - invisible) * (1 - act * 0.35);
+    // the mark stays on the person who decided, quieter once the work has moved on
+    decisionMat.opacity = press * (1 - invisible) * (1 - act * 0.35) * (1 - span(p, 0.78, 0.86) * 0.6);
     decisionRing.scale.setScalar(0.4 + (1 - Math.pow(1 - press, 3)) * 0.6);
-    const ripple = pulse(p, 0.66, 0.76);
-    decisionWaveMat.opacity = ripple * 0.55;
-    decisionWave.scale.setScalar(1 + ripple * 2.2);
+    // a short ripple; the PM is close to the camera here, so it stays small
+    // over before the ACT caption arrives (0.70) and the ring turns away (0.71)
+    const ripple = pulse(p, 0.672, 0.70);
+    decisionWaveMat.opacity = ripple * 0.4;
+    decisionWave.scale.setScalar(1 + ripple * 0.6);
 
     /* ---- what the company now owns ---- */
     memMat.uniforms.uTime.value = time;
@@ -741,24 +942,49 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
     renderer.render(scene, camera);
   };
 
-  const projectRoles = (out: { x: number; y: number; depth: number; visible: boolean }[]) => {
+  const projectRoles = (out: { x: number; y: number; depth: number; visible: boolean; dim: number; r: number }[]) => {
     const v = new THREE.Vector3();
+    const e = new THREE.Vector3();
+    const right = new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld, 0);
     for (let i = 0; i < ROLES.length; i++) {
       v.copy(rolePos[i]);
       cell.localToWorld(v);
       const depth = v.distanceTo(camera.position);
+      // a point one ring radius to the side, in screen terms
+      e.copy(v).addScaledVector(right, ringWorld[i]);
       v.project(camera);
+      e.project(camera);
       out[i] = {
         x: (v.x * 0.5 + 0.5) * width,
         y: (-v.y * 0.5 + 0.5) * height,
         depth,
         visible: v.z < 1,
+        dim: dimOut[i],
+        r: Math.abs(e.x - v.x) * 0.5 * width,
       };
     }
   };
 
+  const projectCore = (out: { x: number; y: number; r: number }) => {
+    const v = new THREE.Vector3(0, 0, 0);
+    core.localToWorld(v);
+    // a point just outside the threads, straight up in screen terms. The dark
+    // disc is wider, but words may sit on the disc; only the threads are kept
+    // clear.
+    const s = new THREE.Vector3();
+    core.getWorldScale(s);
+    camUp.setFromMatrixColumn(camera.matrixWorld, 1);
+    const edge = v.clone().addScaledVector(camUp, (R_THREAD + 0.06) * s.y);
+    v.project(camera);
+    edge.project(camera);
+    out.x = (v.x * 0.5 + 0.5) * width;
+    out.y = (-v.y * 0.5 + 0.5) * height;
+    out.r = Math.abs((edge.y - v.y) * 0.5 * height);
+  };
+
   const dispose = () => {
     canvas.removeEventListener("webglcontextlost", onLost);
+    glowTex.dispose();
     scene.traverse((o) => {
       const mesh = o as THREE.Mesh;
       if (mesh.geometry) mesh.geometry.dispose();
@@ -769,5 +995,5 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
     renderer.dispose();
   };
 
-  return { render, resize, dispose, projectRoles };
+  return { render, resize, dispose, projectRoles, projectCore };
 }

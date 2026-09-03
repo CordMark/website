@@ -1,6 +1,6 @@
 # CordMark Website — トップページ実装メモ(方向B「結び / Weave」)
 
-最終更新: 2026-09-04 夜(Company OS Sectionを近未来のAIコア表現へ作り直し、アニメーション先行の構成へ)
+最終更新: 2026-09-04 深夜(Company OS Sectionを「何を約束するか」から組み直し。糸の球のコア、役割ごとの六つの幕、役職のそばの一行)
 状態: トップページのみ新構成へ切り替え済み。About、Service、Contactは旧デザインのまま。
 
 ## 選ばれた方向
@@ -17,7 +17,7 @@ app/page.tsx                 新トップページ(Server Component)。Section�
 app/home/home.css            .wv 配下にScopeした新Token・Section Style。Header/Footerの上書きも含む
 app/home/HeroCord.tsx        Hero専用のCanvas 2D。糸だけを扱う(ばらばら→縄→マーク→消える)
 app/home/CompanyOsCanvas.tsx Company OS Sectionの全画面3D Sceneの入れ物。能力判定と遅延読込、DOMとの同期
-app/home/three/companyOsScene.ts  Three.jsのScene本体(Reactの外)。Scroll進行度で九つの幕を進める
+app/home/three/companyOsScene.ts  Three.jsのScene本体(Reactの外)。Scroll進行度で幕を進める(全景→ANSWER→ASK→DECIDE→ACT→VISIBILITY→AI-NATIVE)
 app/home/GroundWatch.tsx     地の色がCSSになったので、Headerが読む html[data-wv-*] を書く役だけを残した
 app/_legacy/ThreadCanvas.tsx 旧・背景固定の一枚Canvas(退避)
 app/beyond/page.tsx          Phase 2のページ(Laplace、DotCraft)。固定Canvasは使わず、`.wv-page` でHeaderと地の色をCSSで揃える
@@ -48,6 +48,25 @@ app/_legacy/HomeLegacy.tsx   切替前のトップページ。ルーティング
 - **Header**はCanvasが`html[data-wv-ground]`にdark/lightを書き、地が暗い間だけ透過・生成り文字。Scrollが始まったら(`data-wv-scrolled="1"`)暗い地の上でも半透明の夜色を敷き、本文がNavの下を素通りしないようにする。
 - **Mobile(≤880px)と`prefers-reduced-motion`**では固定を解除して縦並び。Reduced Motionでは時間による動きを止め、Scroll時だけ再描画。糸は編まれた状態、物語はHuman Decisionの静止状態。
 
+## Company OS Section(2026-09-04 夜、組み直し)
+
+商談資料(IC様向け「Company OS共同検証のご提案」)とcompany-osのThesisを読み直し、Sectionを「Productの構造」ではなく「約束」から組み直した。ユーザーの指示: 「中心にあるのはAI」は押さない。AIネイティブカンパニーは押す(使うほど全員がAIを使え、会社がAIネイティブに生まれ変わる。AI導入で業務を楽に、の一段先)。案の資料: https://claude.ai/code/artifact/56dda5f5-be5b-44b3-b99c-fe437d9bf00b
+
+- **見出し**は資料の表紙と同じ「現場を止めない。重要な判断を、見失わない。」。副文で「なぜ今か」(作業はAIに置き換わる、エンジニアリングだけでなくあらゆる業務で。その先で詰まるのは問いと判断が人の間を渡る時間)。
+- **左の段**は機構(検知・整理・振分・判断・反映)をやめ、資料p.5の「一つの仕様変更」を役割ごとの六つの幕にした: 01 ANSWER(営業がAIに聞く) / 02 ASK(エンジニアの問いが背景付きでPMへ) / 03 DECIDE(PMが決められず経緯ごと事業責任者へ、朱) / 04 ACT(決定がエンジニアの仕事に戻る) / 05 VISIBILITY(経営には重要判断だけ) / 06 AI-NATIVE(全員がAIを学ぶ必要はない。会社がAIネイティブに生まれ変わる)。`STEP_AT = [0.34, 0.46, 0.58, 0.70, 0.80, 0.90]`。
+- **役職のそばの一行**(`.wv-os__say`、`SAYS` in CompanyOsCanvas.tsx): 幕ごとに、人の言葉を「 」で括った白(決定は朱)、その下にAIの返答を `COMPANY OS` の小さな札付きで青緑。役職名は点に付いているので一行では繰り返さない(2026-09-04 深夜、「白と青の関係を分かりやすく」「経営表記が二つ被る」の指摘)。役職名は球の後ろの人は点の上、手前に来た人は点の下。DOMで描き、点の右(窓からはみ出すなら点の下に中央揃え)、コアより上の点なら上に出す。チャットUIの模型は出さない(まだ無い画面を約束しない)。
+- **構成(2026-09-04 深夜、作り直し)**: ユーザーの指摘「左の一覧のせいで場面が狭い」「球の後ろの紺の円盤が謎」「AIがずっと主役である必要はない。エンジニアの問いがどう人を渡るかが見えればいい」「役職は四つに。発言する人が手前に来るように位置を動的に変える」を受けて作り直した。Sceneは全画面、幕の文章(`.wv-os__steps li`)は画面左上に一つずつ(`[data-os-scene="on"]`でgrid-areaを重ねて`is-active`だけ表示)。円盤と紺の地は削除し、地は夜色の静かなVignette。
+  - **役職は四つ**: エンジニア / PM / 経営 / 営業(事業責任者は削除。日常の決定はPM、経営は知らされる側)。`R_NODE = 3.8`の輪に90°間隔で並ぶ。
+  - **輪が回る**(`FRONT` in companyOsScene.ts: [p, 手前に向ける方位])。発言する人が手前・画面下に大きく来て、四人は常に全員見える。全景と最後は45°(四人が対角線上、誰も球の後ろや見出しの下に隠れない)。ANSWER=営業、ASK=エンジニア、DECIDE=PM(AIが営業の知る顧客の事情を集めてPMに添え、PMが決める。朱はPM。経営には通知だけが薄く届く)、ACT=エンジニア、VISIBILITY=経営(「重要な判断が、現場の状況ごと届く」。エンジニアの生の懸念「Bだと納期は厳しいかも」が球を経て決定と一緒に経営へ。「できています」の裏の問題を手遅れ前に知る、が経営のニーズ。「重要判断だけ」という選別の言い方はやめた。2026-09-04 深夜の指摘)。2026-09-04 深夜、「経営が決定をもらってしまっている。PMが情報収集して決め、経営には通知、重要判断だけ上がる」の指摘で修正。
+  - **画面の使い方(2026-09-04 深夜)**: 左上の文章は幅36em・見出し26〜42px・本文15px。左下に幕の索引(`.wv-os__index`、01 ANSWER〜06 AI-NATIVE、現在地が青緑/朱で光る。`is-active`は`.wv-os__steps li`と一緒に切り替える)。輪はカメラ el 22で縦に広げ、手前の人が画面の下1/4まで使う。一行は輪から`30 + 26*s`px離す。狭い画面(〜1200px)の最適化は未着手。
+  - **締め(06 AI-NATIVE、2026-09-04 深夜)**: 左上の字幕ではなく、最初の全景と同じ中央の見出しにした(`.wv-os__closing`)。p 0.90からSceneがフェードアウト(`FADE_FROM`、Canvas hostのopacity)、0.935から`data-os-phase="closing"`で中央に「会社が、AIネイティブに生まれ変わる。」と本文。固定表示では06の字幕(`.wv-os__steps li:last-child`)は出さない(索引の06だけ光る)。静的表示(Mobile/Reduced Motion)では一覧の06として読める。
+  - **カメラはほぼ固定**(`SHOTS`: el 18〜26、dist 10前後、見出しを避けて右へ`sx`だけ寄せる)。物語は輪の回転で語る。
+  - 糸の球は`CORE_SCALE = 0.6`で小さく(人と経路が主役、球は共有物)。幕の間は関係する人だけ明るく残し、他は沈める(`focus`/`recede`、DOMの役職名も薄くなる)。使われている経路の線は全体が明るくなる。
+  - 役職名と一行はカメラに近いほど大きい(depthで9.5/depthを掛ける)。役職名は輪の上(`8 + 26*s`px)。一行の置き場所は右→左→下→上の順に試し、見出し・窓の端・糸の球(半径`R_THREAD+0.06`を画面に投影)に当たらない最初の場所。どこにも置けなければ出さない。
+- **コアは「糸の球」**: 大円をわずかに崩した閉曲線を30〜62本(quality別)、TubeGeometryで作って一つに結合し、頂点シェーダで各自の軸に回す(`aAxis`, `aInfo`=速度と色)。手前ほど明るく白を帯び、奥は芯に沈む。芯は柔らかい光の球(depthWriteあり)＋Spriteの発光。二重の骨組み・赤道の輪・八面体は廃止。役職は小さな点＋灯る時だけ輪(灯ると2倍まで大きく)。朱は人の決定にだけ。
+- **切ったもの**: STATUS行、CordMark OS Section(`#cordmark-os`)、秘書/共有の秘書/参謀の紙Section、「中心にあるのはAI。階層ではない。」。CSSも削除済み。
+- 全景ではカメラの注視点を球の下(target y -0.95)に置き、球が画面上半分、見出しが下に来る。
+
 ## 二つのOSの呼び分け(2026-09-04)
 
 ユーザーの指示: **売っているProductは Company OS**、**CordMark OS は自社運営のための社内OSで、販売しない**。
@@ -76,8 +95,8 @@ app/_legacy/HomeLegacy.tsx   切替前のトップページ。ルーティング
 
 ## 会社Contextとの整合
 
-- 導入・検証の数字は出していない。`STATUS · 開発・検証中`のみ。
-- 秘書 / 共有の秘書 / 参謀は製品Thesisの長期構想として、機能の約束にならない書き方にしている。
+- 導入・検証の数字は出していない。STATUS行も2026-09-04に削除(読者に要らない情報)。
+- 秘書 / 共有の秘書 / 参謀の三行はトップから外した。Productページを作る時の材料。
 - Laplace、DotCraftはPhase 2の探索として `/beyond` に接続。
 
 ## ブランド素材
