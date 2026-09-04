@@ -683,7 +683,20 @@
 
 /* ---------- Responsive ---------- */
 
+/* the door keeps its two columns down to a half-screen window; a narrower
+   gap and a smaller numeral make room */
 @media (max-width: 1100px) {
+  .wv .wv-page__hero {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    gap: clamp(32px, 4.5vw, 64px);
+  }
+
+  .wv .wv-chapter__num {
+    font-size: clamp(44px, 7vw, 72px);
+  }
+}
+
+@media (max-width: 880px) {
   .wv .wv-page__hero {
     grid-template-columns: 1fr;
     gap: clamp(36px, 5vw, 56px);
@@ -698,9 +711,13 @@
     flex-wrap: wrap;
     gap: 12px 26px;
   }
-}
 
-@media (max-width: 880px) {
+  /* one column: paragraphs stop holding a two-column measure */
+  .wv.wv-page .wv-lead,
+  .wv.wv-page .wv-page__hero-copy .wv-lead {
+    max-width: none;
+  }
+
   .wv .wv-facts,
   .wv .wv-facts--three {
     grid-template-columns: repeat(2, minmax(0, 1fr));

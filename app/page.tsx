@@ -67,7 +67,7 @@ const practices = [
     index: "DELIVERY",
     title: "課題に合わせた受託・共同開発",
     body: "顧客の具体的な課題に応えるアプリ・システムを開発する。現場を理解し、信頼を築き、そこで得た知見を支援とProductへつなぐ。",
-    href: "/contact?interest=dev",
+    href: "/service/development",
     link: "開発の相談をする",
     hop: "→ 02  現場の理解と信頼",
   },
@@ -75,9 +75,9 @@ const practices = [
     index: "SUPPORT",
     title: "組織・業務改善、AI駆動開発の導入・教育・伴走",
     body: "開発組織を含む業務の進め方を診断し、ドキュメント、計画、レビュー、検証を含む開発プロセスをAI前提に組み替える。",
-    href: "/service/ai-driven-development",
+    href: "/service/support#dev",
     link: "AI駆動開発支援",
-    secondHref: "/service/ai-native-company",
+    secondHref: "/service/support#company",
     secondLink: "組織・業務改善支援",
     hop: "→ 03  知見の還元",
   },
@@ -85,7 +85,7 @@ const practices = [
     index: "PRODUCT",
     title: "Company OSの企画・開発・展開",
     body: "会社の意思と日々の仕事をつなぐProductをつくる。顧客の現場で得た知見を、契約と機密性を守った範囲でProductへ還元する。",
-    href: "#company-os",
+    href: "/company-os",
     link: "Company OSについて",
     hop: "↺ 01  知見は、次の開発Projectへ",
     back: true,
@@ -342,7 +342,7 @@ export default function Home() {
                   <a className="wv-link" href="#company-os">
                     Company OS <Arrow />
                   </a>
-                  <a className="wv-link" href="/service/ai-driven-development">
+                  <a className="wv-link" href="/service/support#dev">
                     AI駆動開発支援 <Arrow />
                   </a>
                 </div>

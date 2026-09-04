@@ -1,0 +1,147 @@
+/* ------------------------------------------------------------
+   /service/development — what only this chapter needs.
+   Everything shared lives in app/wv-page.css. Hairlines and
+   numerals, never boxes; no images, no blue.
+   ------------------------------------------------------------ */
+
+.wv .wv-dev-hero {
+  padding-top: clamp(48px, 7vw, 96px);
+}
+
+/* the band of facts runs the full width of the door, under both columns */
+.wv .wv-dev-hero .wv-facts {
+  margin-top: clamp(48px, 6vw, 88px);
+}
+
+/* this title's two lines are longer than the other chapters', so it takes
+   a size that lets each line stand whole in the left column */
+.wv .wv-dev-hero .wv-h1 {
+  font-size: clamp(26px, 3.2vw, 42px);
+}
+
+/* ---------- 節1 なぜ速いか ---------- */
+
+/* the heading holds the left, the two short paragraphs the right,
+   with a wide gap between them and nothing else on the ground */
+/* half the width, so the heading takes a step down from a full-width one */
+.wv .wv-dev-speed .wv-h2 {
+  font-size: clamp(28px, 3.4vw, 46px);
+}
+
+.wv .wv-dev-speed__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(36px, 6vw, 104px);
+  align-items: start;
+}
+
+.wv .wv-dev-speed__body {
+  padding-top: clamp(6px, 1.2vw, 18px);
+}
+
+.wv .wv-dev-speed__body p {
+  max-width: 30em;
+  font-size: 15px;
+  line-height: 2.05;
+  letter-spacing: 0.03em;
+  color: var(--wv-ink-2);
+}
+
+/* the proof is one quiet line; the number is only a shade larger than the rest */
+.wv .wv-dev-proof {
+  max-width: 30em;
+  margin-top: clamp(24px, 3vw, 36px);
+  padding-top: clamp(18px, 2.2vw, 26px);
+  border-top: 1px solid var(--wv-line);
+  font-size: 13.5px;
+  line-height: 1.9;
+  letter-spacing: 0.03em;
+  color: var(--wv-quiet);
+}
+
+.wv .wv-dev-proof__num {
+  margin: 0 0.15em;
+  font-family: var(--wv-serif), "Hiragino Mincho ProN", serif;
+  font-size: 1.45em;
+  letter-spacing: 0.06em;
+  color: var(--wv-ink);
+}
+
+/* ---------- 節2 進め方 ---------- */
+
+.wv .wv-dev-process {
+  color: var(--wv-linen);
+}
+
+/* two facing lines under each step: what we carry in, what stays */
+.wv .wv-dev-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(18px, 2.4vw, 34px);
+  margin: 22px 0 0;
+}
+
+.wv .wv-dev-pair dt {
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--wv-line-dark);
+  font-family: var(--wv-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  color: var(--wv-stone);
+}
+
+.wv .wv-dev-pair dd {
+  margin: 12px 0 0;
+  font-family: var(--wv-serif), "Hiragino Mincho ProN", serif;
+  font-size: clamp(14px, 1.2vw, 16px);
+  line-height: 1.7;
+  letter-spacing: 0.03em;
+  color: var(--wv-linen);
+}
+
+.wv .wv-dev-pair > div:last-child dt {
+  color: var(--wv-accent);
+}
+
+/* ---------- 節3 三つの実践との関係 ---------- */
+
+.wv .wv-dev-loop__lead {
+  max-width: 34em;
+}
+
+.wv .wv-dev-loop .wv-index__links {
+  margin-top: 20px;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 880px) {
+  .wv .wv-dev-speed__grid {
+    gap: clamp(28px, 4vw, 48px);
+  }
+
+  /* one column: the text takes the width it is given instead of leaving the right side empty */
+  .wv .wv-dev-speed__body p,
+  .wv .wv-dev-proof,
+  .wv .wv-dev-loop__lead {
+    max-width: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .wv .wv-dev-speed__grid {
+    grid-template-columns: 1fr;
+    gap: clamp(24px, 5vw, 36px);
+  }
+
+  .wv .wv-dev-speed__body {
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .wv .wv-dev-pair {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+}

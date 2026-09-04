@@ -10,7 +10,9 @@
   padding-top: clamp(48px, 7vw, 96px);
 }
 
-/* the band of facts runs the full width of the door, under both columns */
+/* the band of facts runs the full width of the door, under both columns.
+   It carries the three facts a reader needs to place the company; the
+   record itself is kept once, at the end of the chapter */
 .wv .wv-about-hero .wv-facts {
   margin-top: clamp(48px, 6vw, 88px);
 }
@@ -28,54 +30,33 @@
   margin-top: 24px;
 }
 
-/* ---------- 節1 Purpose ---------- */
+/* ---------- 節1 Practice ---------- */
 
-.wv .wv-about-purpose {
-  color: var(--wv-linen);
+.wv .wv-about-practice .wv-lead {
+  margin-top: clamp(26px, 3vw, 36px);
+  max-width: 34em;
 }
 
-.wv .wv-about-purpose__statement {
-  max-width: 20em;
-}
-
-/* the two paragraphs sit under one rule that is drawn from the left as
-   the block arrives — the same gesture as the top page's Purpose */
-.wv .wv-about-purpose__body {
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(28px, 4vw, 72px);
-  margin-top: clamp(48px, 5.4vw, 76px);
-  padding-top: clamp(28px, 3vw, 36px);
-}
-
-.wv .wv-about-purpose__body::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  background: rgba(237, 231, 218, 0.22);
-  transform-origin: 0 50%;
-  transform: scaleX(1);
-}
-
-html[data-wv-reveal] .wv .wv-about-purpose__body[data-reveal]::before {
-  transform: scaleX(0);
-  transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-html[data-wv-reveal] .wv .wv-about-purpose__body[data-reveal].is-in::before {
-  transform: scaleX(1);
-}
-
-.wv .wv-about-purpose__body .wv-lead {
-  margin-top: 0;
-  max-width: 30em;
+.wv .wv-about-practice__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 28px;
+  margin-top: clamp(30px, 3.4vw, 44px);
 }
 
 /* ---------- 節2 Principles ---------- */
+
+/* the one dark section of the chapter: the index changes sides, so the
+   type has to as well */
+.wv .wv-about-principles {
+  color: var(--wv-linen);
+}
+
+.wv .wv-about-principles .wv-lead {
+  margin-top: clamp(26px, 3vw, 36px);
+  max-width: 32em;
+  color: #c9c3b4;
+}
 
 /* the numeral is only two digits here, so it takes less of the row than
    the shared default gives it, and the body gets the rest */
@@ -85,26 +66,28 @@ html[data-wv-reveal] .wv .wv-about-purpose__body[data-reveal].is-in::before {
 
 .wv .wv-about-principles .wv-index__main h3 {
   margin-top: 0;
+  color: var(--wv-linen);
 }
 
-/* ---------- 節3 Origin ---------- */
-
-.wv .wv-about-origin .wv-lead {
-  margin-top: clamp(28px, 3vw, 40px);
+.wv .wv-about-principles .wv-index__side p {
+  color: #c9c3b4;
 }
 
-.wv .wv-about-origin .wv-lead + .wv-lead {
-  margin-top: 16px;
-}
-
-.wv .wv-about-origin__link {
-  margin-top: 20px;
-}
-
-/* ---------- 節4 Company ---------- */
+/* ---------- 節3 Company ---------- */
 
 .wv .wv-about-company {
   padding-bottom: calc(var(--wv-pad-y) * 0.85);
+}
+
+/* the name comes from one place; a paragraph is enough here, the telling
+   of it belongs to the top page */
+.wv .wv-about-company__origin {
+  margin-top: clamp(26px, 3vw, 36px);
+  max-width: 34em;
+}
+
+.wv .wv-about-company__link {
+  margin-top: 18px;
 }
 
 .wv .wv-about-company .wv-facts--rows {
@@ -140,15 +123,6 @@ html[data-wv-reveal] .wv .wv-about-purpose__body[data-reveal].is-in::before {
 }
 
 @media (max-width: 880px) {
-  .wv .wv-about-purpose__body {
-    grid-template-columns: 1fr;
-    gap: 18px;
-  }
-
-  .wv .wv-about-purpose__body .wv-lead + .wv-lead {
-    margin-top: 0;
-  }
-
   /* the shared rule stacks the index here; this row has to give way to it */
   .wv .wv-about-principles .wv-index__row {
     grid-template-columns: clamp(64px, 16vw, 96px) minmax(0, 1fr);
@@ -158,19 +132,5 @@ html[data-wv-reveal] .wv .wv-about-purpose__body[data-reveal].is-in::before {
 @media (max-width: 600px) {
   .wv .wv-about-principles .wv-index__row {
     grid-template-columns: minmax(0, 1fr);
-  }
-
-  /* the statement runs three lines here; a size of its own keeps the last
-     one clear of the right edge */
-  .wv.wv-page .wv-section .wv-h2.wv-about-purpose__statement {
-    max-width: none;
-    font-size: clamp(21px, 6.1vw, 28px);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .wv .wv-about-purpose__body::before {
-    transform: scaleX(1);
-    transition: none;
   }
 }

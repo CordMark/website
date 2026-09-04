@@ -2,65 +2,151 @@
    /contact — what only this page needs.
    The shared parts live in app/home/home.css and app/wv-page.css.
    The prefix is .wv-ct- (home.css already owns .wv-contact).
+
+   The page is one dark room with the form in it: the door and the
+   form are the same screen, so there is nothing to look for.
    ------------------------------------------------------------ */
 
+/* ---------- 扉 = フォーム ---------- */
+
 .wv .wv-ct-hero {
-  padding-top: clamp(48px, 7vw, 96px);
+  --wv-ct-line: #3a3f3a;
+  --wv-ct-line-soft: rgba(237, 231, 218, 0.12);
+  --wv-ct-glow: rgba(201, 138, 85, 0.16);
+  min-height: 100vh;
+  /* the room runs up under the header so the nav sits on the dark ground */
+  margin-top: calc(-1 * var(--header-h));
+  padding-top: calc(var(--header-h) + clamp(72px, 9vw, 120px));
+  padding-bottom: clamp(72px, 9vw, 128px);
+  color: var(--wv-linen);
+  overflow: hidden;
 }
 
-/* the band of facts runs the full width of the door, under both columns */
-.wv .wv-ct-hero .wv-facts {
-  margin-top: clamp(48px, 6vw, 88px);
+/* the title has a narrower column here than on the other chapters */
+.wv .wv-ct-hero .wv-h1 {
+  font-size: clamp(28px, 3.3vw, 46px);
+  text-wrap: pretty;
 }
 
-/* the mail address is an address, not a phrase: it stays in the sans face */
+/* one warm light in the room, behind the form */
+.wv .wv-ct-hero::before {
+  content: "";
+  position: absolute;
+  top: -20%;
+  right: -10%;
+  width: min(60vw, 820px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--wv-ct-glow) 0%, rgba(201, 138, 85, 0.05) 38%, transparent 68%);
+  pointer-events: none;
+}
+
+.wv .wv-ct-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(48px, 7vw, 120px);
+  align-items: start;
+}
+
+/* copy above, the three ways in below; the form stands on the right of both */
+.wv .wv-ct-copy {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.wv .wv-ct-panel {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+
+.wv .wv-ct-hero .wv-lead {
+  max-width: 26em;
+  color: #c9c3b4;
+}
+
+/* the other door: mail, one quiet line under the lead */
 .wv .wv-ct-mail {
-  font-family: var(--wv-sans), sans-serif;
-  font-size: 14.5px;
-  letter-spacing: 0.02em;
-  color: var(--wv-ink);
-  border-bottom: 1px solid var(--wv-line);
+  margin: clamp(28px, 3.4vw, 44px) 0 0;
+  font-size: 12.5px;
+  line-height: 1.9;
+  letter-spacing: 0.03em;
+  color: var(--wv-stone);
+}
+
+.wv .wv-ct-mail a {
+  color: var(--wv-linen);
+  border-bottom: 1px solid var(--wv-ct-line);
   transition: border-color 0.2s ease;
 }
 
-.wv .wv-ct-mail:hover {
-  border-color: var(--wv-accent);
+.wv .wv-ct-mail a:hover {
+  border-color: var(--wv-copper-light);
 }
 
-/* ---------- 扉の右列 相談の入口 ---------- */
+/* ---------- 右列 フォームの盤 ---------- */
 
-/* no numeral here: the door's right column carries the three ways in,
-   so a serif line takes the place the numeral holds on other chapters */
-.wv .wv-ct-entry__title {
-  margin-top: 12px;
-  font-family: var(--wv-serif), "Hiragino Mincho ProN", serif;
-  font-weight: 400;
-  font-size: clamp(24px, 2.6vw, 34px);
-  line-height: 1.4;
-  letter-spacing: 0.04em;
-  font-feature-settings: "palt";
-  color: var(--wv-ink);
+.wv .wv-ct-panel {
+  position: relative;
+  padding-top: 18px;
+  border-top: 1px solid var(--wv-copper-light);
 }
 
-.wv .wv-ct-entry .wv-chapter__note {
-  margin-top: 14px;
+.wv .wv-ct-panel__label {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0;
+  font-family: var(--wv-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
 }
 
-/* ---------- 節1 フォーム ---------- */
-
-.wv .wv-ct-form {
-  scroll-margin-top: var(--header-h);
+.wv .wv-ct-panel__label span:first-child {
+  color: var(--wv-copper-light);
 }
 
-/* the fields are read one at a time; the run of them stops short of the
-   full measure so the labels stay near their inputs */
-.wv .wv-ct-form .wv-form,
-.wv .wv-ct-guide .wv-form {
-  max-width: 960px;
+.wv .wv-ct-panel__label span:last-child {
+  color: var(--wv-stone);
+  text-transform: none;
+  letter-spacing: 0.12em;
 }
 
-.wv .wv-ct-form .wv-lead {
-  max-width: 30em;
+/* two columns: the eye reads a pair per line, the message takes the width */
+.wv .wv-ct-form.wv-form {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(24px, 2.8vw, 36px) clamp(24px, 3vw, 44px);
+  margin-top: clamp(28px, 3.4vw, 44px);
+}
+
+.wv .wv-ct-form .wv-field input,
+.wv .wv-ct-form .wv-field select,
+.wv .wv-ct-form .wv-field textarea {
+  font-size: 15.5px;
+  padding-top: 10px;
+  padding-bottom: 12px;
+}
+
+.wv .wv-ct-form .wv-field textarea {
+  min-height: 7.5em;
+}
+
+/* the theme is chosen in the open, one line each, not hidden in a dropdown */
+.wv .wv-ct-theme .wv-check__options {
+  flex-direction: column;
+  gap: 0;
+}
+
+.wv .wv-ct-theme .wv-check__options label {
+  padding: 11px 0;
+  border-bottom: 1px solid var(--wv-ct-line);
+  font-size: 14.5px;
+}
+
+.wv .wv-ct-theme .wv-check__options input {
+  border-radius: 50%;
 }
 
 /* the count sits under the right edge of the textarea, quiet */
@@ -70,37 +156,92 @@
   font-family: var(--wv-mono);
   font-size: 10.5px;
   letter-spacing: 0.16em;
-  color: var(--wv-quiet);
+  color: var(--wv-stone);
 }
 
-/* ---------- 節2 資料 ---------- */
+/* the button and its footnote share one line */
+.wv .wv-ct-actions {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(20px, 2.6vw, 36px);
+  margin-top: clamp(4px, 1vw, 12px);
+}
+
+.wv .wv-ct-actions .wv-submit {
+  margin-top: 0;
+  min-width: 200px;
+  background: var(--wv-copper-light);
+  color: var(--wv-night);
+}
+
+.wv .wv-ct-actions .wv-submit:hover {
+  background: var(--wv-linen);
+}
+
+.wv .wv-ct-actions .wv-note {
+  color: var(--wv-stone);
+}
+
+/* ---------- 資料 — 紙の帯 ---------- */
 
 .wv .wv-ct-guide {
-  padding-top: calc(var(--wv-pad-y) * 0.7);
-  padding-bottom: calc(var(--wv-pad-y) * 0.7);
+  padding-top: calc(var(--wv-pad-y) * 0.75);
+  padding-bottom: calc(var(--wv-pad-y) * 0.75);
   scroll-margin-top: var(--header-h);
 }
 
-.wv .wv-ct-guide__form {
-  margin-top: clamp(32px, 3.8vw, 48px);
+.wv .wv-ct-grid--guide {
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  align-items: start;
 }
 
-/* ---------- 闇の薄い帯 ---------- */
-
-.wv .wv-ct-close {
-  padding-top: calc(var(--wv-pad-y) * 0.5);
-  padding-bottom: calc(var(--wv-pad-y) * 0.5);
-  color: var(--wv-linen);
+.wv .wv-ct-guide .wv-lead {
+  max-width: 24em;
 }
 
-.wv .wv-ct-close .wv-contact__facts {
-  margin: 0;
+.wv .wv-ct-guide__form.wv-form {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(20px, 2.4vw, 30px) clamp(24px, 3vw, 44px);
+  margin-top: 6px;
+  padding-top: 18px;
+  border-top: 1px solid var(--wv-line);
 }
 
 /* ---------- Responsive ---------- */
 
 @media (max-width: 1100px) {
-  .wv .wv-ct-entry__title {
-    font-size: clamp(21px, 3.4vw, 26px);
+  .wv .wv-ct-grid,
+  .wv .wv-ct-grid--guide {
+    grid-template-columns: 1fr;
+    gap: clamp(40px, 6vw, 64px);
+  }
+
+  .wv .wv-ct-copy,
+  .wv .wv-ct-panel {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .wv .wv-ct-hero {
+    min-height: 0;
+    padding-top: calc(var(--header-h) + clamp(56px, 8vw, 88px));
   }
 }
+
+@media (max-width: 600px) {
+  .wv .wv-ct-form.wv-form,
+  .wv .wv-ct-guide__form.wv-form {
+    grid-template-columns: 1fr;
+  }
+
+  .wv .wv-ct-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .wv .wv-ct-actions .wv-submit {
+    width: 100%;
+  }
+}
+

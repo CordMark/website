@@ -14,16 +14,9 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
-  { href: "#company-os", label: "Company OS" },
-  {
-    href: "#services",
-    label: "事業",
-    children: [
-      { href: "#services", label: "受託・共同開発" },
-      { href: "/service/ai-driven-development", label: "AI駆動開発支援" },
-      { href: "/service/ai-native-company", label: "組織・業務改善支援" },
-    ],
-  },
+  { href: "/service/development", label: "受託・共同開発" },
+  { href: "/service/support", label: "AI活用支援" },
+  { href: "/company-os", label: "Company OS" },
   { href: "/about", label: "私たちについて" },
 ];
 
@@ -36,6 +29,9 @@ export function Header() {
   const toggleRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
   const isHome = pathname === "/";
+  const isContact = pathname === "/contact";
+  // the top page and the contact page both open on a dark ground
+  const opensDark = isHome || isContact;
   const navHref = (href: string) => (href.startsWith("#") ? (isHome ? href : `/${href}`) : href);
   const brandHref = isHome ? "#top" : "/";
   const closeMenu = () => {
@@ -114,7 +110,7 @@ export function Header() {
   return (
     <header
       className={`site-header${isScrolled ? " is-scrolled" : ""}${isMenuOpen ? " is-menu-open" : ""}${
-        isHome && !isMenuOpen ? " site-header--over-dark" : ""
+        opensDark && !isMenuOpen ? " site-header--over-dark" : ""
       }`}
     >
       <a className="brand" href={brandHref} aria-label="CordMark home">
@@ -152,9 +148,11 @@ export function Header() {
       </nav>
 
       <div className="header-actions">
-        <a className="header-contact" href="/contact">
-          相談する
-        </a>
+        {!isContact && (
+          <a className="header-contact" href="/contact">
+            相談する
+          </a>
+        )}
         <button
           ref={toggleRef}
           className="mobile-menu-toggle"

@@ -1,0 +1,273 @@
+/* ------------------------------------------------------------
+   /beyond — Phase 2 の章。
+   共通の骨は app/wv-page.css、色と変数は app/home/home.css。
+   ここには この章だけのもの(Laplaceの盤、DotCraftの主題の罫)を書く。
+   旧 home.css の .wv-beyond__* 規則はここへ移した。
+   ------------------------------------------------------------ */
+
+.wv .wv-beyond__hero {
+  padding-top: clamp(48px, 7vw, 96px);
+}
+
+/* 事実の帯は扉の二列の下を通す */
+.wv .wv-beyond__hero .wv-facts {
+  margin-top: clamp(48px, 6vw, 88px);
+}
+
+/* ---------- 二列の節(Laplace) ---------- */
+
+.wv .wv-beyond__feature {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(40px, 6vw, 88px);
+  align-items: start;
+}
+
+.wv .wv-beyond__laplace {
+  color: var(--wv-linen);
+}
+
+.wv .wv-beyond__laplace .wv-lead {
+  color: #c9c3b4;
+}
+
+.wv .wv-beyond__copy {
+  min-width: 0;
+}
+
+/* 名前は明朝の大きな一語。字詰めは見出しにだけ */
+.wv .wv-beyond__name {
+  margin-top: 18px;
+  font-family: var(--wv-serif), "Hiragino Mincho ProN", serif;
+  font-weight: 300;
+  font-size: clamp(40px, 5.6vw, 76px);
+  line-height: 1.1;
+  letter-spacing: 0.12em;
+}
+
+.wv .wv-beyond__tagline {
+  margin-top: 16px;
+  font-family: var(--wv-serif), "Hiragino Mincho ProN", serif;
+  font-size: clamp(18px, 1.7vw, 22px);
+  line-height: 1.7;
+  letter-spacing: 0.05em;
+  font-feature-settings: "palt";
+}
+
+.wv .wv-beyond__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: clamp(28px, 3.2vw, 40px);
+}
+
+/* 従の二つ(一人で遊ぶときの相手、能力を測る場)は罫の二行で小さく。
+   箱にすると主のボタンと重さが並んでしまう */
+.wv .wv-beyond__minor {
+  margin: clamp(30px, 3.4vw, 44px) 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--wv-line-dark);
+}
+
+.wv .wv-beyond__minor > div {
+  display: grid;
+  grid-template-columns: minmax(94px, auto) minmax(0, 1fr);
+  column-gap: clamp(16px, 2vw, 28px);
+  align-items: baseline;
+  padding: 14px 0 15px;
+  border-bottom: 1px solid var(--wv-line-dark);
+}
+
+.wv .wv-beyond__minor dt {
+  font-family: var(--wv-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: var(--wv-stone);
+}
+
+.wv .wv-beyond__minor dd {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.85;
+  letter-spacing: 0.03em;
+  color: #c9c3b4;
+}
+
+.wv .wv-beyond__minor dd .wv-link {
+  margin-left: 14px;
+  font-size: 12px;
+}
+
+/* ---------- 盤面 ---------- */
+
+.wv .wv-beyond__board {
+  margin: 0;
+}
+
+.wv .wv-beyond__board a {
+  display: block;
+  overflow: hidden;
+  border: 1px solid rgba(237, 231, 218, 0.16);
+  background: #1f1d1a;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+}
+
+.wv .wv-beyond__board img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transform: scale(1.02);
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.wv .wv-beyond__board a:hover img {
+  transform: scale(1.05);
+}
+
+.wv .wv-beyond__board figcaption {
+  margin-top: 12px;
+  font-family: var(--wv-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: #7e8a80;
+  text-align: right;
+}
+
+/* ---------- DotCraft ---------- */
+
+/* 見出しと、その脇に小さく置くワードマーク。
+   大きく出すと主題より字面が勝ってしまうので、印の大きさに留める */
+.wv .wv-beyond__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(120px, 15vw, 210px);
+  gap: clamp(24px, 4vw, 64px);
+  align-items: start;
+}
+
+.wv .wv-beyond__head .wv-lead {
+  max-width: 34em;
+}
+
+.wv .wv-beyond__mark {
+  margin: 0;
+  justify-self: end;
+}
+
+.wv .wv-beyond__mark img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: sepia(0.6) saturate(0.7) contrast(0.95);
+  opacity: 0.85;
+}
+
+/* 三つの主題。番号と罫で一行ずつ */
+.wv .wv-beyond__themes {
+  margin: clamp(40px, 5vw, 64px) 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--wv-line);
+}
+
+.wv .wv-beyond__themes > li {
+  display: grid;
+  grid-template-columns: clamp(56px, 6vw, 84px) minmax(0, 0.9fr) minmax(0, 1.1fr);
+  column-gap: clamp(20px, 2.6vw, 40px);
+  align-items: baseline;
+  padding: clamp(20px, 2.2vw, 30px) 0;
+  border-bottom: 1px solid var(--wv-line);
+}
+
+.wv .wv-beyond__themes__num {
+  font-family: var(--wv-serif), "Hiragino Mincho ProN", serif;
+  font-size: clamp(18px, 1.8vw, 24px);
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+  color: var(--wv-accent);
+}
+
+.wv .wv-beyond__themes b {
+  font-family: var(--wv-mono);
+  font-size: clamp(12px, 1.2vw, 14px);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  color: var(--wv-ink);
+}
+
+.wv .wv-beyond__themes p {
+  margin: 0;
+  max-width: 30em;
+  font-size: 14px;
+  line-height: 1.95;
+  letter-spacing: 0.03em;
+  color: var(--wv-ink-2);
+}
+
+/* ---------- 終節 ---------- */
+
+.wv .wv-beyond__loop .wv-lead {
+  max-width: 32em;
+}
+
+.wv .wv-beyond__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px clamp(24px, 3vw, 44px);
+  margin-top: clamp(30px, 3.4vw, 44px);
+  padding-top: 22px;
+  border-top: 1px solid var(--wv-line);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 1000px) {
+  .wv .wv-beyond__themes > li {
+    grid-template-columns: clamp(44px, 8vw, 64px) minmax(0, 1fr);
+    row-gap: 10px;
+  }
+
+  .wv .wv-beyond__themes p {
+    grid-column: 2;
+  }
+}
+
+@media (max-width: 880px) {
+  .wv .wv-beyond__feature {
+    grid-template-columns: 1fr;
+  }
+
+  /* 盤は言葉のあとに見えればよい */
+  .wv .wv-beyond__board {
+    order: 2;
+  }
+
+  .wv .wv-beyond__head {
+    grid-template-columns: 1fr;
+  }
+
+  .wv .wv-beyond__mark {
+    order: -1;
+    justify-self: start;
+    width: clamp(140px, 40vw, 220px);
+  }
+}
+
+@media (max-width: 600px) {
+  .wv .wv-beyond__minor > div {
+    grid-template-columns: 1fr;
+    row-gap: 6px;
+  }
+
+  .wv .wv-beyond__minor dd .wv-link {
+    margin-left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wv .wv-beyond__board img,
+  .wv .wv-beyond__board a:hover img {
+    transition: none;
+    transform: none;
+  }
+}

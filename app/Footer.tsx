@@ -1,8 +1,8 @@
 /** 全体地図。サイトの節と下層ページを、順に並べる */
 const footerLinks = [
-  { label: "Company OS", href: "/#company-os" },
-  { label: "AI駆動開発支援", href: "/service/ai-driven-development" },
-  { label: "組織・業務改善支援", href: "/service/ai-native-company" },
+  { label: "受託・共同開発", href: "/service/development" },
+  { label: "AI活用支援", href: "/service/support" },
+  { label: "Company OS", href: "/company-os" },
   { label: "私たちについて", href: "/about" },
   { label: "Phase 2", href: "/beyond" },
   { label: "お問い合わせ", href: "/contact" },
@@ -37,9 +37,6 @@ export function Footer({ homeLinks = false, mark = homeLinks }: FooterProps) {
           </a>
         ))}
       </nav>
-      <a className="to-top" href="#top" aria-label="ページ上部へ戻る">
-        ↑
-      </a>
     </footer>
   );
 }

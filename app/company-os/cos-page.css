@@ -1,0 +1,637 @@
+/* ------------------------------------------------------------
+   /company-os — what only this chapter needs.
+   Shared parts live in app/wv-page.css. Hairlines and numerals,
+   never boxes; no picture of a screen that does not exist yet.
+   ------------------------------------------------------------ */
+
+.wv .wv-cos-hero {
+  padding-top: clamp(48px, 7vw, 96px);
+}
+
+.wv .wv-cos-hero .wv-facts {
+  margin-top: clamp(48px, 6vw, 88px);
+}
+
+/* ---------- 節1 場面 ---------- */
+
+.wv .wv-cos-scenes {
+  color: var(--wv-linen);
+}
+
+/* Four numbered rows, hung on one line that runs down the left. The line
+   is drawn downward as the reader scrolls through the list (scroll-driven
+   where the browser has it; otherwise it is simply there). Each row arrives
+   on its own: number and title first, the old way of working in a quiet
+   grey, then — a beat later — what Company OS does, in linen, and the knot
+   on the line lights copper at that moment. */
+.wv .wv-cos-scene {
+  position: relative;
+  margin: clamp(46px, 5.6vw, 76px) 0 0;
+  padding: 0 0 0 clamp(26px, 3.4vw, 46px);
+  list-style: none;
+  border-top: 1px solid var(--wv-line-dark);
+}
+
+.wv .wv-cos-scene::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 3px;
+  width: 1px;
+  background: var(--wv-line-dark);
+}
+
+/* the drawn line, over the faint one: copper, scaled down from the top */
+.wv .wv-cos-scene::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 3px;
+  width: 1px;
+  background: var(--wv-accent);
+  opacity: 0.55;
+  transform: scaleY(0);
+  transform-origin: top;
+}
+
+@supports (animation-timeline: view()) {
+  .wv .wv-cos-scene::after {
+    animation: wv-cos-rail linear both;
+    animation-timeline: view();
+    animation-range: entry 15% cover 80%;
+  }
+}
+
+@keyframes wv-cos-rail {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+.wv .wv-cos-scene > li {
+  position: relative;
+  display: grid;
+  grid-template-columns: clamp(64px, 7vw, 104px) minmax(0, 0.9fr) minmax(0, 1.3fr);
+  column-gap: clamp(24px, 3vw, 48px);
+  align-items: start;
+  padding: clamp(26px, 3vw, 40px) 0;
+  border-bottom: 1px solid var(--wv-line-dark);
+}
+
+.wv .wv-cos-scene__knot {
+  position: absolute;
+  top: calc(clamp(26px, 3vw, 40px) + 8px);
+  left: calc(clamp(26px, 3.4vw, 46px) * -1);
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--wv-accent);
+  border-radius: 50%;
+  background: var(--wv-accent);
+  box-shadow: 0 0 0 0 rgba(201, 138, 85, 0);
+}
+
+/* the deciding row is the one where the knot sits a little larger */
+.wv .wv-cos-scene > li.is-human .wv-cos-scene__knot {
+  width: 9px;
+  height: 9px;
+  left: calc(clamp(26px, 3.4vw, 46px) * -1 - 1px);
+  top: calc(clamp(26px, 3vw, 40px) + 7px);
+}
+
+.wv .wv-cos-scene__num {
+  font-family: var(--wv-serif), "Hiragino Mincho ProN", serif;
+  font-weight: 300;
+  font-size: clamp(28px, 3.4vw, 46px);
+  line-height: 1;
+  letter-spacing: 0.04em;
+  font-feature-settings: "palt";
+  color: var(--wv-stone);
+}
+
+.wv .wv-cos-scene > li.is-human .wv-cos-scene__num {
+  color: var(--wv-accent);
+}
+
+.wv .wv-cos-scene__who {
+  display: block;
+  font-family: var(--wv-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--wv-accent);
+}
+
+.wv .wv-cos-scene__main h3 {
+  margin-top: 12px;
+  font-family: var(--wv-serif), "Hiragino Mincho ProN", serif;
+  font-weight: 400;
+  font-size: clamp(19px, 2vw, 27px);
+  line-height: 1.45;
+  letter-spacing: 0.04em;
+  font-feature-settings: "palt";
+  color: var(--wv-linen);
+}
+
+.wv .wv-cos-scene__side {
+  padding-top: 6px;
+  max-width: 34em;
+}
+
+.wv .wv-cos-scene__side p {
+  font-size: 14px;
+  line-height: 1.95;
+  letter-spacing: 0.02em;
+}
+
+.wv .wv-cos-scene__side p i {
+  display: block;
+  margin-bottom: 4px;
+  font-family: var(--wv-mono);
+  font-style: normal;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--wv-stone);
+}
+
+.wv .wv-cos-scene__before {
+  color: #b3ada0;
+}
+
+/* a hairline between before and after: the moment the OS comes in */
+.wv .wv-cos-scene__after {
+  position: relative;
+  margin-top: 18px;
+  padding-top: 18px;
+  color: var(--wv-linen);
+}
+
+.wv .wv-cos-scene__after::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--wv-line-dark);
+  transform-origin: left;
+}
+
+.wv .wv-cos-scene__after i {
+  color: var(--wv-accent);
+}
+
+/* ---- arrival, in three beats ---- */
+
+/* the row itself comes in as every reveal does (home.css); inside it, the
+   old way is already there, and the new way follows a beat later */
+html[data-wv-reveal] .wv .wv-cos-scene > li[data-reveal] .wv-cos-scene__after {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.9s ease 0.55s, transform 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.55s;
+}
+
+html[data-wv-reveal] .wv .wv-cos-scene > li[data-reveal] .wv-cos-scene__after::before {
+  transform: scaleX(0);
+  transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1) 0.45s;
+}
+
+html[data-wv-reveal] .wv .wv-cos-scene > li[data-reveal] .wv-cos-scene__knot {
+  background: transparent;
+  transition: background-color 0.5s ease 0.6s, box-shadow 1.2s ease 0.6s;
+}
+
+html[data-wv-reveal] .wv .wv-cos-scene > li[data-reveal].is-in .wv-cos-scene__after {
+  opacity: 1;
+  transform: none;
+}
+
+html[data-wv-reveal] .wv .wv-cos-scene > li[data-reveal].is-in .wv-cos-scene__after::before {
+  transform: scaleX(1);
+}
+
+html[data-wv-reveal] .wv .wv-cos-scene > li[data-reveal].is-in .wv-cos-scene__knot {
+  background: var(--wv-accent);
+  box-shadow: 0 0 0 6px rgba(201, 138, 85, 0.14);
+}
+
+/* ---------- 節2 動かないもの ---------- */
+
+.wv .wv-cos-bounds .wv-index__row {
+  grid-template-columns: clamp(72px, 8vw, 120px) minmax(0, 1fr) minmax(0, 1.1fr);
+}
+
+.wv .wv-cos-bounds .wv-index__main h3 {
+  margin-top: 0;
+}
+
+/* ---------- 節3 AIネイティブ ---------- */
+
+.wv .wv-cos-native__lead {
+  max-width: 36em;
+}
+
+/* Four lines. Left, what handing out a tool looks like; right, what the
+   OS does instead; between them one hairline that ends in a copper arrow.
+   Each line arrives on its own as the reader reaches it: the left side
+   first, then the rule is drawn to the right, then the right side comes
+   up — and the left side steps back as it does. */
+.wv .wv-cos-shift {
+  margin-top: clamp(48px, 5.6vw, 80px);
+}
+
+.wv .wv-cos-shift__row {
+  display: grid;
+  grid-template-columns:
+    clamp(30px, 4vw, 52px) minmax(0, 0.9fr)
+    clamp(72px, 12vw, 180px) minmax(0, 1.1fr);
+  column-gap: clamp(10px, 1.6vw, 22px);
+  align-items: center;
+}
+
+.wv .wv-cos-shift__labels {
+  padding-bottom: 12px;
+}
+
+.wv .wv-cos-shift__labels .wv-cos-shift__from,
+.wv .wv-cos-shift__labels .wv-cos-shift__to {
+  font-family: var(--wv-mono);
+  font-size: 10.5px;
+  line-height: 1;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-feature-settings: normal;
+  color: var(--wv-quiet);
+}
+
+.wv .wv-cos-shift__labels .wv-cos-shift__from {
+  grid-column: 2;
+}
+
+.wv .wv-cos-shift__labels .wv-cos-shift__to {
+  grid-column: 4;
+  color: var(--wv-accent);
+}
+
+.wv .wv-cos-shift__rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-bottom: 1px solid var(--wv-line);
+}
+
+.wv .wv-cos-shift__rows > li {
+  padding: clamp(18px, 2.2vw, 28px) 0 clamp(20px, 2.4vw, 30px);
+  border-top: 1px solid var(--wv-line);
+}
+
+.wv .wv-cos-shift__num {
+  font-family: var(--wv-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--wv-quiet);
+}
+
+.wv .wv-cos-shift__from,
+.wv .wv-cos-shift__to {
+  font-family: var(--wv-serif), "Hiragino Mincho ProN", serif;
+  line-height: 1.6;
+  letter-spacing: 0.04em;
+  font-feature-settings: "palt";
+}
+
+/* the two sides are told apart by weight and colour, not by a box */
+.wv .wv-cos-shift__from {
+  font-weight: 300;
+  font-size: clamp(15px, 1.45vw, 19px);
+  color: var(--wv-quiet);
+}
+
+.wv .wv-cos-shift__to {
+  font-weight: 400;
+  font-size: clamp(17px, 1.75vw, 24px);
+  color: var(--wv-ink);
+}
+
+/* the hairline that ties the two sides, ending in the arrow */
+.wv .wv-cos-shift__tie {
+  display: flex;
+  align-items: center;
+  justify-self: stretch;
+  color: var(--wv-accent);
+}
+
+.wv .wv-cos-shift__tie::before {
+  content: "";
+  flex: 1 1 auto;
+  height: 1px;
+  background: var(--wv-accent);
+  opacity: 0.6;
+  transform-origin: left;
+}
+
+.wv .wv-cos-shift__tie svg {
+  flex: none;
+  width: 15px;
+  height: 15px;
+  margin-left: -3px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---- arrival, one line at a time, in three beats ---- */
+
+/* the row itself: only its rule and number, no lift (home.css lifts every
+   [data-reveal]; here the parts move instead) */
+html[data-wv-reveal] .wv .wv-cos-shift__rows > li[data-reveal] {
+  transform: none;
+  transition: opacity 0.6s ease;
+}
+
+html[data-wv-reveal] .wv .wv-cos-shift__rows > li[data-reveal] .wv-cos-shift__from {
+  opacity: 0;
+  transform: translateX(-10px);
+  color: var(--wv-ink);
+  transition: opacity 0.7s ease 0.1s, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.1s, color 0.9s ease 0.9s;
+}
+
+html[data-wv-reveal] .wv .wv-cos-shift__rows > li[data-reveal] .wv-cos-shift__tie::before {
+  transform: scaleX(0);
+  transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.5s;
+}
+
+html[data-wv-reveal] .wv .wv-cos-shift__rows > li[data-reveal] .wv-cos-shift__tie svg {
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.4s ease 1.1s, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) 1.1s;
+}
+
+html[data-wv-reveal] .wv .wv-cos-shift__rows > li[data-reveal] .wv-cos-shift__to {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.8s ease 1.15s, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1) 1.15s;
+}
+
+html[data-wv-reveal] .wv .wv-cos-shift__rows > li[data-reveal].is-in .wv-cos-shift__from {
+  opacity: 1;
+  transform: none;
+  color: var(--wv-quiet);
+}
+
+html[data-wv-reveal] .wv .wv-cos-shift__rows > li[data-reveal].is-in .wv-cos-shift__tie::before {
+  transform: scaleX(1);
+}
+
+html[data-wv-reveal] .wv .wv-cos-shift__rows > li[data-reveal].is-in .wv-cos-shift__tie svg,
+html[data-wv-reveal] .wv .wv-cos-shift__rows > li[data-reveal].is-in .wv-cos-shift__to {
+  opacity: 1;
+  transform: none;
+}
+
+/* the two notes under the table sit under the two sides of it */
+.wv .wv-cos-shift__notes {
+  display: grid;
+  grid-template-columns:
+    clamp(30px, 4vw, 52px) minmax(0, 0.9fr)
+    clamp(72px, 12vw, 180px) minmax(0, 1.1fr);
+  column-gap: clamp(10px, 1.6vw, 22px);
+  margin-top: 22px;
+}
+
+.wv .wv-cos-shift__notes .wv-cos-native__note:first-child {
+  grid-column: 2;
+}
+
+.wv .wv-cos-shift__notes .wv-cos-native__note:last-child {
+  grid-column: 4;
+}
+
+.wv .wv-cos-native__note {
+  margin: 0;
+  max-width: 28em;
+  font-size: 13px;
+  line-height: 1.9;
+  letter-spacing: 0.02em;
+  color: var(--wv-ink-2);
+}
+
+.wv .wv-cos-native__note i {
+  display: block;
+  margin-bottom: 6px;
+  font-family: var(--wv-mono);
+  font-style: normal;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--wv-quiet);
+}
+
+.wv .wv-cos-native__note.is-asset i {
+  color: var(--wv-accent);
+}
+
+.wv .wv-cos-native__note small {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--wv-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--wv-quiet);
+}
+
+/* the closing lines sit on the same grid as the table, starting where its
+   words start (after the numeral column) and running to the right edge, so
+   they line up with the table at every width instead of floating */
+.wv .wv-cos-native__foot {
+  display: grid;
+  grid-template-columns:
+    clamp(30px, 4vw, 52px) minmax(0, 0.9fr)
+    clamp(72px, 12vw, 180px) minmax(0, 1.1fr);
+  column-gap: clamp(10px, 1.6vw, 22px);
+  margin-top: clamp(56px, 6.4vw, 96px);
+  padding-top: clamp(28px, 3.2vw, 44px);
+  border-top: 1px solid var(--wv-line);
+}
+
+.wv .wv-cos-native__close,
+.wv .wv-cos-native__link {
+  grid-column: 2 / -1;
+}
+
+.wv .wv-cos-native__close {
+  max-width: 24em;
+  font-family: var(--wv-serif), "Hiragino Mincho ProN", serif;
+  font-weight: 400;
+  font-size: clamp(21px, 2.4vw, 34px);
+  line-height: 1.55;
+  letter-spacing: 0.04em;
+  font-feature-settings: "palt";
+}
+
+/* the last line is the name of the thing: in copper */
+.wv .wv-cos-native__close .wv-line:last-child {
+  color: var(--wv-accent);
+}
+
+/* four lines, so the third and fourth follow the second */
+html[data-wv-reveal] .wv [data-reveal] .wv-cos-native__close .wv-line:nth-child(3) > span {
+  transition-delay: 0.28s;
+}
+
+html[data-wv-reveal] .wv [data-reveal] .wv-cos-native__close .wv-line:nth-child(4) > span {
+  transition-delay: 0.42s;
+}
+
+.wv .wv-cos-native__link {
+  margin-top: clamp(20px, 2.4vw, 30px);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 880px) {
+  .wv .wv-cos-scene > li {
+    grid-template-columns: clamp(56px, 14vw, 88px) minmax(0, 1fr);
+    row-gap: 14px;
+  }
+
+  .wv .wv-cos-scene__num {
+    font-size: clamp(22px, 5vw, 30px);
+    padding-top: 2px;
+  }
+
+  .wv .wv-cos-scene__side {
+    grid-column: 2;
+    padding-top: 0;
+  }
+
+  .wv .wv-cos-bounds .wv-index__row {
+    grid-template-columns: clamp(56px, 14vw, 88px) minmax(0, 1fr);
+    row-gap: 10px;
+  }
+
+  .wv .wv-cos-bounds .wv-index__side {
+    grid-column: 2;
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .wv .wv-cos-scene {
+    padding-left: 22px;
+  }
+
+  .wv .wv-cos-scene__knot {
+    left: -22px;
+  }
+
+  .wv .wv-cos-scene > li.is-human .wv-cos-scene__knot {
+    left: -23px;
+  }
+
+  .wv .wv-cos-scene > li,
+  .wv .wv-cos-bounds .wv-index__row {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 10px;
+  }
+
+  .wv .wv-cos-scene__side,
+  .wv .wv-cos-bounds .wv-index__side {
+    grid-column: 1;
+  }
+
+  /* 縦に積む。番号は左に残り、from → to が上下に読める */
+  .wv .wv-cos-shift__labels {
+    display: none;
+  }
+
+  .wv .wv-cos-shift__row {
+    grid-template-columns: clamp(26px, 8vw, 36px) 20px minmax(0, 1fr);
+    column-gap: 6px;
+    row-gap: 8px;
+    align-items: start;
+  }
+
+  .wv .wv-cos-shift__num {
+    grid-row: 1 / span 2;
+  }
+
+  .wv .wv-cos-shift__from {
+    grid-column: 2 / -1;
+    grid-row: 1;
+    font-size: 14px;
+  }
+
+  .wv .wv-cos-shift__to {
+    grid-column: 3;
+    grid-row: 2;
+    font-size: 16px;
+  }
+
+  .wv .wv-cos-shift__tie {
+    grid-column: 2;
+    grid-row: 2;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 5px;
+  }
+
+  .wv .wv-cos-shift__tie::before {
+    display: none;
+  }
+
+  .wv .wv-cos-shift__tie svg {
+    width: 14px;
+    height: 14px;
+    margin-left: 0;
+    transform: rotate(90deg);
+  }
+
+  html[data-wv-reveal] .wv .wv-cos-shift__rows > li[data-reveal].is-in .wv-cos-shift__tie svg {
+    transform: rotate(90deg);
+  }
+
+  .wv .wv-cos-shift__notes {
+    grid-template-columns: 1fr;
+    row-gap: 20px;
+  }
+
+  .wv .wv-cos-shift__notes .wv-cos-native__note:first-child,
+  .wv .wv-cos-shift__notes .wv-cos-native__note:last-child {
+    grid-column: 1;
+  }
+
+  .wv .wv-cos-native__foot {
+    grid-template-columns: 1fr;
+  }
+
+  .wv .wv-cos-native__close,
+  .wv .wv-cos-native__link {
+    grid-column: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-wv-reveal] .wv .wv-cos-shift__rows > li[data-reveal] .wv-cos-shift__from,
+  html[data-wv-reveal] .wv .wv-cos-shift__rows > li[data-reveal] .wv-cos-shift__tie::before,
+  html[data-wv-reveal] .wv .wv-cos-shift__rows > li[data-reveal] .wv-cos-shift__tie svg,
+  html[data-wv-reveal] .wv .wv-cos-shift__rows > li[data-reveal] .wv-cos-shift__to {
+    transition: none;
+  }
+
+  .wv .wv-cos-scene::after {
+    animation: none;
+    transform: scaleY(1);
+  }
+
+  html[data-wv-reveal] .wv .wv-cos-scene > li[data-reveal] .wv-cos-scene__after,
+  html[data-wv-reveal] .wv .wv-cos-scene > li[data-reveal] .wv-cos-scene__after::before,
+  html[data-wv-reveal] .wv .wv-cos-scene > li[data-reveal] .wv-cos-scene__knot {
+    transition: none;
+  }
+}

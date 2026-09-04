@@ -13,7 +13,7 @@ const sans = Noto_Sans_JP({ subsets: ["latin"], weight: ["400", "500", "700"], v
 
 const pageTitle = "私たちについて | CordMark";
 const pageDescription =
-  "CordMarkは、テクノロジーによる物質的な充足を、精神的な豊かさへ還元することを目指す会社です。会社の意思と日々の仕事をつなぐCompany OSを主要商品に、ソフトウェア開発の現場からそれを始めています。";
+  "CordMarkは、2026年に横浜で始めた会社です。AIで上がった生産力を、人が考え、決め、創造する時間へ戻す。Company OSも開発の進め方も、まず自分たちの会社で使い、顧客の現場で確かめています。";
 
 export const metadata: Metadata = {
   title: pageTitle,
@@ -31,17 +31,18 @@ export const metadata: Metadata = {
   },
 };
 
-/** 扉の帯。会社そのものの事実だけ */
-const facts: Array<[string, ReactNode]> = [
-  ["会社名", <span className="wv-nowrap">CordMark株式会社</span>],
-  ["設立", "2026年7月"],
-  ["所在地", "神奈川県横浜市"],
-  [
-    "代表",
-    <>
-      <span className="wv-nowrap">橋本武士</span>、<span className="wv-nowrap">山本圭亮</span>
-    </>,
-  ],
+/** 節1 — 自分たちの会社と、顧客の現場。順番の話 */
+const grounds: Array<{ label: string; title: string; body: string }> = [
+  {
+    label: "01 · Ourselves",
+    title: "まず、自分たちで踏む。",
+    body: "Company OSも、AIを前提にした開発の進め方も、日々の自分たちの仕事で使う。使いにくいところ、決めきれないところが、提案より先に自分の手元に出る。",
+  },
+  {
+    label: "02 · The field",
+    title: "次に、顧客の現場で確かめる。",
+    body: "受託・共同開発と組織・業務改善の支援で、顧客の現場に入る。会社ごとに事情は違うので、自社で動いたものをそのまま持ち込まず、現場で残ったものだけを標準にする。",
+  },
 ];
 
 const principles = [
@@ -67,29 +68,17 @@ const principles = [
   },
 ];
 
-const horizons: Array<{ number: string; period: string; title: string; body: ReactNode }> = [
-  {
-    number: "01",
-    period: "PHASE 1 · AI-NATIVE",
-    title: "意思と実行を、つなぐ。",
-    body: (
-      <>
-        会社の意思決定と日々の仕事をつなぎ、人が判断と創造に集中できる状態を、ソフトウェア開発の現場からつくる。
-        <span className="wv-nowrap">Company OS、</span>組織・業務改善の支援、受託・共同開発。
-      </>
-    ),
-  },
-  {
-    number: "02",
-    period: "PHASE 2 · BEYOND",
-    title: "人に残る営みを、形にする。",
-    body: "技術が行き渡ったあとにも、人が自ら行う価値のある営みがある。仲間の心理を読み合う2v2の戦略ボードゲームLaplace、社会と人間の先を考えるメディアDotCraft。",
-  },
-];
-
+/** 会社の事実は、ここが正本 */
 const companyInfo: Array<[string, ReactNode]> = [
   ["会社名", "CordMark株式会社"],
-  ["代表者", "橋本武士、山本圭亮"],
+  [
+    "代表者",
+    <>
+      <span className="wv-nowrap">代表取締役CEO 橋本武士</span>
+      <br />
+      <span className="wv-nowrap">代表取締役CTO 山本圭亮</span>
+    </>,
+  ],
   ["設立", "2026年7月"],
   ["資本金", "80万円"],
   [
@@ -122,7 +111,7 @@ export default function AboutPage() {
     <div className={`wv wv-page ${serif.variable} ${sans.variable}`}>
       <RevealWatch />
       <main id="top" className="site-main">
-        {/* 扉 — 会社の名乗りと、名前そのもののマーク */}
+        {/* 扉 — 会社の名乗りと、名前そのもののマーク。帯は最小限の三項目 */}
         <section className="wv-section wv-about-hero" data-ground="paper" aria-labelledby="about-heading">
           <div className="wv-inner">
             <div className="wv-page__hero">
@@ -132,71 +121,60 @@ export default function AboutPage() {
                   余力を、人へ戻す。
                 </h1>
                 <p className="wv-lead">
-                  CordMarkは、テクノロジーによる物質的な充足を、精神的な豊かさへ還元することを目指す会社です。AIで生産力が上がったとき、その力を仕事量の拡大だけに使うのではなく、人が考え、決め、創造し、他者と関わる時間へ戻す。会社の意思と日々の仕事をつなぐ<span className="wv-nowrap">Company OS</span>を主要商品に、ソフトウェア開発の現場からそれを始めています。
+                  CordMarkは、2026年に横浜で始めた会社です。AIで生産力が上がった分を、仕事量の拡大ではなく、人が考え、決め、創造し、他者と関わる時間へ戻す。そのために会社の意思と日々の仕事をつなぐ<span className="wv-nowrap">Company OS</span>をつくり、まず自分たちの会社で使い、ソフトウェア開発の現場へ持ち込んでいます。
                 </p>
               </div>
               <aside className="wv-chapter wv-about-chapter" data-reveal="2" aria-label="この章の位置">
                 <CordMark className="wv-about-chapter__mark" title="CordMarkのマーク" />
                 <p className="wv-chapter__role">CORD MARK</p>
-                <p className="wv-chapter__note">会社の名前と、考え方の出どころ。</p>
-                <nav className="wv-chapter__links" aria-label="関連するページ">
-                  <a className="wv-link" href="/#origin">
-                    トップの考え方へ <Arrow />
-                  </a>
-                  <a className="wv-link" href="/beyond">
-                    Phase 2 <Arrow />
-                  </a>
-                </nav>
+                <p className="wv-chapter__note">社名は、土器に残る縄目から。</p>
               </aside>
             </div>
-            <dl className="wv-facts" data-reveal="3">
-              {facts.map(([key, value]) => (
-                <div key={key}>
-                  <dt>{key}</dt>
-                  <dd>{value}</dd>
-                </div>
-              ))}
-            </dl>
           </div>
         </section>
 
-        {/* 節1 Purpose — このページの唯一の闇。一文が一行ずつ現れ、罫が左から引かれる */}
+        {/* 節1 — 順番の話。二列を縦罫で継ぐ */}
         <section
-          className="wv-section wv-about-purpose"
-          data-ground="charcoal"
-          aria-labelledby="about-purpose-heading"
+          className="wv-section wv-about-practice"
+          data-ground="paper2"
+          aria-labelledby="about-practice-heading"
         >
           <div className="wv-inner">
             <div data-reveal>
-              <p className="wv-label">Purpose</p>
-              <h2 className="wv-h2 wv-lines wv-about-purpose__statement" id="about-purpose-heading">
-                <span className="wv-line">
-                  <span>
-                    テクノロジーによる
-                    <br className="wv-br-sm" />
-                    <span className="wv-nowrap">物質的な充足を、</span>
-                  </span>
-                </span>
-                <span className="wv-line">
-                  <span className="wv-nowrap">精神的な豊かさへ還元する。</span>
-                </span>
+              <p className="wv-label">Practice</p>
+              <h2 className="wv-h2" id="about-practice-heading">
+                <span className="wv-nowrap">顧客に出す前に、</span>
+                <br />
+                <span className="wv-nowrap">自分たちで使う。</span>
               </h2>
-            </div>
-            <div className="wv-about-purpose__body" data-reveal="2">
               <p className="wv-lead">
-                ツールを一つ増やしても、会社は速くなりません。変わるべきなのは、問いが答えに届き、判断が実行に届くまでの、仕事の流れそのものです。
-              </p>
-              <p className="wv-lead">
-                AIは、人の意思を現実へ運ぶ力であり、判断に置き換わるものではありません。誰が、何を根拠に決めたかが残り、次の判断の土台になる。その仕組みを自分たちの会社でまず動かし、顧客の現場に合わせて持ち込みます。
+                仕事の流れを組み替える提案は、外から眺めているだけでは書けません。詰まるのはたいてい、機能の不足ではなく、誰がいつ何を決めるかの取り決めのほうです。だから順番を決めています。
               </p>
             </div>
+            <div className="wv-split" data-reveal="2">
+              {grounds.map((ground) => (
+                <div key={ground.label}>
+                  <p className="wv-split__label">{ground.label}</p>
+                  <h3>{ground.title}</h3>
+                  <p>{ground.body}</p>
+                </div>
+              ))}
+            </div>
+            <p className="wv-about-practice__links" data-reveal="3">
+              <a className="wv-link" href="/company-os">
+                Company OS <Arrow />
+              </a>
+              <a className="wv-link" href="/#services">
+                三つの実践 <Arrow />
+              </a>
+            </p>
           </div>
         </section>
 
-        {/* 節2 Principles — 罫と番号の四行 */}
+        {/* 節2 — このページの唯一の闇。判断の仕方を、罫と番号の四行で */}
         <section
           className="wv-section wv-about-principles"
-          data-ground="paper"
+          data-ground="charcoal"
           aria-labelledby="about-principles-heading"
         >
           <div className="wv-inner">
@@ -205,6 +183,9 @@ export default function AboutPage() {
               <h2 className="wv-h2" id="about-principles-heading">
                 判断の仕方。
               </h2>
+              <p className="wv-lead">
+                速く動く会社ほど、判断の数が増えます。二人の代表と、その場にいる人が迷ったときに戻る四つを、先に決めています。
+              </p>
             </div>
             <ol className="wv-index" data-reveal="2">
               {principles.map((principle) => (
@@ -222,49 +203,7 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* 節3 Origin — 名前の出どころと、二つの段階 */}
-        <section className="wv-section wv-about-origin" data-ground="paper2" aria-labelledby="about-origin-heading">
-          <div className="wv-inner">
-            <div data-reveal>
-              <p className="wv-label">Origin</p>
-              <h2 className="wv-h2" id="about-origin-heading">
-                <span>
-                  一万年前、
-                  <br className="wv-br-sm" />
-                  <span className="wv-nowrap">人は余った時間で、</span>
-                </span>
-                <br />
-                <span className="wv-nowrap">土器に縄目を刻んだ。</span>
-              </h2>
-              <p className="wv-lead">
-                縄文の土器に残る縄目、cord
-                mark。豊かな資源を人の豊かな暮らしへつなげた、豊かさの原型です。CordMarkの名前は、そこから来ています。
-              </p>
-              <p className="wv-lead">
-                AIが生む余力で、私たちは何を刻むのか。その問いを、二つの段階で考えています。
-              </p>
-            </div>
-            <div className="wv-split" data-reveal="2">
-              <div>
-                <p className="wv-split__label">{horizons[0].period}</p>
-                <h3>{horizons[0].title}</h3>
-                <p>{horizons[0].body}</p>
-              </div>
-              <div>
-                <p className="wv-split__label">{horizons[1].period}</p>
-                <h3>{horizons[1].title}</h3>
-                <p>{horizons[1].body}</p>
-                <p className="wv-about-origin__link">
-                  <a className="wv-link" href="/beyond">
-                    Phase 2を見る <Arrow />
-                  </a>
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* 節4 Company — 罫だけの表 */}
+        {/* 節3 — 会社概要。事実はここに一度だけ書く。名前の由来は一段落で、続きはトップへ */}
         <section className="wv-section wv-about-company" data-ground="paper" aria-labelledby="about-company-heading">
           <div className="wv-inner">
             <div data-reveal>
@@ -272,6 +211,14 @@ export default function AboutPage() {
               <h2 className="wv-h2" id="about-company-heading">
                 会社概要
               </h2>
+              <p className="wv-lead wv-about-company__origin">
+                社名は、縄文の土器に残る縄目、cord markから。余った力が暮らしの形になった、いちばん古い痕跡です。
+              </p>
+              <p className="wv-about-company__link">
+                <a className="wv-link" href="/#origin">
+                  名前の話 <Arrow />
+                </a>
+              </p>
             </div>
             <dl className="wv-facts wv-facts--rows" data-reveal="2">
               {companyInfo.map(([label, value]) => (

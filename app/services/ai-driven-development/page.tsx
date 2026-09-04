@@ -1,5 +1,5 @@
 import { permanentRedirect } from "next/navigation";
 
 export default function LegacyAiDrivenDevelopmentPage() {
-  permanentRedirect("/service/ai-driven-development");
+  permanentRedirect("/service/support#dev");
 }
