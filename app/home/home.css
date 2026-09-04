@@ -24,10 +24,7 @@
   --wv-accent: #8f5833;
   --wv-quiet: #666158;
   --wv-mark: #c4553a;
-  --wv-pad-y: clamp(80px, 11vw, 160px);
-  /* 地の境目を溶かす帯。節の余白より必ず短く保ち、本文には決して掛けない。
-     帯は縦、余白は横で決まるので、min() で低いほうに合わせる */
-  --wv-blend: min(clamp(88px, 12vh, 150px), var(--wv-pad-y));
+  --wv-pad-y: clamp(72px, 9.5vw, 136px);
   --wv-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --wv-x: clamp(22px, 5vw, 88px);
   --wv-max: 1240px;
@@ -242,6 +239,14 @@
   line-height: 1.5;
   letter-spacing: 0.04em;
   margin-top: 22px;
+}
+
+/* 下の節の見出しは Hero に負けない大きさに。Company OS の節は別扱い */
+.wv .wv-section .wv-h2 {
+  font-size: clamp(30px, 4.1vw, 58px);
+  line-height: 1.38;
+  letter-spacing: 0.03em;
+  margin-top: 26px;
 }
 
 .wv .wv-lead {
@@ -463,63 +468,11 @@ body:has(.wv-page) .site-header {
   --wv-mark: #e2643f;
 }
 
-/* Boundaries between a dark and a light ground dissolve instead of cutting.
-   The blend lives inside the dark section (z-index -1: above its own
-   background, below its text), because a pseudo-element hanging outside would
-   be painted over by the next section.
-   溶かす先は隣の節の地の色。paper でない隣を持つ節だけ、markup 側で
-   data-blend-down / data-blend-up を宣言する(節の並び順と同じ場所に置く)。 */
+/* 地の境目は切る。暗い節と明るい節のあいだにぼかしは置かない */
 .wv [data-ground="night"],
 .wv [data-ground="charcoal"] {
   position: relative;
   isolation: isolate;
-  --wv-blend-up: var(--wv-paper);
-  --wv-blend-down: var(--wv-paper);
-}
-
-.wv [data-blend-up="paper2"] {
-  --wv-blend-up: var(--wv-paper-2);
-}
-
-.wv [data-blend-down="paper2"] {
-  --wv-blend-down: var(--wv-paper-2);
-}
-
-.wv [data-ground="night"]::before,
-.wv [data-ground="charcoal"]::before,
-.wv [data-ground="night"]::after,
-.wv [data-ground="charcoal"]::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  z-index: -1;
-  height: var(--wv-blend);
-  pointer-events: none;
-}
-
-.wv [data-ground="night"]::before,
-.wv [data-ground="charcoal"]::before {
-  top: 0;
-  /* through a warm stone, never a neutral grey */
-  background: linear-gradient(to bottom, var(--wv-blend-up), #7d7263 42%, transparent);
-}
-
-.wv [data-ground="night"]::after,
-.wv [data-ground="charcoal"]::after {
-  bottom: 0;
-  background: linear-gradient(to top, var(--wv-blend-down), #7d7263 42%, transparent);
-}
-
-/* The hero has nothing above it to blend into. */
-.wv .wv-hero::before {
-  content: none;
-}
-
-/* 隣も暗い節なら溶かさない(Hero → Company OS) */
-.wv [data-blend-down="none"]::after,
-.wv [data-blend-up="none"]::before {
-  content: none;
 }
 
 .wv .site-footer__mark {
@@ -1053,79 +1006,125 @@ body:has(.wv-page) .site-header {
 
 .wv .wv-services__head {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
   gap: clamp(32px, 5vw, 80px);
   align-items: end;
 }
 
+.wv .wv-services__head .wv-lead {
+  margin-top: 0;
+  padding-bottom: 6px;
+}
+
 .wv .wv-practices {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0;
-  margin-top: clamp(40px, 5vw, 64px);
-  border: 1px solid var(--wv-line);
-  background: var(--wv-paper);
+  position: relative;
+  margin-top: clamp(48px, 6vw, 80px);
 }
 
+.wv .wv-practices__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--wv-line);
+}
+
+/* one row per practice: the numeral, the title, the words; a hairline
+   between rows, and the row lifts to the lighter paper under the pointer */
 .wv .wv-practice {
-  display: flex;
-  flex-direction: column;
-  padding: 30px 28px 32px;
-  border-right: 1px solid var(--wv-line);
-  transition: background 0.3s ease;
+  position: relative;
+  display: grid;
+  grid-template-columns: clamp(72px, 8vw, 120px) minmax(0, 1.05fr) minmax(0, 1fr);
+  column-gap: clamp(24px, 3vw, 48px);
+  align-items: start;
+  padding: clamp(24px, 2.8vw, 36px) 0;
+  border-bottom: 1px solid var(--wv-line);
+  color: var(--wv-ink);
 }
 
-.wv .wv-practice:last-child {
-  border-right: 0;
+.wv .wv-practice::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(50% - 50vw);
+  right: calc(50% - 50vw);
+  z-index: -1;
+  background: var(--wv-paper);
+  opacity: 0;
+  transition: opacity 0.35s ease;
 }
 
-.wv .wv-practice:hover {
-  background: #f6f2e9;
+.wv .wv-practice h3,
+.wv .wv-practice__num {
+  transition: color 0.35s ease;
 }
 
-.wv .wv-practice__meta {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  font-family: var(--wv-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  color: var(--wv-quiet);
+@media (hover: hover) {
+  .wv .wv-practice:hover::before {
+    opacity: 1;
+  }
+
+  .wv .wv-practice:hover h3,
+  .wv .wv-practice:hover .wv-practice__num {
+    color: var(--wv-accent);
+  }
 }
 
-.wv .wv-practice h3 {
-  margin-top: 16px;
-  font-size: 20px;
-  font-weight: 500;
-  line-height: 1.5;
+.wv .wv-practice__num {
+  font-family: var(--wv-serif), "Hiragino Mincho ProN", serif;
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 400;
+  line-height: 0.9;
   letter-spacing: 0.02em;
 }
 
-.wv .wv-practice p {
-  flex: 1;
+.wv .wv-practice__role,
+.wv .wv-practice__hop {
+  display: block;
+  font-family: var(--wv-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--wv-quiet);
+  transition: color 0.35s ease;
+}
+
+.wv .wv-practice h3 {
   margin-top: 12px;
+  font-family: var(--wv-serif), "Hiragino Mincho ProN", serif;
+  font-size: clamp(22px, 2.2vw, 30px);
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+}
+
+.wv .wv-practice__side {
+  display: flex;
+  flex-direction: column;
+  padding-top: 6px;
+}
+
+.wv .wv-practice p {
+  max-width: 30em;
   font-size: 14px;
-  line-height: 1.9;
+  line-height: 1.95;
   color: var(--wv-ink-2);
+}
+
+.wv .wv-practice__hop {
+  margin-top: 24px;
+  letter-spacing: 0.12em;
+}
+
+/* the last step closes the loop: back to 01, in copper */
+.wv .wv-practice__hop.is-back {
+  color: var(--wv-accent);
 }
 
 .wv .wv-practice__links {
   display: flex;
   flex-wrap: wrap;
   gap: 10px 22px;
-  margin-top: 24px;
-}
-
-.wv .wv-practice .wv-link {
-  align-self: flex-start;
-}
-
-.wv .wv-practice__loop {
-  margin-top: 28px;
-  font-size: 13px;
-  line-height: 1.9;
-  letter-spacing: 0.03em;
-  color: var(--wv-quiet);
+  margin-top: 18px;
 }
 
 /* ---------- Origin ---------- */
@@ -1133,154 +1132,250 @@ body:has(.wv-page) .site-header {
 .wv .wv-origin {
   position: relative;
   color: var(--wv-linen);
+  padding-top: calc(var(--wv-pad-y) * 0.85);
+  padding-bottom: calc(var(--wv-pad-y) * 0.85);
 }
 
+/* the cord's impression in the clay: a band across the top, fading out
+   before the copy, not a texture over the whole ground */
+.wv .wv-impression {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -2;
+  width: 100%;
+  height: 62%;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, #000 45%, transparent);
+  mask-image: linear-gradient(to bottom, #000 45%, transparent);
+}
+
+.wv .wv-impression__ticks {
+  opacity: 0.075;
+}
+
+/* pattern content inherits from the pattern element, not from the rect that uses it */
+.wv .wv-impression pattern {
+  stroke: var(--wv-linen);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  fill: none;
+}
+
+/* the question wide and left, its short answer in a narrow column at the
+   right, then Purpose across the whole width under one rule */
 .wv .wv-origin__grid {
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: clamp(32px, 5vw, 80px);
-  align-items: end;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(20px, 2.5vw, 32px);
+}
+
+.wv .wv-origin__head {
+  grid-column: 1 / -1;
+}
+
+.wv .wv-origin__head .wv-label {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.wv .wv-origin__mark {
+  width: 34px;
+  height: auto;
+  color: var(--wv-linen);
 }
 
 .wv .wv-origin .wv-h2 {
   color: var(--wv-linen);
 }
 
-.wv .wv-origin .wv-lead {
+.wv .wv-origin__body {
+  grid-column: 7 / -1;
+  margin-top: clamp(24px, 2.8vw, 36px);
+  max-width: 30em;
   color: #c9c3b4;
 }
 
+/* the answer: one rule, drawn from the left as it arrives; the question
+   small above the statement, one line of grounds and a way to the rest */
 .wv .wv-origin__purpose {
-  padding: clamp(28px, 3vw, 40px) clamp(28px, 3vw, 40px) clamp(30px, 3.2vw, 44px);
-  border: 1px solid rgba(237, 231, 218, 0.16);
-  background: rgba(15, 14, 12, 0.42);
+  position: relative;
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(20px, 2.5vw, 32px);
+  margin-top: clamp(44px, 5vw, 64px);
+  padding-top: clamp(28px, 3vw, 36px);
+}
+
+.wv .wv-origin__purpose::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: rgba(237, 231, 218, 0.22);
+  transform-origin: 0 50%;
+  transform: scaleX(1);
+}
+
+.wv .wv-origin__purpose .wv-label {
+  grid-column: 1 / -1;
+}
+
+.wv .wv-origin__question {
+  grid-column: 1 / -1;
+  margin-top: 22px;
+  font-family: var(--wv-serif), "Hiragino Mincho ProN", serif;
+  font-size: clamp(16px, 1.3vw, 19px);
+  letter-spacing: 0.06em;
+  color: #c9c3b4;
 }
 
 .wv .wv-origin__statement {
+  grid-column: 1 / 9;
   margin-top: 18px;
   font-family: var(--wv-serif), "Hiragino Mincho ProN", serif;
   font-weight: 400;
-  font-size: clamp(20px, 2.1vw, 30px);
-  line-height: 1.6;
-  letter-spacing: 0.05em;
+  font-size: clamp(24px, 2.9vw, 42px);
+  line-height: 1.5;
+  letter-spacing: 0.04em;
   font-feature-settings: "palt";
   color: var(--wv-linen);
 }
 
-.wv .wv-origin__purpose > p:last-child {
-  margin-top: 18px;
+/* the grounds and the way to the rest: beside the statement, set to its foot */
+.wv .wv-origin__aside {
+  grid-column: 9 / -1;
+  grid-row: 3;
+  align-self: end;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+  padding-bottom: 6px;
+}
+
+.wv .wv-origin__ground {
+  max-width: 22em;
   font-size: 14px;
   line-height: 2;
   letter-spacing: 0.03em;
   color: #c9c3b4;
 }
 
+/* ---------- Lines that arrive one at a time ---------- */
+
+/* each line is clipped to its own box and slides up into it; the second
+   line a beat after the first. Only once the block has been revealed. */
+.wv .wv-lines .wv-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+.wv .wv-lines .wv-line > span {
+  display: block;
+}
+
+html[data-wv-reveal] .wv [data-reveal] .wv-lines .wv-line > span {
+  transform: translateY(110%);
+  transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html[data-wv-reveal] .wv [data-reveal] .wv-lines .wv-line:nth-child(2) > span {
+  transition-delay: 0.14s;
+}
+
+html[data-wv-reveal] .wv [data-reveal].is-in .wv-lines .wv-line > span {
+  transform: none;
+}
+
+html[data-wv-reveal] .wv .wv-origin__purpose[data-reveal]::before {
+  transform: scaleX(0);
+  transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html[data-wv-reveal] .wv .wv-origin__purpose[data-reveal].is-in::before {
+  transform: scaleX(1);
+}
+
 /* ---------- Two horizons ---------- */
 
-.wv .wv-horizons__grid {
+/* Two sheets of paper side by side: NOW on the lighter one, BEYOND on the
+   darker, one hairline at the seam. The seam is the horizon. */
+.wv .wv-horizons {
+  padding: 0;
+  background: linear-gradient(90deg, var(--wv-paper) 50%, var(--wv-paper-2) 50%);
+}
+
+.wv .wv-horizons__field {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(28px, 4vw, 56px);
-  margin-top: clamp(40px, 5vw, 64px);
 }
 
 .wv .wv-horizon {
-  position: relative;
   display: flex;
   flex-direction: column;
-  padding: 30px 30px 32px;
-  border: 1px solid var(--wv-line);
-  background: var(--wv-paper-2);
-  transition:
-    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
-    border-color 0.4s ease,
-    box-shadow 0.55s ease,
-    opacity 0.4s ease;
+  padding: var(--wv-pad-y) var(--wv-x);
 }
 
+/* each half keeps its copy on the page grid: the outer edge lines up with
+   the other sections, the inner edge keeps a gap from the seam */
 .wv .wv-horizon.is-now {
-  border-color: var(--wv-copper);
+  padding-left: max(var(--wv-x), calc(50vw - var(--wv-max) / 2));
+  padding-right: clamp(32px, 4vw, 64px);
+  background: var(--wv-paper);
+  color: var(--wv-ink);
 }
 
-/* Hover: 上辺に撚り糸が左から右へ渡り、Cardがわずかに浮く */
-.wv .wv-horizon::before {
-  content: "";
-  position: absolute;
-  left: -1px;
-  right: -1px;
-  top: -2px;
-  height: 4px;
-  background: repeating-linear-gradient(
-    -60deg,
-    #a8683c 0 5px,
-    #e6d5b3 5px 8px,
-    #4e6b57 8px 11px,
-    #d8c39f 11px 14px
-  );
-  background-size: 28px 100%;
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-  pointer-events: none;
+.wv .wv-horizon.is-beyond {
+  padding-left: clamp(32px, 4vw, 64px);
+  padding-right: max(var(--wv-x), calc(50vw - var(--wv-max) / 2));
+  border-left: 1px solid #d3cbbb;
+  background: var(--wv-paper-2);
+  color: var(--wv-ink-2);
 }
 
-.wv .wv-horizon::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(120% 90% at 0% 0%, rgba(168, 104, 60, 0.1), transparent 60%);
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  pointer-events: none;
+.wv .wv-horizon.is-beyond .wv-horizon__title,
+.wv .wv-horizon.is-beyond h3 {
+  color: var(--wv-ink-2);
 }
 
-.wv .wv-horizon:hover {
-  transform: translateY(-6px);
-  border-color: var(--wv-copper);
-  box-shadow: 0 24px 48px -28px rgba(38, 35, 31, 0.35);
-}
-
-.wv .wv-horizon:hover::before {
-  transform: scaleX(1);
-  animation: wv-twist 1.6s linear 0.7s infinite;
-}
-
-.wv .wv-horizon:hover::after {
-  opacity: 1;
-}
-
-@keyframes wv-twist {
-  to {
-    background-position: 28px 0;
-  }
-}
-
-.wv .wv-horizons__grid:has(.wv-horizon:hover) .wv-horizon:not(:hover) {
-  opacity: 0.6;
-}
-
-.wv .wv-horizon > * {
-  position: relative;
-  z-index: 1;
-}
-
-.wv .wv-horizon:hover .wv-horizon__meta {
-  color: var(--wv-accent);
-}
-
-.wv .wv-horizon__meta span:last-child {
-  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), color 0.4s ease;
-}
-
-.wv .wv-horizon:hover .wv-horizon__meta span:last-child {
-  transform: translateX(-6px);
-}
-
-.wv .wv-horizon:hover .wv-horizon__links .wv-link {
+.wv .wv-horizon .wv-label {
+  display: flex;
+  justify-content: space-between;
   gap: 16px;
-  color: var(--wv-accent);
+}
+
+.wv .wv-horizon__where {
+  font-family: var(--wv-mono);
+  font-weight: 400;
+  letter-spacing: 0.24em;
+  color: var(--wv-quiet);
+}
+
+.wv .wv-horizon.is-beyond .wv-label {
+  justify-content: flex-end;
+}
+
+/* the one sentence, split by the seam */
+.wv .wv-horizon__title {
+  display: flex;
+  flex-direction: column;
+  color: inherit;
+}
+
+.wv .wv-horizon__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin-top: clamp(40px, 5vw, 72px);
 }
 
 .wv .wv-horizon__meta {
@@ -1289,54 +1384,162 @@ body:has(.wv-page) .site-header {
   font-family: var(--wv-mono);
   font-size: 11px;
   letter-spacing: 0.14em;
-  color: var(--wv-quiet);
-}
-
-.wv .wv-horizon.is-now .wv-horizon__meta {
   color: var(--wv-accent);
 }
 
 .wv .wv-horizon h3 {
-  margin-top: 16px;
+  margin-top: 22px;
   font-family: var(--wv-serif), serif;
   font-weight: 400;
-  font-size: clamp(22px, 2.2vw, 28px);
-  line-height: 1.5;
+  font-size: clamp(24px, 2.4vw, 34px);
+  line-height: 1.45;
   letter-spacing: 0.04em;
 }
 
-.wv .wv-horizon p {
+.wv .wv-horizon p:not(.wv-label):not(.wv-horizon__title) {
   flex: 1;
-  margin-top: 14px;
+  max-width: 30em;
+  margin-top: 16px;
   font-size: 14px;
   line-height: 2;
   color: var(--wv-ink-2);
 }
 
+
 .wv .wv-horizon__links {
   display: flex;
   flex-wrap: wrap;
   gap: 12px 26px;
-  margin-top: 22px;
+  margin-top: 26px;
 }
 
 .wv .wv-horizon__links .wv-link {
   color: var(--wv-ink);
 }
 
-/* ---------- Contact ---------- */
-
-.wv .wv-contact__grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.2fr) auto;
-  gap: clamp(32px, 5vw, 80px);
-  align-items: end;
+.wv .wv-horizon.is-beyond .wv-link {
+  color: var(--wv-ink-2);
 }
 
-/* 1列に畳んだとき、Grid の item は既定で段いっぱいに伸びる。Hero の同じ
-   Button は 163px なので、こちらも文字の幅で止める */
-.wv .wv-contact__grid .wv-button {
-  justify-self: start;
+/* ---------- Contact ---------- */
+
+/* the page closes in the dark it opened in: Contact and the footer are one ground */
+.wv .wv-contact {
+  color: var(--wv-linen);
+  padding-bottom: calc(var(--wv-pad-y) * 0.7);
+}
+
+.wv .wv-contact .wv-h2 {
+  color: var(--wv-linen);
+}
+
+.wv .wv-section .wv-h2--xl {
+  font-size: clamp(32px, 5.6vw, 80px);
+  line-height: 1.28;
+  letter-spacing: 0.02em;
+}
+
+/* the words that ask, and the one thing to press, on one line */
+.wv .wv-contact__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: clamp(32px, 5vw, 80px);
+  margin-top: clamp(32px, 4vw, 48px);
+}
+
+.wv .wv-contact .wv-lead {
+  margin-top: 0;
+  max-width: 30em;
+  color: #c9c3b4;
+}
+
+.wv .wv-contact__cta {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  padding: 22px 40px;
+  background: var(--wv-linen);
+  color: var(--wv-night);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  transition: background 0.25s ease, gap 0.25s ease;
+}
+
+.wv .wv-contact__cta:hover {
+  background: var(--wv-copper-light);
+  gap: 26px;
+}
+
+.wv .wv-contact__cta svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* mail and office: one quiet line at the foot */
+.wv .wv-contact__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px clamp(40px, 5vw, 72px);
+  margin: clamp(64px, 8vw, 112px) 0 0;
+  font-family: var(--wv-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--wv-quiet);
+}
+
+.wv .wv-contact__facts > div {
+  display: flex;
+  gap: 18px;
+}
+
+.wv .wv-contact__facts dt {
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.wv .wv-contact__facts dd {
+  margin: 0;
+  color: var(--wv-linen);
+}
+
+.wv .wv-contact__facts a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(237, 231, 218, 0.3);
+  transition: border-color 0.2s ease;
+}
+
+.wv .wv-contact__facts a:hover {
+  border-color: var(--wv-copper-light);
+}
+
+/* ---------- Reveal on arrival ---------- */
+
+html[data-wv-reveal] .wv [data-reveal] {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html[data-wv-reveal] .wv [data-reveal="2"] {
+  transition-delay: 0.12s;
+}
+
+html[data-wv-reveal] .wv [data-reveal="3"] {
+  transition-delay: 0.24s;
+}
+
+html[data-wv-reveal] .wv [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
 }
 
 /* ---------- Footer within the new palette ---------- */
@@ -1346,6 +1549,11 @@ body:has(.wv-page) .site-header {
   z-index: 1;
   color: var(--wv-linen);
   background: var(--wv-night);
+  border-top: 1px solid rgba(237, 231, 218, 0.14);
+}
+
+.wv .site-footer .site-footer__brand {
+  border-right-color: rgba(237, 231, 218, 0.14);
 }
 
 /* globals.css には、差し替える前の紺のPaletteの色が残っている */
@@ -1361,17 +1569,14 @@ body:has(.wv-page) .site-header {
 /* ---------- Responsive ---------- */
 
 @media (max-width: 1100px) {
-  .wv .wv-practices {
-    grid-template-columns: 1fr;
-  }
-
   .wv .wv-practice {
-    border-right: 0;
-    border-bottom: 1px solid var(--wv-line);
+    grid-template-columns: clamp(56px, 8vw, 96px) minmax(0, 1fr);
+    row-gap: 18px;
   }
 
-  .wv .wv-practice:last-child {
-    border-bottom: 0;
+  .wv .wv-practice__side {
+    grid-column: 2;
+    padding-top: 0;
   }
 }
 
@@ -1407,33 +1612,76 @@ body:has(.wv-page) .site-header {
   }
 
   .wv .wv-os__grid,
-  .wv .wv-services__head,
-  .wv .wv-origin__grid,
-  .wv .wv-horizons__grid,
-  .wv .wv-contact__grid {
+  .wv .wv-services__head {
     grid-template-columns: 1fr;
+  }
+
+  .wv .wv-services__head .wv-lead {
+    margin-top: 24px;
+  }
+
+  .wv .wv-origin__grid,
+  .wv .wv-origin__purpose {
+    grid-template-columns: 1fr;
+  }
+
+  .wv .wv-origin__body,
+  .wv .wv-origin__statement,
+  .wv .wv-origin__aside {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+
+  .wv .wv-origin__aside {
+    margin-top: 24px;
+  }
+
+  /* stacked: the lighter sheet above, the darker below; the seam is a rule */
+  .wv .wv-horizons {
+    background: none;
+  }
+
+  .wv .wv-horizon.is-beyond {
+    border-left: 0;
+    border-top: 1px solid #d3cbbb;
+  }
+
+  .wv .wv-horizons__field {
+    grid-template-columns: 1fr;
+  }
+
+  .wv .wv-horizon.is-now,
+  .wv .wv-horizon.is-beyond {
+    padding: var(--wv-pad-y) var(--wv-x);
+  }
+
+  .wv .wv-horizon.is-beyond .wv-label {
+    justify-content: flex-start;
+  }
+
+
+  .wv .wv-contact__row {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .wv .wv-horizon,
-  .wv .wv-horizon::before,
-  .wv .wv-horizon__meta span:last-child {
+  html[data-wv-reveal] .wv [data-reveal],
+  html[data-wv-reveal] .wv [data-reveal] .wv-lines .wv-line > span,
+  html[data-wv-reveal] .wv .wv-origin__purpose[data-reveal]::before {
     transition: none;
-  }
-  .wv .wv-horizon:hover {
-    transform: none;
-  }
-  .wv .wv-horizon:hover::before {
-    animation: none;
   }
 
   .wv .wv-link,
   .wv .wv-button,
-  .wv .wv-practice,
+  .wv .wv-practice::before,
+  .wv .wv-practice h3,
+  .wv .wv-practice__num,
   .wv .wv-os__steps li {
     transition: none;
   }
+
 
   .wv .wv-hero {
     height: auto;
@@ -1457,18 +1705,19 @@ body:has(.wv-page) .site-header {
   }
 }
 
-/* ---------- Brand mark ---------- */
-
-.wv .wv-origin__mark {
-  display: block;
-  width: 104px;
-  height: auto;
-  margin-bottom: 28px;
-  color: var(--wv-linen);
-}
-
 .wv .wv-nowrap {
   display: inline-block;
+}
+
+/* a line break that only exists on a narrow screen */
+.wv .wv-br-sm {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .wv .wv-br-sm {
+    display: inline;
+  }
 }
 
 

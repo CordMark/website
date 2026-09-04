@@ -4,6 +4,8 @@ import { CompanyOsCanvas } from "./home/CompanyOsCanvas";
 import { CordMark } from "./home/CordMark";
 import { GroundWatch } from "./home/GroundWatch";
 import { HeroCord } from "./home/HeroCord";
+import { CordImpression } from "./home/CordImpression";
+import { RevealWatch } from "./home/RevealWatch";
 import "./home/home.css";
 
 const serif = Noto_Serif_JP({
@@ -67,6 +69,7 @@ const practices = [
     body: "顧客の具体的な課題に応えるアプリ・システムを開発する。現場を理解し、信頼を築き、そこで得た知見を支援とProductへつなぐ。",
     href: "/contact",
     link: "開発の相談をする",
+    hop: "→ 02  現場の理解と信頼",
   },
   {
     index: "SUPPORT",
@@ -76,6 +79,7 @@ const practices = [
     link: "AI駆動開発支援",
     secondHref: "/service/ai-native-company",
     secondLink: "組織・業務改善支援",
+    hop: "→ 03  知見の還元",
   },
   {
     index: "PRODUCT",
@@ -83,6 +87,8 @@ const practices = [
     body: "会社の意思と日々の仕事をつなぐProductをつくる。顧客の現場で得た知見を、契約と機密性を守った範囲でProductへ還元する。",
     href: "#company-os",
     link: "Company OSについて",
+    hop: "↺ 01  知見は、次の開発Projectへ",
+    back: true,
   },
 ];
 
@@ -108,9 +114,10 @@ export default function Home() {
   return (
     <div className={`wv ${serif.variable} ${sans.variable}`}>
       <GroundWatch />
+      <RevealWatch />
       <main id="top" className="site-main">
         {/* 1. Hero — 人の意思を主語にする。Scrollで糸が編まれる */}
-        <section className="wv-hero" data-ground="night" data-blend-down="none" aria-labelledby="wv-hero-heading">
+        <section className="wv-hero" data-ground="night" aria-labelledby="wv-hero-heading">
           <div className="wv-hero__pin">
             <HeroCord />
             <div className="wv-hero__scrim" aria-hidden="true" />
@@ -141,7 +148,7 @@ export default function Home() {
         </section>
 
         {/* 2. Company OS — 売っているProduct。全画面の3D Sceneが成り立ちを見せる(Scroll連動) */}
-        <section className="wv-os wv-act" id="company-os" data-ground="night" data-blend-up="none" data-blend-down="paper2" aria-labelledby="wv-os-heading">
+        <section className="wv-os wv-act" id="company-os" data-ground="night" aria-labelledby="wv-os-heading">
           <div className="wv-os__pin">
             <CompanyOsCanvas />
             <div className="wv-inner wv-os__grid">
@@ -208,90 +215,121 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 3. What we do — 三つの実践 */}
+        {/* 3. What we do — 三つの実践を三段の索引に。大きな数字と題、右に本文。
+            循環は各行末の一行で、03 の行末で 01 へ戻って閉じる */}
         <section className="wv-section wv-services" id="services" data-ground="paper2" aria-labelledby="wv-services-heading">
           <div className="wv-inner">
             <div className="wv-services__head">
-              <div>
+              <div data-reveal>
                 <p className="wv-label">What We Do</p>
                 <h2 className="wv-h2" id="wv-services-heading">
-                  三つの実践が、ひとつの循環をつくる。
+                  三つの実践が、
+                  <br />
+                  ひとつの循環をつくる。
                 </h2>
               </div>
-              <p className="wv-lead">
+              <p className="wv-lead" data-reveal="2">
                 受託・共同開発で顧客の現場を理解し、そこで得た知見を組織・業務改善の支援とCompany OSへ還元する。支援とProductで得た知見は、次の開発Projectへ戻る。三つは別々のサービスではなく、顧客の現実に根ざした新しい働き方をつくる一つの流れです。
               </p>
             </div>
             <div className="wv-practices">
-              {practices.map((item) => (
-                <article className="wv-practice" key={item.index}>
-                  <div className="wv-practice__meta">
-                    <span>{item.index}</span>
-                  </div>
-                  <h3>{item.title}</h3>
-                  <p>{item.body}</p>
-                  <div className="wv-practice__links">
-                    <a className="wv-link" href={item.href}>
-                      {item.link} <Arrow />
-                    </a>
-                    {"secondHref" in item && (
-                      <a className="wv-link" href={item.secondHref}>
-                        {item.secondLink} <Arrow />
-                      </a>
-                    )}
-                  </div>
-                </article>
-              ))}
+              <ol className="wv-practices__list">
+                {practices.map((item, i) => (
+                  <li className="wv-practice" key={item.index}>
+                    <span className="wv-practice__num">0{i + 1}</span>
+                    <div className="wv-practice__main">
+                      <span className="wv-practice__role">{item.index}</span>
+                      <h3>{item.title}</h3>
+                    </div>
+                    <div className="wv-practice__side">
+                      <p>{item.body}</p>
+                      <div className="wv-practice__links">
+                        <a className="wv-link" href={item.href}>
+                          {item.link} <Arrow />
+                        </a>
+                        {"secondHref" in item && (
+                          <a className="wv-link" href={item.secondHref}>
+                            {item.secondLink} <Arrow />
+                          </a>
+                        )}
+                      </div>
+                      <span className={"back" in item ? "wv-practice__hop is-back" : "wv-practice__hop"}>{item.hop}</span>
+                    </div>
+                  </li>
+                ))}
+              </ol>
             </div>
-            <p className="wv-practice__loop">
-              受託・共同開発 → 現場の理解と信頼 → 組織・業務改善とAI駆動開発の支援 → Company OSの導入・展開 → 次の開発Projectへ
-            </p>
           </div>
         </section>
 
-        {/* 4. Origin + Purpose — 名前の由来が問いを立て、Purposeが答える */}
-        <section className="wv-section wv-origin" id="origin" data-ground="charcoal" data-blend-up="paper2" aria-labelledby="wv-origin-heading">
+        {/* 4. Origin + Purpose — 土器の縄目 → 問い → 答え、の一筋。文章は最小限、
+            見出しと答えは一行ずつ現れ、罫は左から引かれる。説明は /about へ */}
+        <section className="wv-section wv-origin" id="origin" data-ground="charcoal" aria-labelledby="wv-origin-heading">
+          <CordImpression />
           <div className="wv-inner wv-origin__grid">
-            <div>
-              <CordMark className="wv-origin__mark" title="CordMarkのマーク" />
-              <p className="wv-label">Origin</p>
-              <h2 className="wv-h2" id="wv-origin-heading">
-                一万年前、人は余った時間で、
-                <br />
-                <span className="wv-nowrap">土器に縄目を刻んだ。</span>
+            <div className="wv-origin__head" data-reveal>
+              <p className="wv-label">
+                <CordMark className="wv-origin__mark" title="CordMarkのマーク" />
+                Origin
+              </p>
+              <h2 className="wv-h2 wv-lines" id="wv-origin-heading">
+                <span className="wv-line">
+                  <span>
+                    一万年前、
+                    <br className="wv-br-sm" />
+                    <span className="wv-nowrap">人は余った時間で、</span>
+                  </span>
+                </span>
+                <span className="wv-line">
+                  <span className="wv-nowrap">土器に縄目を刻んだ。</span>
+                </span>
               </h2>
-              <p className="wv-lead">
-                縄文時代は、自然資源に恵まれ、人々が自分たちの意思で暮らしをつくっていた時代として語られます。CordMarkという名前は、その土器に残る縄目(cord
-                mark)に由来します。私たちがそこに見るのは、過去の理想化ではなく、豊かな資源を人間の豊かな暮らしへつなげた、豊かさの原型です。AIが生む余力で、私たちは何を刻むのか。
-              </p>
             </div>
-            <div className="wv-origin__purpose">
+            <p className="wv-lead wv-origin__body" data-reveal="2">
+              縄文の土器に残る縄目、cord mark。豊かな資源を人の豊かな暮らしへつなげた、豊かさの原型です。CordMarkの名前は、そこから来ています。
+            </p>
+            <div className="wv-origin__purpose" data-reveal="3">
               <p className="wv-label">Purpose</p>
-              <p className="wv-origin__statement">
-                テクノロジーによる
-                <br />
-                物質的な充足を、
-                <br />
-                精神的な豊かさへ還元する。
+              <p className="wv-origin__question">AIが生む余力で、私たちは何を刻むのか。</p>
+              <p className="wv-origin__statement wv-lines">
+                <span className="wv-line">
+                  <span>
+                    テクノロジーによる
+                    <br className="wv-br-sm" />
+                    <span className="wv-nowrap">物質的な充足を、</span>
+                  </span>
+                </span>
+                <span className="wv-line">
+                  <span className="wv-nowrap">精神的な豊かさへ還元する。</span>
+                </span>
               </p>
-              <p>
-                生産力が大きくなったとき、その力を仕事量の拡大だけに使えば、物質的な充足が増えても、精神的な豊かさにつながるとは限りません。技術が生む余力を、人が考え、決め、創造し、他者と関わる時間へ戻す。それが、CordMarkの存在理由です。
-              </p>
+              <div className="wv-origin__aside">
+                <p className="wv-origin__ground">技術が生む余力を、人が考え、決め、創造し、他者と関わる時間へ戻す。</p>
+                <a className="wv-link" href="/about">
+                  考え方を読む <Arrow />
+                </a>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* 5. Two phases — 何を刻むのか、への答え。Phase 2は/beyondへ */}
+        {/* 5. Two phases — 二枚の紙を継ぐ。左は紙、右はやや濃い紙、継ぎ目に一本の縦罫。
+            見出しの一文が継ぎ目で二つに割れ、継ぎ目が地平線になる */}
         <section className="wv-section wv-horizons" id="horizons" data-ground="paper" aria-labelledby="wv-horizons-heading">
-          <div className="wv-inner">
-            <p className="wv-label">Two Phases</p>
-            <h2 className="wv-h2" id="wv-horizons-heading">
-              社会をAIネイティブに。
-              <br />
-              その先の、人の営みを考える。
-            </h2>
-            <div className="wv-horizons__grid">
-              <article className="wv-horizon is-now">
+          <h2 className="sr-only" id="wv-horizons-heading">
+            社会をAIネイティブに。その先の、人の営みを考える。
+          </h2>
+          <div className="wv-horizons__field">
+            <article className="wv-horizon is-now" data-reveal>
+              <p className="wv-label">
+                <span>Two Phases</span>
+                <span className="wv-horizon__where">NOW</span>
+              </p>
+              <p className="wv-h2 wv-horizon__title" aria-hidden="true">
+                <span className="wv-nowrap">社会を</span>
+                <span className="wv-nowrap">AIネイティブに。</span>
+              </p>
+              <div className="wv-horizon__body">
                 <div className="wv-horizon__meta">
                   <span>PHASE 1</span>
                   <span>AI-NATIVE</span>
@@ -308,11 +346,20 @@ export default function Home() {
                     AI駆動開発支援 <Arrow />
                   </a>
                 </div>
-              </article>
-              <article className="wv-horizon">
+              </div>
+            </article>
+            <article className="wv-horizon is-beyond" data-reveal="2">
+              <p className="wv-label">
+                <span className="wv-horizon__where">BEYOND</span>
+              </p>
+              <p className="wv-h2 wv-horizon__title" aria-hidden="true">
+                <span className="wv-nowrap">その先の、</span>
+                <span className="wv-nowrap">人の営みを考える。</span>
+              </p>
+              <div className="wv-horizon__body">
                 <div className="wv-horizon__meta">
                   <span>PHASE 2</span>
-                  <span>BEYOND</span>
+                  <span>LAPLACE / DOTCRAFT</span>
                 </div>
                 <h3>人に残る営みを、形にする。</h3>
                 <p>
@@ -323,26 +370,43 @@ export default function Home() {
                     Phase 2を見る <Arrow />
                   </a>
                 </div>
-              </article>
-            </div>
+              </div>
+            </article>
           </div>
         </section>
 
-        {/* 6. Contact — 対話へ */}
-        <section className="wv-section wv-contact" id="contact" data-ground="paper2" aria-labelledby="wv-contact-heading">
-          <div className="wv-inner wv-contact__grid">
-            <div>
+        {/* 6. Contact — Heroと同じ闇でページを閉じる。見出しを大きく、押すものは一つ、
+            Mail と Office は下に一行。Footer がそのまま続く */}
+        <section className="wv-section wv-contact" id="contact" data-ground="night" aria-labelledby="wv-contact-heading">
+          <div className="wv-inner">
+            <div data-reveal>
               <p className="wv-label">Contact</p>
-              <h2 className="wv-h2" id="wv-contact-heading">
-                何をつくるかから、一緒に考えましょう。
+              <h2 className="wv-h2 wv-h2--xl" id="wv-contact-heading">
+                <span className="wv-nowrap">何をつくるかから、</span>
+                <br />
+                <span className="wv-nowrap">一緒に考えましょう。</span>
               </h2>
+            </div>
+            <div className="wv-contact__row" data-reveal="2">
               <p className="wv-lead">
                 まだ言葉になっていない構想や問いからで構いません。開発のこと、組織のこと、AIとの働き方のこと。現状を伺い、最初の一歩を一緒に整理します。
               </p>
+              <a className="wv-contact__cta" href="/contact">
+                相談する <Arrow />
+              </a>
             </div>
-            <a className="wv-button wv-button--ink" href="/contact">
-              相談する <Arrow />
-            </a>
+            <dl className="wv-contact__facts" data-reveal="3">
+              <div>
+                <dt>Mail</dt>
+                <dd>
+                  <a href="mailto:info@cordmark.co.jp">info@cordmark.co.jp</a>
+                </dd>
+              </div>
+              <div>
+                <dt>Office</dt>
+                <dd>神奈川県横浜市</dd>
+              </div>
+            </dl>
           </div>
         </section>
       </main>
