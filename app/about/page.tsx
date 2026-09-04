@@ -178,7 +178,8 @@ export default function AboutPage() {
             <div data-reveal>
               <p className="wv-label">Founders</p>
               <h2 className="wv-h2" id="about-founders-heading">
-                二人で、始めた。
+                <span className="wv-nowrap">変化を、</span>
+                <span className="wv-nowrap">自分の手で経験した。</span>
               </h2>
             </div>
             <div className="wv-about-founders__grid">
@@ -190,11 +191,15 @@ export default function AboutPage() {
                   そこで見えたのは、AIは作業を速くする道具にとどまらない、ということでした。人の意思や創造性を、一人では届かなかった大きさの成果へ変える基盤になる。その考えを会社にするために、2026年7月、横浜でCordMark株式会社を設立しました。
                 </p>
                 <p>
-                  いまは受託・共同開発とAI駆動開発支援で顧客の現場に入りながら、Company OSをつくっています。並行して、AIの先の社会と人間を考えるメディア
+                  いまは受託・共同開発とAI駆動開発支援で顧客の現場に入りながら、Company OSをつくっています。並行して、AIが行き渡った先の人の営みも、自分たちの手で形にしています。仲間の心理を読み合う2v2の戦略ボードゲーム
+                  <a className="wv-link wv-link--inline" href="/beyond">
+                    Laplace
+                  </a>
+                  と、AIの先の社会と人間を考えるメディア
                   <a className="wv-link wv-link--inline" href="/beyond">
                     DotCraft
                   </a>
-                  で、理解したことを言葉と映像にして渡し続けています。
+                  。理解したことを、遊びと言葉と映像にして渡し続けています。
                 </p>
               </div>
               <dl className="wv-about-founders__names" data-reveal="3" aria-label="創業者">

@@ -64,6 +64,10 @@
 }
 
 .wv .wv-about-founders__names {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(20px, 2.6vw, 40px);
+  align-self: start;
   margin: 0;
   padding-left: clamp(16px, 2.3vw, 38px);
   margin-left: calc(clamp(16px, 2.3vw, 38px) * -1);
@@ -71,12 +75,14 @@
 }
 
 .wv .wv-about-founders__names > div {
-  padding: 18px 0 20px;
+  padding: 4px 0 20px;
   border-bottom: 1px solid var(--wv-line);
 }
 
-.wv .wv-about-founders__names > div:first-child {
-  padding-top: 4px;
+.wv .wv-about-founders__names > div + div {
+  padding-left: clamp(20px, 2.6vw, 40px);
+  margin-left: calc(clamp(20px, 2.6vw, 40px) * -1);
+  border-left: 1px solid var(--wv-line);
 }
 
 .wv .wv-about-founders__names dt {
@@ -104,6 +110,7 @@
 .wv .wv-about-founders__en {
   display: block;
   margin-top: 4px;
+  white-space: nowrap;
   font-family: var(--wv-mono);
   font-size: 11px;
   letter-spacing: 0.12em;
@@ -229,9 +236,7 @@
   .wv .wv-about-chapter__mark {
     width: clamp(76px, 12vw, 104px);
   }
-}
 
-@media (max-width: 880px) {
   .wv .wv-about-founders__grid {
     grid-template-columns: minmax(0, 1fr);
     gap: 36px;
@@ -244,13 +249,30 @@
     border-top: 1px solid var(--wv-line);
   }
 
-  .wv .wv-about-founders__names > div:first-child {
+  .wv .wv-about-founders__names > div {
     padding-top: 18px;
   }
+}
 
+@media (max-width: 880px) {
   /* the shared rule stacks the index here; this row has to give way to it */
   .wv .wv-about-principles .wv-index__row {
     grid-template-columns: clamp(64px, 16vw, 96px) minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .wv .wv-about-founders__names {
+    column-gap: 16px;
+  }
+
+  .wv .wv-about-founders__names > div + div {
+    padding-left: 16px;
+    margin-left: -16px;
+  }
+
+  .wv .wv-about-founders__name {
+    font-size: 20px;
   }
 }
 
