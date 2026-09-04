@@ -67,7 +67,7 @@ const practices = [
     index: "DELIVERY",
     title: "課題に合わせた受託・共同開発",
     body: "顧客の具体的な課題に応えるアプリ・システムを開発する。現場を理解し、信頼を築き、そこで得た知見を支援とProductへつなぐ。",
-    href: "/contact",
+    href: "/contact?interest=dev",
     link: "開発の相談をする",
     hop: "→ 02  現場の理解と信頼",
   },

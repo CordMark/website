@@ -1,0 +1,176 @@
+/* ------------------------------------------------------------
+   /about — what only this chapter needs.
+   Everything shared lives in app/wv-page.css and app/home/home.css;
+   nothing here is general enough to move there.
+   ------------------------------------------------------------ */
+
+/* ---------- 扉 ---------- */
+
+.wv .wv-about-hero {
+  padding-top: clamp(48px, 7vw, 96px);
+}
+
+/* the band of facts runs the full width of the door, under both columns */
+.wv .wv-about-hero .wv-facts {
+  margin-top: clamp(48px, 6vw, 88px);
+}
+
+/* the right column carries the mark itself instead of a numeral: the
+   name of the company, drawn once, in ink */
+.wv .wv-about-chapter__mark {
+  display: block;
+  width: clamp(88px, 10.5vw, 132px);
+  height: auto;
+  color: var(--wv-ink);
+}
+
+.wv .wv-about-chapter .wv-chapter__role {
+  margin-top: 24px;
+}
+
+/* ---------- 節1 Purpose ---------- */
+
+.wv .wv-about-purpose {
+  color: var(--wv-linen);
+}
+
+.wv .wv-about-purpose__statement {
+  max-width: 20em;
+}
+
+/* the two paragraphs sit under one rule that is drawn from the left as
+   the block arrives — the same gesture as the top page's Purpose */
+.wv .wv-about-purpose__body {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(28px, 4vw, 72px);
+  margin-top: clamp(48px, 5.4vw, 76px);
+  padding-top: clamp(28px, 3vw, 36px);
+}
+
+.wv .wv-about-purpose__body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: rgba(237, 231, 218, 0.22);
+  transform-origin: 0 50%;
+  transform: scaleX(1);
+}
+
+html[data-wv-reveal] .wv .wv-about-purpose__body[data-reveal]::before {
+  transform: scaleX(0);
+  transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html[data-wv-reveal] .wv .wv-about-purpose__body[data-reveal].is-in::before {
+  transform: scaleX(1);
+}
+
+.wv .wv-about-purpose__body .wv-lead {
+  margin-top: 0;
+  max-width: 30em;
+}
+
+/* ---------- 節2 Principles ---------- */
+
+/* the numeral is only two digits here, so it takes less of the row than
+   the shared default gives it, and the body gets the rest */
+.wv .wv-about-principles .wv-index__row {
+  grid-template-columns: clamp(72px, 8vw, 112px) minmax(0, 0.95fr) minmax(0, 1.25fr);
+}
+
+.wv .wv-about-principles .wv-index__main h3 {
+  margin-top: 0;
+}
+
+/* ---------- 節3 Origin ---------- */
+
+.wv .wv-about-origin .wv-lead {
+  margin-top: clamp(28px, 3vw, 40px);
+}
+
+.wv .wv-about-origin .wv-lead + .wv-lead {
+  margin-top: 16px;
+}
+
+.wv .wv-about-origin__link {
+  margin-top: 20px;
+}
+
+/* ---------- 節4 Company ---------- */
+
+.wv .wv-about-company {
+  padding-bottom: calc(var(--wv-pad-y) * 0.85);
+}
+
+.wv .wv-about-company .wv-facts--rows {
+  margin-top: clamp(34px, 4vw, 56px);
+}
+
+/* the caveat under the address: small, sans, quiet */
+.wv .wv-about-note {
+  display: block;
+  max-width: 44em;
+  margin-top: 8px;
+  font-family: var(--wv-sans), "Hiragino Sans", "Yu Gothic", Meiryo, sans-serif;
+  font-size: 11.5px;
+  line-height: 1.9;
+  letter-spacing: 0.03em;
+  color: var(--wv-quiet);
+}
+
+/* ---------- Contact ---------- */
+
+/* the lead and the one thing to press share a line, as on the top page */
+.wv .wv-about-contact .wv-contact__row .wv-lead {
+  margin-top: 0;
+  max-width: 30em;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 1100px) {
+  .wv .wv-about-chapter__mark {
+    width: clamp(76px, 12vw, 104px);
+  }
+}
+
+@media (max-width: 880px) {
+  .wv .wv-about-purpose__body {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .wv .wv-about-purpose__body .wv-lead + .wv-lead {
+    margin-top: 0;
+  }
+
+  /* the shared rule stacks the index here; this row has to give way to it */
+  .wv .wv-about-principles .wv-index__row {
+    grid-template-columns: clamp(64px, 16vw, 96px) minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .wv .wv-about-principles .wv-index__row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* the statement runs three lines here; a size of its own keeps the last
+     one clear of the right edge */
+  .wv.wv-page .wv-section .wv-h2.wv-about-purpose__statement {
+    max-width: none;
+    font-size: clamp(21px, 6.1vw, 28px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wv .wv-about-purpose__body::before {
+    transform: scaleX(1);
+    transition: none;
+  }
+}

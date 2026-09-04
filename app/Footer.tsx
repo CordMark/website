@@ -1,8 +1,11 @@
+/** 全体地図。サイトの節と下層ページを、順に並べる */
 const footerLinks = [
-  { label: "私たちについて", href: "/about" },
   { label: "Company OS", href: "/#company-os" },
-  { label: "事業", href: "/#services" },
-  { label: "考え方", href: "/#origin" },
+  { label: "AI駆動開発支援", href: "/service/ai-driven-development" },
+  { label: "組織・業務改善支援", href: "/service/ai-native-company" },
+  { label: "私たちについて", href: "/about" },
+  { label: "Phase 2", href: "/beyond" },
+  { label: "お問い合わせ", href: "/contact" },
   { label: "プライバシー", href: "/privacy-policy" },
 ];
 

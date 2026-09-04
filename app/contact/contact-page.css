@@ -1,0 +1,106 @@
+/* ------------------------------------------------------------
+   /contact — what only this page needs.
+   The shared parts live in app/home/home.css and app/wv-page.css.
+   The prefix is .wv-ct- (home.css already owns .wv-contact).
+   ------------------------------------------------------------ */
+
+.wv .wv-ct-hero {
+  padding-top: clamp(48px, 7vw, 96px);
+}
+
+/* the band of facts runs the full width of the door, under both columns */
+.wv .wv-ct-hero .wv-facts {
+  margin-top: clamp(48px, 6vw, 88px);
+}
+
+/* the mail address is an address, not a phrase: it stays in the sans face */
+.wv .wv-ct-mail {
+  font-family: var(--wv-sans), sans-serif;
+  font-size: 14.5px;
+  letter-spacing: 0.02em;
+  color: var(--wv-ink);
+  border-bottom: 1px solid var(--wv-line);
+  transition: border-color 0.2s ease;
+}
+
+.wv .wv-ct-mail:hover {
+  border-color: var(--wv-accent);
+}
+
+/* ---------- 扉の右列 相談の入口 ---------- */
+
+/* no numeral here: the door's right column carries the three ways in,
+   so a serif line takes the place the numeral holds on other chapters */
+.wv .wv-ct-entry__title {
+  margin-top: 12px;
+  font-family: var(--wv-serif), "Hiragino Mincho ProN", serif;
+  font-weight: 400;
+  font-size: clamp(24px, 2.6vw, 34px);
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+  font-feature-settings: "palt";
+  color: var(--wv-ink);
+}
+
+.wv .wv-ct-entry .wv-chapter__note {
+  margin-top: 14px;
+}
+
+/* ---------- 節1 フォーム ---------- */
+
+.wv .wv-ct-form {
+  scroll-margin-top: var(--header-h);
+}
+
+/* the fields are read one at a time; the run of them stops short of the
+   full measure so the labels stay near their inputs */
+.wv .wv-ct-form .wv-form,
+.wv .wv-ct-guide .wv-form {
+  max-width: 960px;
+}
+
+.wv .wv-ct-form .wv-lead {
+  max-width: 30em;
+}
+
+/* the count sits under the right edge of the textarea, quiet */
+.wv .wv-ct-counter {
+  align-self: flex-end;
+  margin-top: -2px;
+  font-family: var(--wv-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  color: var(--wv-quiet);
+}
+
+/* ---------- 節2 資料 ---------- */
+
+.wv .wv-ct-guide {
+  padding-top: calc(var(--wv-pad-y) * 0.7);
+  padding-bottom: calc(var(--wv-pad-y) * 0.7);
+  scroll-margin-top: var(--header-h);
+}
+
+.wv .wv-ct-guide__form {
+  margin-top: clamp(32px, 3.8vw, 48px);
+}
+
+/* ---------- 闇の薄い帯 ---------- */
+
+.wv .wv-ct-close {
+  padding-top: calc(var(--wv-pad-y) * 0.5);
+  padding-bottom: calc(var(--wv-pad-y) * 0.5);
+  color: var(--wv-linen);
+}
+
+.wv .wv-ct-close .wv-contact__facts {
+  margin: 0;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 1100px) {
+  .wv .wv-ct-entry__title {
+    font-size: clamp(21px, 3.4vw, 26px);
+  }
+}

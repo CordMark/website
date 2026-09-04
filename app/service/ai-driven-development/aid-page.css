@@ -1,0 +1,280 @@
+/* ------------------------------------------------------------
+   /service/ai-driven-development — what only this chapter needs.
+   Everything shared lives in app/wv-page.css; nothing here is
+   general enough to move there.
+   ------------------------------------------------------------ */
+
+.wv .wv-aid-hero {
+  padding-top: clamp(48px, 7vw, 96px);
+}
+
+/* the band of facts runs the full width of the door, under both columns */
+.wv .wv-aid-hero .wv-facts {
+  margin-top: clamp(48px, 6vw, 88px);
+}
+
+/* ---------- 節1 症状 ---------- */
+
+.wv .wv-aid-symptoms .wv-list--two {
+  margin-top: clamp(40px, 5vw, 64px);
+}
+
+/* the one line under the list: quiet, at the right, in mono */
+.wv .wv-aid-aside {
+  margin-top: 22px;
+  text-align: right;
+  font-family: var(--wv-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.1em;
+  color: var(--wv-quiet);
+}
+
+/* ---------- 節2 組み替えるもの ---------- */
+
+.wv .wv-aid-rework {
+  color: var(--wv-linen);
+}
+
+/* One line through six stages. The rail is drawn from the left as the
+   block arrives; the knots sit on it where each stage begins. */
+.wv .wv-aid-flow {
+  position: relative;
+  margin-top: clamp(46px, 5.6vw, 76px);
+  padding-top: 36px;
+}
+
+.wv .wv-aid-flow__rail {
+  position: absolute;
+  top: 16px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  overflow: visible;
+}
+
+.wv .wv-aid-flow__rail path {
+  fill: none;
+  stroke: rgba(237, 231, 218, 0.3);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 1200;
+  stroke-dashoffset: 0;
+}
+
+.wv .wv-aid-flow__rail--v {
+  display: none;
+}
+
+/* drawn left to right, once the block is on screen. Without JS, or with
+   reduced motion, the line is simply already there. */
+html[data-wv-reveal] .wv [data-reveal] .wv-aid-flow__rail path {
+  stroke-dashoffset: 1200;
+  transition: stroke-dashoffset 1.5s cubic-bezier(0.22, 1, 0.36, 1) 0.2s;
+}
+
+html[data-wv-reveal] .wv [data-reveal].is-in .wv-aid-flow__rail path {
+  stroke-dashoffset: 0;
+}
+
+.wv .wv-aid-flow__steps {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  column-gap: clamp(12px, 1.6vw, 24px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wv .wv-aid-flow__steps > li {
+  position: relative;
+}
+
+.wv .wv-aid-flow__knot {
+  position: absolute;
+  top: -21px;
+  left: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--wv-accent);
+}
+
+.wv .wv-aid-flow__steps b {
+  display: block;
+  font-family: var(--wv-serif), "Hiragino Mincho ProN", serif;
+  font-weight: 400;
+  font-size: clamp(16px, 1.6vw, 21px);
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+  font-feature-settings: "palt";
+  color: var(--wv-linen);
+}
+
+.wv .wv-aid-flow__role {
+  display: block;
+  margin-top: 12px;
+  font-size: 12.5px;
+  line-height: 1.75;
+  letter-spacing: 0.02em;
+  color: #b3ada0;
+}
+
+.wv .wv-aid-flow__role i {
+  display: block;
+  margin-bottom: 2px;
+  font-family: var(--wv-mono);
+  font-style: normal;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--wv-stone);
+}
+
+.wv .wv-aid-flow__role.is-human {
+  color: var(--wv-linen);
+}
+
+.wv .wv-aid-flow__role.is-human i {
+  color: var(--wv-accent);
+}
+
+.wv .wv-aid-rework__lead {
+  margin-top: clamp(44px, 5vw, 68px);
+}
+
+/* ---------- 節3 進め方 ---------- */
+
+/* this index carries two small lists on the right, so the side column
+   takes more of the row than the shared default gives it */
+.wv .wv-aid-steps .wv-index__row {
+  grid-template-columns: clamp(96px, 11vw, 150px) minmax(0, 0.9fr) minmax(0, 1.5fr);
+}
+
+.wv .wv-aid-notes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(20px, 2.4vw, 36px);
+  margin-top: 24px;
+}
+
+.wv .wv-aid-notes__head {
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--wv-line);
+  font-family: var(--wv-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  color: var(--wv-quiet);
+}
+
+.wv .wv-aid-notes ul {
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wv .wv-aid-notes li {
+  font-size: 12.5px;
+  line-height: 1.85;
+  letter-spacing: 0.02em;
+  color: var(--wv-ink-2);
+}
+
+.wv .wv-aid-notes li + li {
+  margin-top: 4px;
+}
+
+/* a row with only one list gives it the whole width */
+.wv .wv-aid-notes--one {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* the metrics read as one run of names, not a column of bullets */
+.wv .wv-aid-notes__inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 20px;
+}
+
+.wv .wv-aid-notes__inline li + li {
+  margin-top: 0;
+}
+
+.wv .wv-aid-steps__link {
+  margin-top: clamp(28px, 3vw, 40px);
+}
+
+/* ---------- 節4 合う会社 ---------- */
+
+.wv .wv-aid-fit {
+  padding-top: calc(var(--wv-pad-y) * 0.7);
+  padding-bottom: calc(var(--wv-pad-y) * 0.7);
+}
+
+.wv .wv-aid-fit .wv-list {
+  margin-top: 20px;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 880px) {
+  /* the six stages stand in one column, and the line runs down beside them */
+  .wv .wv-aid-flow {
+    padding-top: 6px;
+    padding-left: 30px;
+  }
+
+  .wv .wv-aid-flow__rail--h {
+    display: none;
+  }
+
+  .wv .wv-aid-flow__rail--v {
+    display: block;
+    top: 0;
+    left: 3px;
+    width: 2px;
+    height: 100%;
+  }
+
+  .wv .wv-aid-flow__steps {
+    grid-template-columns: 1fr;
+    row-gap: 30px;
+  }
+
+  .wv .wv-aid-flow__knot {
+    top: 7px;
+    left: -30px;
+  }
+
+  .wv .wv-aid-flow__role {
+    margin-top: 8px;
+  }
+
+  .wv .wv-aid-steps .wv-index__row {
+    grid-template-columns: clamp(72px, 20vw, 120px) minmax(0, 1fr);
+  }
+
+  .wv .wv-aid-notes {
+    gap: 20px;
+  }
+
+  .wv .wv-aid-aside {
+    text-align: left;
+  }
+}
+
+@media (max-width: 600px) {
+  /* the row is one column here, so the shared rule has to win back */
+  .wv .wv-aid-steps .wv-index__row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .wv .wv-aid-notes {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wv .wv-aid-flow__rail path {
+    stroke-dashoffset: 0;
+    transition: none;
+  }
+}

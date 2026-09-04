@@ -14,18 +14,17 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
-  { href: "/about", label: "私たちについて" },
   { href: "#company-os", label: "Company OS" },
   {
     href: "#services",
     label: "事業",
     children: [
+      { href: "#services", label: "受託・共同開発" },
       { href: "/service/ai-driven-development", label: "AI駆動開発支援" },
       { href: "/service/ai-native-company", label: "組織・業務改善支援" },
     ],
   },
-  { href: "#origin", label: "考え方" },
-  { href: "/beyond", label: "Phase 2" },
+  { href: "/about", label: "私たちについて" },
 ];
 
 const mobileMenuId = "mobile-navigation";
@@ -138,7 +137,7 @@ export function Header() {
               </a>
               <div className="site-nav__menu" aria-label={`${item.label} menu`}>
                 {item.children.map((child) => (
-                  <a className="site-nav__menu-link" href={child.href} key={child.href}>
+                  <a className="site-nav__menu-link" href={navHref(child.href)} key={child.href}>
                     {child.label}
                   </a>
                 ))}
@@ -203,7 +202,7 @@ export function Header() {
                   {item.children.map((child) => (
                     <a
                       className="mobile-menu-nav__child-link"
-                      href={child.href}
+                      href={navHref(child.href)}
                       key={child.href}
                       onClick={closeMenu}
                     >

@@ -1,11 +1,17 @@
-import { Footer } from "../../Footer";
 import type { Metadata } from "next";
-import { QueryFormStatus } from "../../FormStatus";
-import { LoadingSubmitButton } from "../../LoadingSubmitButton";
+import { Noto_Sans_JP, Noto_Serif_JP } from "next/font/google";
+import { Footer } from "../../Footer";
+import { RevealWatch } from "../../home/RevealWatch";
+import "../../home/home.css";
+import "../../wv-page.css";
+import "./anc-page.css";
 
-const pageTitle = "組織・業務改善支援 | AI Native Company | CordMark";
+const serif = Noto_Serif_JP({ subsets: ["latin"], weight: ["300", "400"], variable: "--wv-serif", display: "swap" });
+const sans = Noto_Sans_JP({ subsets: ["latin"], weight: ["400", "500", "700"], variable: "--wv-sans", display: "swap" });
+
+const pageTitle = "組織・業務改善支援 | CordMark";
 const pageDescription =
-  "業務の進め方を診断し、意思決定・業務・ナレッジ・ガバナンスをAI前提に組み替える支援。3〜4週間で実装ロードマップを具体化します。";
+  "ツールが増えても、問いと判断の流れが変わらなければ、会社は速くなりません。CordMarkの組織・業務改善支援は、意思決定・業務・ナレッジ・ガバナンスの流れを診断し、人が決め、AIが運ぶ仕事の形へ組み替える支援です。";
 
 export const metadata: Metadata = {
   title: pageTitle,
@@ -13,989 +19,372 @@ export const metadata: Metadata = {
   openGraph: {
     title: pageTitle,
     description: pageDescription,
-    images: [
-      {
-        url: "/assets/ai-native-company-hero.webp",
-        width: 1448,
-        height: 1086,
-        alt: "AI Native Company変革支援",
-      },
-    ],
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "組織・業務改善支援 | CordMark" }],
   },
   twitter: {
     card: "summary_large_image",
     title: pageTitle,
     description: pageDescription,
-    images: ["/assets/ai-native-company-hero.webp"],
+    images: ["/og.png"],
   },
 };
 
-type AncIconType =
-  | "agent"
-  | "bars"
-  | "before"
-  | "check"
-  | "clock"
-  | "cube"
-  | "database"
-  | "document"
-  | "flow"
-  | "governance"
-  | "grid"
-  | "map"
-  | "organization"
-  | "pause"
-  | "people"
-  | "person"
-  | "search"
-  | "shield"
-  | "sparkle"
-  | "tag"
-  | "target";
-
-type AncProblemVisualType =
-  | "network"
-  | "poc"
-  | "workflow"
-  | "knowledge"
-  | "governance"
-  | "measurement";
-
-type RoadmapStepVisualType = "kpi" | "process" | "brain" | "priority" | "roadmap" | "report";
-type DeliverableVisualType = "maturity" | "usecases" | "beforeAfter" | "agentFlow" | "roadmap" | "kpi";
-type ImplementationAreaType = "sales" | "knowledge" | "executive" | "development";
-
-type ProblemCard = {
-  visual: AncProblemVisualType;
-  image: string;
-  title: string;
-};
-
-type DeliverableCard = {
-  visual: DeliverableVisualType;
-  image: string;
-  title: string;
-  body: string;
-};
-
-const painPoints: ProblemCard[] = [
+/** 扉の帯。期間・範囲・対象・価格を、事実のまま四つ */
+const facts = [
+  { key: "期間", value: <span className="wv-nowrap">3〜4週間</span> },
   {
-    visual: "network",
-    image: "/assets/anc-problem-network.webp",
-    title: "部署ごとに試しており、全社で広がらない",
+    key: "範囲",
+    value: (
+      <>
+        <span className="wv-nowrap">1つの経営テーマ</span> + <span className="wv-nowrap">2〜3部門</span>
+      </>
+    ),
   },
   {
-    visual: "poc",
-    image: "/assets/anc-problem-poc.webp",
-    title: "PoCやツール導入で止まり、運用に乗らない",
+    key: "対象部門",
+    value: (
+      <>
+        <span className="wv-nowrap">営業・CS・</span>
+        <span className="wv-nowrap">バックオフィスなど</span>
+      </>
+    ),
   },
   {
-    visual: "workflow",
-    image: "/assets/anc-problem-workflow.webp",
-    title: "業務プロセス自体が人間前提のまま",
-  },
-  {
-    visual: "knowledge",
-    image: "/assets/anc-problem-knowledge.webp",
-    title: "ナレッジが分散し、AIが活用できない",
-  },
-  {
-    visual: "governance",
-    image: "/assets/anc-problem-governance.webp",
-    title: "ガバナンスが曖昧で、本格展開できない",
-  },
-  {
-    visual: "measurement",
-    image: "/assets/anc-problem-measurement.webp",
-    title: "効果測定がなく、投資対効果を説明できない",
+    key: "価格",
+    value: (
+      <>
+        <span className="wv-nowrap">初期モニター</span> <span className="wv-nowrap">200万円〜(税別)</span>
+      </>
+    ),
   },
 ];
 
-const companyShifts = [
-  {
-    beforeIcon: "person",
-    before: "個人利用中心",
-    afterIcon: "organization",
-    after: "ワークフロー組み込み型",
-  },
-  {
-    beforeIcon: "search",
-    before: "情報探索",
-    afterIcon: "database",
-    after: "組織記憶の活用",
-  },
-  {
-    beforeIcon: "people",
-    before: "会議依存の意思決定",
-    afterIcon: "sparkle",
-    after: "AI支援の意思決定",
-  },
-  {
-    beforeIcon: "grid",
-    before: "部分最適",
-    afterIcon: "target",
-    after: "全社OS再設計",
-  },
-] satisfies Array<{ beforeIcon: AncIconType; before: string; afterIcon: AncIconType; after: string }>;
+const symptoms = [
+  { title: "部署ごとに試しており、全社で広がらない", body: "うまくいったやり方が、隣の部署へ渡っていない。" },
+  { title: "PoCやツール導入で止まり、運用に乗らない", body: "試すところまでは進み、日々の仕事には入っていない。" },
+  { title: "業務プロセス自体が人間前提のまま", body: "人が集まって決める形は変わらず、手順だけが増える。" },
+  { title: "ナレッジが分散し、AIが活用できない", body: "必要な文書が置き場ごとに散り、探す時間が残っている。" },
+  { title: "ガバナンスが曖昧で、本格展開できない", body: "どこまで任せてよいかが決まらず、広げる判断が止まる。" },
+  { title: "効果測定がなく、投資対効果を説明できない", body: "何がどれだけ変わったかを、次の投資の判断に使えない。" },
+];
 
+/** 四行の対照表。左が今、右がこれから */
+const shifts = [
+  { from: "個人利用中心", to: "ワークフロー組み込み型" },
+  { from: "情報探索", to: "組織記憶の活用" },
+  { from: "会議依存の意思決定", to: "AI支援の意思決定" },
+  { from: "部分最適", to: "全社の再設計" },
+];
+
+/** 地層。上の層から順に組み替える */
 const layers = [
-  {
-    number: "01",
-    title: "Strategy / KPI",
-    body: "経営課題とAI活用テーマを接続する。",
-    image: "/assets/anc-layer-strategy-kpi.webp",
-  },
-  {
-    number: "02",
-    title: "Workflow",
-    body: "営業・CS・管理・開発の業務プロセスを再設計する。",
-    image: "/assets/anc-layer-workflow.webp",
-  },
-  {
-    number: "03",
-    title: "Knowledge / Data",
-    body: "社内ナレッジとデータをAIが使える形に整える。",
-    image: "/assets/anc-layer-knowledge-data.webp",
-  },
-  {
-    number: "04",
-    title: "Agent / Application",
-    body: "AI Agent、RAG、業務アプリを実装する。",
-    image: "/assets/anc-layer-agent-application.webp",
-  },
-  {
-    number: "05",
-    title: "Governance / Enablement",
-    body: "権限、ルール、教育、運用体制を設計する。",
-    image: "/assets/anc-layer-governance-enablement.webp",
-  },
+  { num: "01", name: "Strategy / KPI", body: "経営課題とAI活用テーマを接続する。" },
+  { num: "02", name: "Workflow", body: "営業・CS・管理・開発の業務プロセスを再設計する。" },
+  { num: "03", name: "Knowledge / Data", body: "社内ナレッジとデータをAIが使える形に整える。" },
+  { num: "04", name: "Agent / Application", body: "AI Agent、RAG、業務アプリを実装する。" },
+  { num: "05", name: "Governance / Enablement", body: "権限、ルール、教育、運用体制を設計する。" },
 ];
 
-const roadmapBullets = [
-  "既存業務と意思決定フローの可視化",
-  "AI活用テーマの洗い出しと優先順位付け",
-  "KPI設計とガバナンス整理",
-  "90日実装ロードマップの提案",
+const diagnosisFlow = [
+  "経営課題・事業KPIヒアリング",
+  "業務・意思決定プロセスの可視化",
+  "AI活用テーマの設計",
+  "優先順位・リスク・ガバナンス設計",
+  "90日実装ロードマップ作成",
+  "診断結果・実装提案のご報告",
 ];
 
-const roadmapSteps = [
-  { visual: "kpi", step: "STEP 1", title: "経営課題・事業KPIヒアリング", image: "/assets/anc-roadmap-step-kpi.webp" },
-  { visual: "process", step: "STEP 2", title: "業務・意思決定プロセスの可視化", image: "/assets/anc-roadmap-step-process.webp" },
-  { visual: "brain", step: "STEP 3", title: "AI活用テーマの設計", image: "/assets/anc-roadmap-step-brain.webp" },
-  { visual: "priority", step: "STEP 4", title: "優先順位・リスク・ガバナンス設計", image: "/assets/anc-roadmap-step-priority.webp" },
-  { visual: "roadmap", step: "STEP 5", title: "90日実装ロードマップ作成", image: "/assets/anc-roadmap-step-roadmap.webp" },
-  { visual: "report", step: "STEP 6", title: "診断結果・実装提案のご報告", image: "/assets/anc-roadmap-step-report.webp" },
-] satisfies Array<{ visual: RoadmapStepVisualType; step: string; title: string; image: string }>;
-
-const deliverables: DeliverableCard[] = [
-  {
-    visual: "maturity",
-    image: "/assets/anc-deliverable-maturity.webp",
-    title: "AI Native成熟度マップ",
-    body: "現在地と目指す姿を可視化",
-  },
-  {
-    visual: "usecases",
-    image: "/assets/anc-deliverable-usecases.webp",
-    title: "部門別AI活用候補リスト",
-    body: "部門ごとのユースケースを整理",
-  },
-  {
-    visual: "beforeAfter",
-    image: "/assets/anc-deliverable-before-after.webp",
-    title: "業務プロセス Before / After案",
-    body: "AI導入前後のフローを比較",
-  },
-  {
-    visual: "agentFlow",
-    image: "/assets/anc-deliverable-agent-flow.webp",
-    title: "AI Agent / Workflow構成案",
-    body: "必要なAgentと連携を設計",
-  },
-  {
-    visual: "roadmap",
-    image: "/assets/anc-deliverable-roadmap.webp",
-    title: "90日実装ロードマップ",
-    body: "優先順位とマイルストーンを明確化",
-  },
-  {
-    visual: "kpi",
-    image: "/assets/anc-deliverable-kpi.webp",
-    title: "KPI測定シート / ガバナンス方針案",
-    body: "効果測定と運用ルールを整備",
-  },
+const diagnosisOutputs = [
+  "AI活用成熟度マップ",
+  "部門別AI活用候補リスト",
+  "業務プロセス Before・After案",
+  "AI Agent・Workflow構成案",
+  "90日実装ロードマップ",
+  "KPI測定シート・ガバナンス方針案",
 ];
 
-const implementationAreas = [
-  {
-    title: "営業・CSワークフロー",
-    body: "問い合わせ、提案、議事録、対応をAIで支援。",
-    variant: "sales",
-    image: "/assets/anc-area-sales.webp",
-  },
-  {
-    title: "社内ナレッジAIアシスタント",
-    body: "FAQ、業務マニュアル、社内文書を横断検索。",
-    variant: "knowledge",
-    image: "/assets/anc-area-knowledge.webp",
-  },
-  {
-    title: "経営会議・意思決定支援AI",
-    body: "論点抽出、指標要約、選択肢生成を支援。",
-    variant: "executive",
-    image: "/assets/anc-area-executive.webp",
-  },
-  {
-    title: "AI駆動開発プロセス",
-    body: "仕様、実装、レビュー、テストをAI補助で再設計。",
-    variant: "development",
-  },
-] satisfies Array<{ title: string; body: string; variant: ImplementationAreaType; image?: string }>;
+const targetDepartments = ["営業部門", "CS部門", "バックオフィス", "開発部門"];
 
-const offerFacts = [
-  { icon: "clock", label: "期間", value: "3〜4週間" },
-  { icon: "people", label: "対象部門", value: "営業部門 / CS部門 / バックオフィスなど" },
-  { icon: "grid", label: "範囲", value: "1つの経営テーマ + 2〜3部門" },
-  { icon: "tag", label: "価格", value: "初期モニター 200万円〜（税別）" },
-] satisfies Array<{ icon: AncIconType; label: string; value: string }>;
-
-function AncIcon({ type }: { type: AncIconType }) {
+function Arrow() {
   return (
-    <svg viewBox="0 0 40 40" aria-hidden="true">
-      {type === "people" && (
-        <>
-          <path d="M15 19a6 6 0 1 0 0-12 6 6 0 0 0 0 12Z" />
-          <path d="M5.5 34v-4.2c0-4.6 3.7-8.3 8.3-8.3h2.4c4.6 0 8.3 3.7 8.3 8.3V34" />
-          <path d="M27 18.2a4.8 4.8 0 1 0 0-9.6" />
-          <path d="M28.2 21.4c3.7.4 6.3 3.5 6.3 7.5V34" />
-        </>
-      )}
-      {type === "pause" && (
-        <>
-          <circle cx="20" cy="20" r="14" />
-          <path d="M16.2 13.5v13" />
-          <path d="M23.8 13.5v13" />
-        </>
-      )}
-      {type === "person" && (
-        <>
-          <circle cx="20" cy="14" r="5.5" />
-          <path d="M10.2 33.5c1.8-7 5.1-10.4 9.8-10.4s8 3.4 9.8 10.4" />
-        </>
-      )}
-      {type === "database" && (
-        <>
-          <ellipse cx="20" cy="10" rx="10.5" ry="4.8" />
-          <path d="M9.5 10v18c0 2.7 4.7 4.8 10.5 4.8S30.5 30.7 30.5 28V10" />
-          <path d="M9.5 19c0 2.7 4.7 4.8 10.5 4.8S30.5 21.7 30.5 19" />
-        </>
-      )}
-      {type === "shield" && (
-        <>
-          <path d="M20 5.2 32 9.8v9c0 7.4-4.9 13.2-12 15-7.1-1.8-12-7.6-12-15v-9L20 5.2Z" />
-          <path d="m14.5 20 3.6 3.6 7.6-8.2" />
-        </>
-      )}
-      {type === "bars" && (
-        <>
-          <path d="M8 33V22" />
-          <path d="M16 33V14" />
-          <path d="M24 33V18" />
-          <path d="M32 33V8" />
-          <path d="M6 33h28" />
-        </>
-      )}
-      {type === "flow" && (
-        <>
-          <circle cx="9" cy="9" r="3" />
-          <circle cx="31" cy="9" r="3" />
-          <circle cx="20" cy="31" r="3" />
-          <path d="M12 9h16" />
-          <path d="m29.2 12.1-7.7 15.8" />
-          <path d="m18.5 27.9-7.7-15.8" />
-        </>
-      )}
-      {type === "document" && (
-        <>
-          <path d="M11 5.5h13.2L30 11.3v23.2H11z" />
-          <path d="M24.2 5.5v5.8H30" />
-          <path d="M15.5 17.5h9" />
-          <path d="M15.5 23h9" />
-          <path d="M15.5 28.5h6" />
-        </>
-      )}
-      {type === "grid" && (
-        <>
-          <rect x="8" y="8" width="9" height="9" rx="1.5" />
-          <rect x="23" y="8" width="9" height="9" rx="1.5" />
-          <rect x="8" y="23" width="9" height="9" rx="1.5" />
-          <rect x="23" y="23" width="9" height="9" rx="1.5" />
-        </>
-      )}
-      {type === "clock" && (
-        <>
-          <circle cx="20" cy="20" r="15" />
-          <path d="M20 10.5V20l7 4.7" />
-        </>
-      )}
-      {type === "check" && (
-        <>
-          <circle cx="20" cy="20" r="15" />
-          <path d="m13 20.5 4.5 4.5L27.4 14" />
-        </>
-      )}
-      {type === "tag" && (
-        <>
-          <path d="M5.5 20.5 20.2 5.8h11v11L16.5 31.5a3.8 3.8 0 0 1-5.4 0l-5.6-5.6a3.8 3.8 0 0 1 0-5.4Z" />
-          <circle cx="27" cy="10.5" r="2" />
-        </>
-      )}
-      {type === "search" && (
-        <>
-          <circle cx="17" cy="17" r="10" />
-          <path d="m24.2 24.2 7.2 7.2" />
-        </>
-      )}
-      {type === "organization" && (
-        <>
-          <rect x="16" y="6" width="8" height="8" rx="1.5" />
-          <rect x="7" y="26" width="8" height="8" rx="1.5" />
-          <rect x="16" y="26" width="8" height="8" rx="1.5" />
-          <rect x="25" y="26" width="8" height="8" rx="1.5" />
-          <path d="M20 14v6" />
-          <path d="M11 26v-6h18v6" />
-        </>
-      )}
-      {type === "sparkle" && (
-        <>
-          <path d="M20 5.5 23.8 16 34.5 20l-10.7 4L20 34.5 16.2 24 5.5 20l10.7-4Z" />
-          <path d="M31 5.5v7" />
-          <path d="M34.5 9h-7" />
-          <path d="M9 27.5v5.5" />
-          <path d="M11.8 30.2H6.2" />
-        </>
-      )}
-      {type === "target" && (
-        <>
-          <circle cx="20" cy="20" r="14" />
-          <circle cx="20" cy="20" r="8.5" />
-          <circle cx="20" cy="20" r="3" />
-        </>
-      )}
-      {type === "map" && (
-        <>
-          <path d="M7 11.5 16 7l8 4.5 9-4.5v25.5L24 37l-8-4.5L7 37z" />
-          <path d="M16 7v25.5" />
-          <path d="M24 11.5V37" />
-        </>
-      )}
-      {type === "before" && (
-        <>
-          <path d="M7 12h10" />
-          <path d="M7 20h10" />
-          <path d="M7 28h10" />
-          <path d="M23 12h10" />
-          <path d="M23 20h10" />
-          <path d="M23 28h10" />
-          <path d="m17.8 20 4.4 0" />
-          <path d="m20.2 17.6 2.4 2.4-2.4 2.4" />
-        </>
-      )}
-      {type === "agent" && (
-        <>
-          <path d="M20 6.5v6" />
-          <rect x="9" y="12.5" width="22" height="17" rx="4" />
-          <circle cx="16" cy="21" r="1.8" />
-          <circle cx="24" cy="21" r="1.8" />
-          <path d="M15 27h10" />
-          <path d="M7 18.5h-3" />
-          <path d="M36 18.5h-3" />
-        </>
-      )}
-      {type === "cube" && (
-        <>
-          <path d="m20 5.5 13 7.5v14L20 34.5 7 27V13z" />
-          <path d="M20 20.5v14" />
-          <path d="m7 13 13 7.5L33 13" />
-          <path d="M20 5.5v15" />
-        </>
-      )}
-      {type === "governance" && (
-        <>
-          <path d="M20 5.2 32 9.8v9c0 7.4-4.9 13.2-12 15-7.1-1.8-12-7.6-12-15v-9L20 5.2Z" />
-          <path d="M14 19.2h12" />
-          <path d="M20 13.2v12" />
-        </>
-      )}
+    <svg viewBox="0 0 16 16" aria-hidden="true">
+      <path d="M2.5 8h10" />
+      <path d="m8.5 4 4 4-4 4" />
     </svg>
-  );
-}
-
-function AncProblemVisual({ type }: { type: AncProblemVisualType }) {
-  const blue = `anc-problem-blue-${type}`;
-  const pale = `anc-problem-pale-${type}`;
-  const deep = `anc-problem-deep-${type}`;
-
-  return (
-    <svg className={`anc-problem-visual anc-problem-visual--${type}`} viewBox="0 0 220 124" aria-hidden="true">
-      <defs>
-        <linearGradient id={blue} x1="0" x2="1" y1="0" y2="1">
-          <stop offset="0%" stopColor="#8db8ff" />
-          <stop offset="54%" stopColor="#4f86f7" />
-          <stop offset="100%" stopColor="#0b65ff" />
-        </linearGradient>
-        <linearGradient id={pale} x1="0" x2="1" y1="0" y2="1">
-          <stop offset="0%" stopColor="#ffffff" />
-          <stop offset="100%" stopColor="#edf5ff" />
-        </linearGradient>
-        <linearGradient id={deep} x1="0" x2="1" y1="0" y2="1">
-          <stop offset="0%" stopColor="#5f95ff" />
-          <stop offset="100%" stopColor="#0c4fd1" />
-        </linearGradient>
-      </defs>
-
-      {type === "network" && (
-        <>
-          <g fill={`url(#${pale})`} stroke="#dbe7f7" strokeWidth="1.4">
-            <path d="M31 68 61 52l30 16-30 16Z" />
-            <path d="M14 92 44 76l30 16-30 16Z" />
-            <path d="M79 92 109 76l30 16-30 16Z" />
-            <path d="M144 68 174 52l30 16-30 16Z" />
-          </g>
-          <g fill="none" stroke="#76a5ff" strokeDasharray="4 5" strokeWidth="1.8">
-            <path d="M61 52c22 4 38 18 48 40" />
-            <path d="M174 52c-25 4-48 18-65 40" />
-            <path d="M44 76c25-8 44-3 65 16" />
-          </g>
-          <g fill={`url(#${blue})`} stroke="none">
-            <circle cx="61" cy="46" r="5" />
-            <path d="M50 60c2-7 6-10 11-10s9 3 11 10Z" />
-            <circle cx="44" cy="70" r="5" />
-            <path d="M33 84c2-7 6-10 11-10s9 3 11 10Z" />
-            <circle cx="109" cy="70" r="5" />
-            <path d="M98 84c2-7 6-10 11-10s9 3 11 10Z" />
-            <circle cx="174" cy="46" r="5" />
-            <path d="M163 60c2-7 6-10 11-10s9 3 11 10Z" />
-          </g>
-        </>
-      )}
-
-      {type === "poc" && (
-        <>
-          <ellipse cx="110" cy="91" rx="62" ry="18" fill={`url(#${deep})`} stroke="none" opacity="0.2" />
-          <path d="M50 74c0 18 27 32 60 32s60-14 60-32v11c0 18-27 32-60 32S50 103 50 85Z" fill={`url(#${deep})`} stroke="none" opacity="0.85" />
-          <ellipse cx="110" cy="73" rx="60" ry="32" fill={`url(#${pale})`} stroke="#bfd4f5" strokeWidth="1.5" />
-          <ellipse cx="110" cy="70" rx="40" ry="14" fill="none" stroke="#8bb3ff" strokeWidth="2" opacity="0.65" />
-          <path d="M110 36c23 0 42 9 51 22" fill="none" stroke="#397dff" strokeDasharray="4 5" strokeWidth="1.8" />
-          <circle cx="151" cy="43" r="5" fill={`url(#${blue})`} stroke="none" />
-          <g stroke="none">
-            <path d="M90 70 110 60l20 10-20 10Z" fill="#a9c8ff" />
-            <path d="M90 70v18l20 10V80Z" fill="#79a7ff" />
-            <path d="M130 70v18l-20 10V80Z" fill="#2f72ea" />
-          </g>
-        </>
-      )}
-
-      {type === "workflow" && (
-        <>
-          <g fill={`url(#${pale})`} stroke="#d7e5f7" strokeWidth="1.3">
-            <path d="M38 78 110 40l72 38-72 38Z" opacity="0.7" />
-            <path d="M55 64 110 35l55 29-55 29Z" />
-            <path d="M37 92 110 54l73 38-73 38Z" opacity="0.56" />
-          </g>
-          <g fill="none" stroke="#4f86f7" strokeWidth="2.2">
-            <path d="M82 64h57v30H82Z" />
-            <path d="M110 64v30" />
-            <path d="M82 79h57" />
-            <path d="M70 72 82 72" />
-            <path d="M139 86h15" />
-          </g>
-          <g fill={`url(#${blue})`} stroke="none">
-            <circle cx="82" cy="64" r="5" />
-            <circle cx="110" cy="64" r="5" />
-            <circle cx="139" cy="64" r="5" />
-            <circle cx="82" cy="94" r="5" />
-            <circle cx="110" cy="94" r="5" />
-            <circle cx="139" cy="94" r="5" />
-            <circle cx="70" cy="72" r="5" />
-            <circle cx="154" cy="86" r="5" />
-          </g>
-        </>
-      )}
-
-      {type === "knowledge" && (
-        <>
-          <g fill="none" stroke="#86adf8" strokeDasharray="4 5" strokeWidth="1.7">
-            <path d="M109 43 55 61" />
-            <path d="M111 43 166 61" />
-            <path d="M110 72 55 91" />
-            <path d="M110 72 166 91" />
-          </g>
-          <g stroke="none">
-            <path d="M84 55 110 42l26 13-26 14Z" fill="#a9c8ff" />
-            <path d="M84 55v30l26 14V69Z" fill="#70a0ff" />
-            <path d="M136 55v30l-26 14V69Z" fill="#2165df" />
-            {[["45", "56"], ["155", "56"], ["45", "86"], ["155", "86"], ["100", "24"]].map(([x, y]) => (
-              <g key={`${x}-${y}`}>
-                <path d={`M${x} ${y}l11-6 11 6-11 6Z`} fill="#a8c8ff" />
-                <path d={`M${x} ${y}v12l11 6V${Number(y) + 6}Z`} fill="#6e9fff" />
-                <path d={`M${Number(x) + 22} ${y}v12l-11 6V${Number(y) + 6}Z`} fill="#3474e8" />
-              </g>
-            ))}
-          </g>
-        </>
-      )}
-
-      {type === "governance" && (
-        <>
-          <ellipse cx="111" cy="76" rx="74" ry="28" fill="none" stroke="#8bb3ff" strokeDasharray="5 7" strokeWidth="1.8" opacity="0.78" />
-          <circle cx="56" cy="65" r="5" fill={`url(#${blue})`} stroke="none" />
-          <circle cx="168" cy="65" r="5" fill={`url(#${blue})`} stroke="none" />
-          <path d="M110 27 147 42v28c0 25-15 44-37 54-22-10-37-29-37-54V42Z" fill={`url(#${pale})`} stroke="#adc9f8" strokeWidth="1.6" />
-          <path d="M110 35 137 46v22c0 20-11 35-27 43-16-8-27-23-27-43V46Z" fill={`url(#${blue})`} stroke="none" opacity="0.2" />
-          <path d="m95 73 11 11 24-27" fill="none" stroke="#0b65ff" strokeWidth="4" />
-        </>
-      )}
-
-      {type === "measurement" && (
-        <>
-          <rect x="39" y="24" width="102" height="72" rx="6" fill={`url(#${pale})`} stroke="#d2e1f4" strokeWidth="1.5" />
-          <path d="M51 81h78M51 63h78M51 45h78" stroke="#d9e7f6" strokeWidth="1.2" />
-          <path d="M52 75 71 59l18 14 21-26 20 10" fill="none" stroke="#3a7fff" strokeWidth="2.2" />
-          <g fill={`url(#${blue})`} stroke="none" opacity="0.72">
-            <rect x="62" y="72" width="9" height="24" rx="2" />
-            <rect x="83" y="62" width="9" height="34" rx="2" />
-            <rect x="104" y="50" width="9" height="46" rx="2" />
-          </g>
-          <circle cx="163" cy="78" r="30" fill="none" stroke="#dce8fb" strokeWidth="12" />
-          <path d="M163 48a30 30 0 0 1 26 45" fill="none" stroke={`url(#${deep})`} strokeWidth="12" />
-          <circle cx="163" cy="78" r="15" fill="#fff" stroke="none" />
-        </>
-      )}
-    </svg>
-  );
-}
-
-function RoadmapStepVisual({ image }: { image: string }) {
-  return (
-    <div className="anc-step-visual" aria-hidden="true">
-      <img src={image} alt="" loading="lazy" decoding="async" />
-    </div>
-  );
-}
-
-function DeliverableVisual({ image, type }: { image: string; type: DeliverableVisualType }) {
-  return (
-    <div className={`anc-deliverable-visual anc-deliverable-visual--${type}`} aria-hidden="true">
-      <img src={image} alt="" loading="lazy" decoding="async" />
-    </div>
-  );
-}
-
-function ImplementationPreview({ variant, image }: { variant: ImplementationAreaType; image?: string }) {
-  if (image) {
-    return (
-      <div className="anc-area-preview anc-area-preview--image" aria-hidden="true">
-        <img src={image} alt="" loading="lazy" decoding="async" />
-      </div>
-    );
-  }
-
-  if (variant === "knowledge") {
-    return (
-      <div className="anc-area-preview anc-area-preview--knowledge" aria-hidden="true">
-        <div className="anc-knowledge-title">
-          <span></span>
-          <div>
-            <strong>AIアシスタント</strong>
-            <small>これには「何をお探しですか？」</small>
-          </div>
-        </div>
-        <div className="anc-knowledge-search">
-          <span>例：経費精算のルール</span>
-          <b>検索</b>
-        </div>
-        <div className="anc-answer-box">
-          <strong>回答</strong>
-          <p>
-            経費精算の申請手順は以下の通りです。
-            <br />
-            1. 経費精算システムにログイン
-            <br />
-            2. 領収書を添付し、承認者を選択
-            <br />
-            3. 上長に申請して承認を待つ
-          </p>
-        </div>
-        <div className="anc-doc-list">
-          <strong>おすすめドキュメント</strong>
-          {["経費精算ガイドライン v2.1", "出張旅費規程", "経費精算FAQ"].map((label) => (
-            <span key={label}>
-              <i></i>
-              {label}
-            </span>
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  if (variant === "executive") {
-    return (
-      <div className="anc-area-preview anc-area-preview--executive" aria-hidden="true">
-        <div className="anc-metric-panel">
-          <strong>経営サマリー（今月）</strong>
-          {[
-            ["売上高", "¥2.48億", "+12.6%"],
-            ["営業利益", "¥3,420万", "+18.3%"],
-            ["粗利率", "36.7%", "+2.1pt"],
-            ["顧客満足度", "4.3 / 5.0", "-0.1pt"],
-          ].map(([label, value, trend]) => (
-            <span key={label}>
-              <b>{label}</b>
-              <i>{value}</i>
-              <em className={trend.startsWith("+") ? "is-up" : "is-down"}>{trend}</em>
-            </span>
-          ))}
-        </div>
-        <div className="anc-insight-panel">
-          <strong>主要トレンド</strong>
-          <p>新規受注が前年同月比で12.6%増加</p>
-          <p>広告CPAは改善（-8.7%）</p>
-          <p>解約率はやや上昇（+0.3pt）</p>
-        </div>
-        <div className="anc-action-panel">
-          <strong>次のアクション候補</strong>
-          <p>価格戦略の見直しを検討</p>
-          <p>ハイタッチ顧客の解約要因を深掘り</p>
-          <p>プロダクト導入オンボーディングを強化</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (variant === "development") {
-    return (
-      <div className="anc-area-preview anc-area-preview--development" aria-hidden="true">
-        <div className="anc-kanban">
-          {[
-            ["Backlog", "12", "ユーザー管理 API設計", "認証基盤のリファクタリング"],
-            ["In Progress", "5", "データ集計バッチ実装", "テストケース リファクタリング"],
-            ["Review", "3", "コードレビュー対応", "テストケース追加"],
-            ["Done", "18", "統合テスト完了", "リリース準備"],
-          ].map(([heading, count, first, second]) => (
-            <div key={heading}>
-              <strong>
-                {heading}
-                <small>{count}</small>
-              </strong>
-              <span>{first}</span>
-              <span>{second}</span>
-            </div>
-          ))}
-        </div>
-        <div className="anc-dev-summary">
-          <strong>AI支援サマリー</strong>
-          <p>本日までに8件のPRレビューを支援しました。</p>
-          <p>バグ検出率：27% 改善（先週比）</p>
-          <b>詳細レポートを見る</b>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="anc-area-preview anc-area-preview--sales" aria-hidden="true">
-      <div className="anc-sales-sidebar">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-      <div className="anc-sales-main">
-        <div className="anc-sales-head">
-          <strong>問い合わせ管理</strong>
-          <b>+ 新規作成</b>
-        </div>
-        <div className="anc-sales-tabs">
-          {["すべて", "未対応", "対応中", "完了"].map((label, index) => (
-            <span className={index === 0 ? "is-active" : undefined} key={label}>
-              {label}
-            </span>
-          ))}
-        </div>
-        {[
-          ["問い合わせ受付", "株式会社A　山田様", "10:21", "承り待ち"],
-          ["経費申請確認", "佐藤 拓也", "09:47", "対応中"],
-          ["議事録サマリー", "定例ミーティング", "5/16", "完了"],
-          ["提案書ドラフト作成", "株式会社B　鈴木様", "昨日", "対応中"],
-        ].map(([title, meta, time, status]) => (
-          <div className="anc-ticket" key={title}>
-            <i></i>
-            <span>
-              <strong>{title}</strong>
-              <small>{meta}</small>
-            </span>
-            <b>{time}</b>
-            <em>{status}</em>
-          </div>
-        ))}
-        <p>すべての問い合わせを表示</p>
-      </div>
-    </div>
   );
 }
 
 export default function AiNativeCompanyPage() {
   return (
-    <>
-      <main id="top" className="anc-page site-main">
-        <section className="anc-hero" aria-labelledby="anc-heading">
-          <div className="anc-hero__copy">
-            <p className="anc-kicker">組織・業務改善支援 / AI Native Company</p>
-            <h1 id="anc-heading">
-              AIを足すのではなく、
-              <br />
-              仕事の流れを
-              <br />
-              組み替える。
-            </h1>
-            <p className="anc-lead">
-              ツールを一つ増やしても、会社は速くなりません。
-              <br />
-              意思決定、業務、ナレッジ、データ、ガバナンスの流れを診断し、
-              <br />
-              人が決め、AIが運ぶ仕事の形へ組み替える支援です。
-            </p>
-            <div className="anc-actions">
-              <a className="anc-primary" href="#contact">
-                AI Native化について相談する <span aria-hidden="true">→</span>
-              </a>
-              <a className="anc-secondary" href="#roadmap">
-                変革プログラムを見る <span aria-hidden="true">→</span>
-              </a>
+    <div className={`wv wv-page ${serif.variable} ${sans.variable}`}>
+      <RevealWatch />
+      <main id="top" className="site-main">
+        {/* 扉 — 何の章か、どこに属するか、事実の帯 */}
+        <section className="wv-section wv-anc-hero" data-ground="paper" aria-labelledby="anc-heading">
+          <div className="wv-inner">
+            <div className="wv-page__hero">
+              <div className="wv-page__hero-copy" data-reveal>
+                <p className="wv-label">組織・業務改善支援 — 02 / SUPPORT</p>
+                <h1 className="wv-h1" id="anc-heading">
+                  <span className="wv-nowrap">AIを入れた会社と、</span>
+                  <br />
+                  <span className="wv-nowrap">AIで動く会社は、違う。</span>
+                </h1>
+                <p className="wv-lead">
+                  部署ごとの試行、PoC止まり、人間前提のままの業務。ツールが増えても、問いと判断の流れが変わらなければ、会社は速くなりません。CordMarkの組織・業務改善支援は、意思決定・業務・ナレッジ・ガバナンスの流れを診断し、人が決め、AIが運ぶ仕事の形へ組み替える支援です。
+                </p>
+                <p className="wv-anc-hero__link">
+                  <a className="wv-link" href="#contact">
+                    相談する <Arrow />
+                  </a>
+                </p>
+              </div>
+              <aside className="wv-chapter" data-reveal="2" aria-label="この章の位置">
+                <p className="wv-chapter__num">02</p>
+                <p className="wv-chapter__role">SUPPORT</p>
+                <p className="wv-chapter__note">三つの実践の、二つ目。開発の進め方と、会社の動き方。</p>
+                <nav className="wv-chapter__links" aria-label="関連するページ">
+                  <a className="wv-link" href="/service/ai-driven-development">
+                    AI駆動開発支援 <Arrow />
+                  </a>
+                  <a className="wv-link" href="/#company-os">
+                    Company OS <Arrow />
+                  </a>
+                  <a className="wv-link" href="/#services">
+                    事業の索引へ <Arrow />
+                  </a>
+                </nav>
+              </aside>
             </div>
-          </div>
-          <div className="anc-hero__visual" aria-hidden="true">
-            <img src="/assets/ai-native-company-hero.webp" alt="" loading="eager" fetchPriority="high" decoding="async" />
-          </div>
-        </section>
-
-        <section className="anc-section anc-problems" aria-labelledby="anc-problems-heading">
-          <div className="anc-problems__head">
-            <p className="anc-kicker">よくある課題</p>
-            <h2 id="anc-problems-heading">AIを導入しても、成果につながっていない。</h2>
-            <p className="anc-problems__lead">
-              ツール利用は始まったが、業務・意思決定・運用の設計が変わらないままでは、
-              全社の成果に結びつきません。
-            </p>
-          </div>
-          <div className="anc-problem-grid">
-            {painPoints.map((point) => (
-              <article className="anc-problem-card" key={point.title}>
-                <img
-                  className={`anc-problem-visual anc-problem-visual--${point.visual}`}
-                  src={point.image}
-                  alt=""
-                  loading="lazy"
-                  decoding="async"
-                />
-                <h3>{point.title}</h3>
-              </article>
-            ))}
-          </div>
-
-          <div className="anc-problems__divider" />
-
-          <div className="anc-definition" aria-labelledby="anc-definition-heading">
-            <div className="anc-definition__copy">
-              <p className="anc-kicker">AI Native Companyとは</p>
-              <h2 id="anc-definition-heading">
-                目的は、AIを使うことではなく、
-                <br />
-                問いと判断が止まらない会社にすること。
-              </h2>
-              <p>
-                チャットボットは、数あるインターフェースのひとつにすぎません。経営から現場までの問いと判断の流れを組み替え、決めるのは人のまま、実行と記録をAIが支える構造へ変えることで、継続的な成果をつくります。
-              </p>
-            </div>
-            <dl className="anc-shift-list">
-              {companyShifts.map((item) => (
-                <div key={item.before}>
-                  <dt>
-                    <span className="anc-shift-icon" aria-hidden="true">
-                      <AncIcon type={item.beforeIcon} />
-                    </span>
-                    <span>{item.before}</span>
-                  </dt>
-                  <dd>
-                    <span className="anc-shift-arrow" aria-hidden="true">
-                      →
-                    </span>
-                    <span className="anc-shift-icon" aria-hidden="true">
-                      <AncIcon type={item.afterIcon} />
-                    </span>
-                    <span>{item.after}</span>
-                  </dd>
+            <dl className="wv-facts" data-reveal="3">
+              {facts.map((fact) => (
+                <div key={fact.key}>
+                  <dt>{fact.key}</dt>
+                  <dd>{fact.value}</dd>
                 </div>
               ))}
             </dl>
           </div>
         </section>
 
-        <section className="anc-section anc-layers" aria-labelledby="anc-layers-heading">
-          <p className="anc-kicker">Transformation Layers</p>
-          <h2 id="anc-layers-heading">AI Native化は、5つのレイヤーで進める。</h2>
-          <div className="anc-layer-grid">
-            {layers.map((layer) => (
-              <article className="anc-layer-card" key={layer.number}>
-                <span>{layer.number}</span>
-                <h3>{layer.title}</h3>
-                <p>{layer.body}</p>
-                <img src={layer.image} alt="" aria-hidden="true" loading="lazy" decoding="async" />
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="anc-section anc-roadmap" id="roadmap" aria-labelledby="anc-roadmap-heading">
-          <div className="anc-roadmap__head">
-            <div>
-              <p className="anc-kicker">AI Native Company診断とは</p>
-              <h2 id="anc-roadmap-heading">
-                3〜4週間で、対象領域と
+        {/* 節1 症状 — 二列の一覧と、四行の対照表 */}
+        <section className="wv-section wv-anc-symptoms" data-ground="paper2" aria-labelledby="anc-symptoms-heading">
+          <div className="wv-inner">
+            <div data-reveal>
+              <p className="wv-label">Symptoms</p>
+              <h2 className="wv-h2" id="anc-symptoms-heading">
+                <span className="wv-nowrap">試している。</span>
                 <br />
-                実装ロードマップを設計する。
+                <span className="wv-nowrap">広がってはいない。</span>
               </h2>
-              <p>
-                1つの経営テーマと2〜3部門に絞り、業務実態・意思決定プロセスの可視化から、AI活用テーマ、優先順位、KPI、90日実装計画までを設計します。
-              </p>
             </div>
-            <ul>
-              {roadmapBullets.map((bullet) => (
-                <li key={bullet}>{bullet}</li>
+            <ul className="wv-list wv-list--two" data-reveal="2">
+              {symptoms.map((item, i) => (
+                <li key={item.title}>
+                  <span className="wv-list__num">0{i + 1}</span>
+                  <div>
+                    <b>{item.title}</b>
+                    <p>{item.body}</p>
+                  </div>
+                </li>
               ))}
             </ul>
+            <div className="wv-anc-shift" data-reveal="3">
+              <p className="wv-label wv-anc-shift__label">Shift</p>
+              <p className="wv-anc-shift__row wv-anc-shift__labels">
+                <span>いま</span>
+                <span>これから</span>
+              </p>
+              <ul>
+                {shifts.map((item) => (
+                  <li className="wv-anc-shift__row" key={item.from}>
+                    <span className="wv-anc-shift__from">{item.from}</span>
+                    <span className="wv-anc-shift__arrow" aria-hidden="true">
+                      <Arrow />
+                    </span>
+                    <span className="wv-anc-shift__to">{item.to}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
-          <ol className="anc-step-list">
-            {roadmapSteps.map((item) => (
-              <li key={item.step}>
-                <span className="anc-step-badge">{item.step}</span>
-                <RoadmapStepVisual image={item.image} />
-                <strong>{item.title}</strong>
-              </li>
-            ))}
-          </ol>
         </section>
 
-        <section className="anc-section anc-deliverables" aria-labelledby="anc-deliverables-heading">
-          <p className="anc-kicker">診断で得られるもの</p>
-          <h2 id="anc-deliverables-heading">AI導入の投資判断に必要な資料を納品します。</h2>
-          <div className="anc-deliverable-grid">
-            {deliverables.map((item) => (
-              <article className={`anc-deliverable-card anc-deliverable-card--${item.visual}`} key={item.title}>
-                <DeliverableVisual image={item.image} type={item.visual} />
-                <div className="anc-deliverable-copy">
-                  <h3>{item.title}</h3>
-                  <p>{item.body}</p>
+        {/* 節2 五つの層 — この章の唯一の闇。地層が上から順に現れる */}
+        <section className="wv-section wv-anc-layers" data-ground="charcoal" aria-labelledby="anc-layers-heading">
+          <div className="wv-inner">
+            <div data-reveal>
+              <p className="wv-label">Layers</p>
+              <h2 className="wv-h2" id="anc-layers-heading">
+                <span className="wv-nowrap">五つの層を、</span>
+                <br className="wv-br-sm" />
+                <span className="wv-nowrap">上から順に組み替える。</span>
+              </h2>
+            </div>
+            <ol className="wv-anc-strata" data-reveal aria-label="組み替える五つの層">
+              {layers.map((layer) => (
+                <li key={layer.num}>
+                  <span className="wv-anc-strata__num">{layer.num}</span>
+                  <span className="wv-anc-strata__name">{layer.name}</span>
+                  <span className="wv-anc-strata__body">{layer.body}</span>
+                </li>
+              ))}
+            </ol>
+            <p className="wv-lead wv-anc-layers__lead" data-reveal="3">
+              上の層を決めないまま下の層から手をつけると、道具だけが増えていきます。CordMarkは、経営の指標から権限・教育までを一つの設計として扱い、上の層から順に組み替えます。決めるのは、人のままです。
+            </p>
+          </div>
+        </section>
+
+        {/* 節3 診断 — 索引の二行。数字の位置に期間 */}
+        <section className="wv-section wv-anc-steps" data-ground="paper" aria-labelledby="anc-steps-heading">
+          <div className="wv-inner">
+            <div data-reveal>
+              <p className="wv-label">Process</p>
+              <h2 className="wv-h2" id="anc-steps-heading">
+                <span className="wv-nowrap">三〜四週間で、</span>
+                <br className="wv-br-sm" />
+                <span className="wv-nowrap">対象と道筋を決める。</span>
+              </h2>
+            </div>
+            <ol className="wv-index" data-reveal="2">
+              <li className="wv-index__row">
+                <p className="wv-index__num">3〜4週間</p>
+                <div className="wv-index__main">
+                  <span className="wv-index__role">DIAGNOSIS</span>
+                  <h3>組織・業務改善診断</h3>
                 </div>
-              </article>
-            ))}
+                <div className="wv-index__side">
+                  <p>
+                    1つの経営テーマと2〜3部門に絞り、業務と意思決定の実態の可視化から、AI活用テーマ、優先順位、ガバナンス、90日の実装計画までを設計する。
+                  </p>
+                  <div className="wv-anc-notes">
+                    <div>
+                      <p className="wv-anc-notes__head">進み方</p>
+                      <ul>
+                        {diagnosisFlow.map((item) => (
+                          <li key={item}>{item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div>
+                      <p className="wv-anc-notes__head">手元に残るもの</p>
+                      <ul>
+                        {diagnosisOutputs.map((item) => (
+                          <li key={item}>{item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li className="wv-index__row">
+                <p className="wv-index__num">90日</p>
+                <div className="wv-index__main">
+                  <span className="wv-index__role">IMPLEMENTATION</span>
+                  <h3>90日の実装</h3>
+                </div>
+                <div className="wv-index__side">
+                  <p>
+                    診断で決めたテーマから着手し、ワークフロー、ナレッジ、Agentを実装して日々の運用に乗せる。運用ルールと教育を含む。
+                  </p>
+                  <div className="wv-anc-notes wv-anc-notes--one">
+                    <div>
+                      <p className="wv-anc-notes__head">実装領域</p>
+                      <ul className="wv-anc-notes__inline">
+                        <li>営業・CSワークフロー</li>
+                        <li>社内ナレッジAIアシスタント</li>
+                        <li>経営会議・意思決定支援</li>
+                        <li>
+                          <a href="/service/ai-driven-development">AI駆動開発プロセス</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ol>
+            <p className="wv-anc-steps__link" data-reveal="3">
+              <a className="wv-link" href="#contact">
+                まず、診断の相談をする <Arrow />
+              </a>
+            </p>
           </div>
         </section>
 
-        <section className="anc-section anc-areas" aria-labelledby="anc-areas-heading">
-          <p className="anc-kicker">Implementation Areas</p>
-          <div className="anc-area-grid">
-            {implementationAreas.map((area) => (
-              <article className="anc-area-card" key={area.title}>
-                <h3>{area.title}</h3>
-                <p>{area.body}</p>
-                <ImplementationPreview image={area.image} variant={area.variant} />
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="anc-section anc-offer" aria-labelledby="anc-offer-heading">
-          <p className="anc-kicker">価格・対象</p>
-          <h2 id="anc-offer-heading">まずは1つの経営テーマと2〜3部門から始めます。</h2>
-          <dl className="anc-offer-list">
-            {offerFacts.map((fact) => (
-              <div key={fact.label}>
-                <AncIcon type={fact.icon} />
-                <dt>{fact.label}</dt>
-                <dd>{fact.value}</dd>
+        {/* 節4 Company OS との関係 — 縦罫で二列。短く */}
+        <section className="wv-section wv-anc-next" data-ground="paper2" aria-label="Company OSとの関係">
+          <div className="wv-inner">
+            <div className="wv-split" data-reveal>
+              <div>
+                <p className="wv-split__label">Company OS</p>
+                <h3>
+                  <span className="wv-nowrap">組み替えた流れは、</span>
+                  <span className="wv-nowrap">載せる場所を前提に設計する。</span>
+                </h3>
+                <p>
+                  支援で組み替えた業務と判断の流れは、会社の意思と日々の仕事をつなぐCompany OSに載せることを前提に設計します。Company OSは開発・検証中です。
+                </p>
+                <p className="wv-anc-next__link">
+                  <a className="wv-link" href="/#company-os">
+                    Company OS <Arrow />
+                  </a>
+                </p>
               </div>
-            ))}
-          </dl>
-          <a className="anc-primary anc-offer__button" href="#contact">
-            AI Native化について相談する <span aria-hidden="true">→</span>
-          </a>
-        </section>
-
-        <section className="anc-section anc-contact" id="contact" aria-labelledby="anc-contact-heading">
-          <p className="anc-kicker">お問い合わせフォーム</p>
-          <h2 id="anc-contact-heading">AI Native化に関するご相談はこちらから。</h2>
-          <p className="anc-form-note">会社名・氏名・メールアドレスのみ必須です。まだ構想段階でも構いません。</p>
-          <form className="anc-form" action="/api/contact" method="post">
-            <input type="hidden" name="formType" value="ai-native-company" />
-            <input type="hidden" name="redirectTo" value="/service/ai-native-company#contact" />
-            <QueryFormStatus
-              className="anc-form-status"
-              successMessage="送信しました。担当者より2営業日以内を目安にご連絡いたします。"
-              errorMessage="送信できませんでした。時間をおいて再度お試しください。"
-            />
-            <label>
-              <span>会社名</span>
-              <input name="company" type="text" placeholder="CordMark株式会社" required />
-            </label>
-            <label>
-              <span>氏名</span>
-              <input name="name" type="text" placeholder="山田 太郎" required />
-            </label>
-            <label>
-              <span>メールアドレス</span>
-              <input name="email" type="email" placeholder="taro.yamada@cordmark.co.jp" required />
-            </label>
-            <label className="anc-form__full">
-              <span>相談したい内容</span>
-              <select name="consultation" defaultValue="">
-                <option value="" disabled>
-                  選択してください
-                </option>
-                <option>自社に合うか相談</option>
-                <option>診断について詳しく聞きたい</option>
-                <option>実装支援</option>
-              </select>
-            </label>
-            <label className="anc-form__full">
-              <span>現在の状況（任意）</span>
-              <textarea
-                name="message"
-                maxLength={500}
-                placeholder="例）複数部門でAIを試しているが、全社展開の優先順位と効果測定を整理したい。"
-              />
-            </label>
-            <LoadingSubmitButton>
-              送信する <span aria-hidden="true">→</span>
-            </LoadingSubmitButton>
-          </form>
-        </section>
-
-        <section className="anc-final-cta">
-          <div>
-            <h2>Let&apos;s build your AI Native company.</h2>
-            <p>AIを試す段階から、AIで事業を動かす段階へ。</p>
+              <div>
+                <p className="wv-split__label">対象</p>
+                <h3>
+                  <span className="wv-nowrap">まず一つの経営テーマと、</span>
+                  <span className="wv-nowrap">二〜三部門から。</span>
+                </h3>
+                <ul className="wv-list wv-list--plain">
+                  {targetDepartments.map((item) => (
+                    <li key={item}>
+                      <b>{item}</b>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           </div>
-          <a className="button" href="#contact">
-            無料で相談する <span aria-hidden="true">→</span>
-          </a>
+        </section>
+
+        {/* Contact — 闇でページを閉じる。Footerがそのまま続く */}
+        <section className="wv-section wv-page__contact" id="contact" data-ground="night" aria-labelledby="anc-contact-heading">
+          <div className="wv-inner">
+            <div data-reveal>
+              <p className="wv-label">Contact</p>
+              <h2 className="wv-h2 wv-h2--xl" id="anc-contact-heading">
+                <span className="wv-nowrap">いまの仕事の流れから、</span>
+                <br />
+                <span className="wv-nowrap">一緒に見直しましょう。</span>
+              </h2>
+            </div>
+            <div className="wv-contact__row" data-reveal="2">
+              <p className="wv-lead">
+                会社名・氏名・メールアドレスだけで構いません。まだ構想段階でも、現状を伺い最初の一歩を整理します。
+              </p>
+              <a className="wv-contact__cta" href="/contact?interest=anc">
+                相談する <Arrow />
+              </a>
+            </div>
+            <dl className="wv-contact__facts" data-reveal="3">
+              <div>
+                <dt>Mail</dt>
+                <dd>
+                  <a href="mailto:info@cordmark.co.jp">info@cordmark.co.jp</a>
+                </dd>
+              </div>
+              <div>
+                <dt>Office</dt>
+                <dd>神奈川県横浜市</dd>
+              </div>
+            </dl>
+          </div>
         </section>
       </main>
 
-      <Footer />
-    </>
+      <Footer mark />
+    </div>
   );
 }

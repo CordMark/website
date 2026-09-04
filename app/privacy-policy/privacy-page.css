@@ -1,0 +1,153 @@
+/* ------------------------------------------------------------
+   /privacy-policy — what only this page needs.
+   Shared parts live in app/home/home.css and app/wv-page.css.
+   Prefix: .wv-pp-
+   ------------------------------------------------------------ */
+
+.wv .wv-pp-hero {
+  padding-top: clamp(48px, 7vw, 96px);
+  padding-bottom: clamp(40px, 5vw, 72px);
+}
+
+.wv .wv-pp-hero .wv-lead {
+  max-width: 42em;
+}
+
+/* the door's line breaks are set by hand; on a narrow screen the sentence
+   flows instead, so no clause is cut in the middle */
+@media (max-width: 600px) {
+  .wv .wv-pp-br {
+    display: none;
+  }
+}
+
+/* ---------- 本文 ---------- */
+
+.wv .wv-pp-body {
+  padding-top: 0;
+}
+
+.wv .wv-pp-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--wv-line);
+}
+
+/* the number keeps its own column; the text stays at reading measure */
+.wv .wv-pp-item {
+  display: grid;
+  grid-template-columns: clamp(56px, 7vw, 96px) minmax(0, 1fr);
+  column-gap: clamp(20px, 2.6vw, 40px);
+  align-items: start;
+  padding: clamp(28px, 3.2vw, 44px) 0;
+  border-bottom: 1px solid var(--wv-line);
+}
+
+.wv .wv-pp-item__num {
+  font-family: var(--wv-serif), "Hiragino Mincho ProN", serif;
+  font-weight: 300;
+  font-size: clamp(20px, 2.2vw, 30px);
+  line-height: 1.3;
+  letter-spacing: 0.04em;
+  color: var(--wv-quiet);
+}
+
+.wv .wv-pp-item__body h2 {
+  font-family: var(--wv-serif), "Hiragino Mincho ProN", serif;
+  font-weight: 400;
+  font-size: clamp(19px, 2vw, 26px);
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  font-feature-settings: "palt";
+  color: var(--wv-ink);
+}
+
+.wv .wv-pp-item__body p {
+  margin-top: 18px;
+  max-width: 40em;
+  font-size: 15px;
+  line-height: 2;
+  letter-spacing: 0.03em;
+  color: var(--wv-ink-2);
+}
+
+/* the enumerated purposes: hairline rows, a copper mark at the left */
+.wv .wv-pp-points {
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+  max-width: 40em;
+  border-top: 1px solid var(--wv-line);
+}
+
+.wv .wv-pp-points > li {
+  position: relative;
+  padding: 12px 0 13px 22px;
+  border-bottom: 1px solid var(--wv-line);
+  font-size: 14.5px;
+  line-height: 1.9;
+  letter-spacing: 0.03em;
+  color: var(--wv-ink-2);
+}
+
+.wv .wv-pp-points > li::before {
+  content: "";
+  position: absolute;
+  top: 22px;
+  left: 0;
+  width: 10px;
+  height: 1px;
+  background: var(--wv-accent);
+}
+
+/* the window for enquiries: the same hairline rows, nothing boxed */
+.wv .wv-pp-contact {
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+  max-width: 40em;
+  border-top: 1px solid var(--wv-line);
+}
+
+.wv .wv-pp-contact > li {
+  padding: 16px 0 17px;
+  border-bottom: 1px solid var(--wv-line);
+  font-size: 15px;
+  line-height: 2;
+  letter-spacing: 0.03em;
+  color: var(--wv-ink-2);
+}
+
+.wv .wv-pp-contact strong {
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--wv-ink);
+}
+
+.wv .wv-pp-contact a {
+  color: var(--wv-accent);
+  border-bottom: 1px solid currentColor;
+}
+
+.wv .wv-pp-note {
+  display: block;
+  margin-top: 4px;
+  font-size: 12.5px;
+  line-height: 1.85;
+  letter-spacing: 0.02em;
+  color: var(--wv-quiet);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 600px) {
+  .wv .wv-pp-item {
+    grid-template-columns: 1fr;
+    row-gap: 10px;
+  }
+
+  .wv .wv-pp-item__num {
+    font-size: 18px;
+  }
+}

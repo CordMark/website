@@ -14,22 +14,6 @@ const formTypes = {
     required: ["company", "name", "email", "interest-area"],
     fields: ["company", "name", "email", "interest-area", "message"],
   },
-  "ai-driven-development": {
-    label: "AI駆動開発 無料相談",
-    required: ["company", "name", "email", "team-size"],
-    fields: ["company", "name", "role", "email", "team-size", "tools", "issue"],
-  },
-  "ai-native-company": {
-    label: "AI Native化",
-    required: ["company", "name", "email"],
-    fields: [
-      "company",
-      "name",
-      "email",
-      "consultation",
-      "message",
-    ],
-  },
   "service-guide": {
     label: "サービス資料請求",
     required: ["company", "name", "email"],
@@ -42,18 +26,8 @@ const fieldLabels: Record<string, string> = {
   name: "氏名",
   role: "役職",
   email: "メールアドレス",
-  "company-size": "従業員規模",
-  department: "対象にしたい部門",
-  "ai-status": "現在のAI活用状況",
   message: "相談したい内容",
-  budget: "予算感",
-  "meeting-date": "希望面談日時",
   "interest-area": "相談したい領域",
-  "team-size": "開発組織の人数",
-  tools: "現在使っているAIツール",
-  issue: "困っている開発工程",
-  consultation: "相談したい内容",
-  date: "希望面談日時",
 };
 
 type FormType = keyof typeof formTypes;
@@ -76,14 +50,6 @@ type SubmissionStatus = "sent" | "error";
 
 const statusParams: Record<FormType, Record<SubmissionStatus, string>> = {
   general: {
-    sent: "sent",
-    error: "error",
-  },
-  "ai-driven-development": {
-    sent: "sent",
-    error: "error",
-  },
-  "ai-native-company": {
     sent: "sent",
     error: "error",
   },

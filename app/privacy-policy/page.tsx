@@ -1,5 +1,13 @@
 import type { Metadata } from "next";
+import { Noto_Sans_JP, Noto_Serif_JP } from "next/font/google";
 import { Footer } from "../Footer";
+import { RevealWatch } from "../home/RevealWatch";
+import "../home/home.css";
+import "../wv-page.css";
+import "./privacy-page.css";
+
+const serif = Noto_Serif_JP({ subsets: ["latin"], weight: ["300", "400"], variable: "--wv-serif", display: "swap" });
+const sans = Noto_Sans_JP({ subsets: ["latin"], weight: ["400", "500", "700"], variable: "--wv-sans", display: "swap" });
 
 export const metadata: Metadata = {
   title: "プライバシーポリシー | CordMark",
@@ -71,114 +79,89 @@ const policySections: PolicySection[] = [
   },
 ];
 
-function ContactIcon({ type }: { type: "building" | "mail" | "pin" }) {
-  return (
-    <svg viewBox="0 0 20 20" aria-hidden="true">
-      {type === "building" && (
-        <>
-          <path d="M5 17V4.7A1.7 1.7 0 0 1 6.7 3h6.6A1.7 1.7 0 0 1 15 4.7V17" />
-          <path d="M3.5 17h13" />
-          <path d="M8 7h.1M12 7h.1M8 10h.1M12 10h.1M8 13h.1M12 13h.1" />
-        </>
-      )}
-      {type === "mail" && (
-        <>
-          <path d="M3.5 5.5h13v9h-13z" />
-          <path d="m4 6 6 5 6-5" />
-        </>
-      )}
-      {type === "pin" && (
-        <>
-          <path d="M10 17s5-4.7 5-8.4A5 5 0 0 0 5 8.6C5 12.3 10 17 10 17Z" />
-          <path d="M10 10.4a1.8 1.8 0 1 0 0-3.6 1.8 1.8 0 0 0 0 3.6Z" />
-        </>
-      )}
-    </svg>
-  );
-}
-
 export default function PrivacyPolicyPage() {
   return (
-    <>
-      <main id="top" className="privacy-page site-main">
-        <section className="privacy-hero" aria-labelledby="privacy-heading">
-          <div className="privacy-hero__copy">
-            <p className="privacy-kicker">Privacy Policy</p>
-            <h1 id="privacy-heading">プライバシーポリシー</h1>
-            <p>
-              CordMark株式会社（以下「当社」）は、
-              <br />
-              お客様および当社のウェブサイトをご利用いただく皆様の
-              <br />
-              個人情報を適切に取り扱い、保護することを重要な責務と考えています。
-            </p>
-          </div>
-          <div className="privacy-hero__visual" aria-hidden="true">
-            <img src="/assets/privacy-policy-hero.webp" alt="" loading="eager" fetchPriority="high" decoding="async" />
+    <div className={`wv wv-page ${serif.variable} ${sans.variable}`}>
+      <RevealWatch />
+      <main id="top" className="site-main">
+        {/* 扉 — 題と、扱いの構え */}
+        <section className="wv-section wv-pp-hero" data-ground="paper" aria-labelledby="pp-heading">
+          <div className="wv-inner">
+            <div data-reveal>
+              <p className="wv-label">Privacy Policy</p>
+              <h1 className="wv-h1" id="pp-heading">
+                プライバシーポリシー
+              </h1>
+              <p className="wv-lead">
+                CordMark株式会社（以下「当社」）は、
+                <br className="wv-pp-br" />
+                お客様および当社のウェブサイトをご利用いただく皆様の
+                <br className="wv-pp-br" />
+                個人情報を適切に取り扱い、保護することを重要な責務と考えています。
+              </p>
+            </div>
           </div>
         </section>
 
-        <div className="privacy-content">
-          {policySections.map((section) => (
-            <section className="privacy-section" key={section.number}>
-              <p className="privacy-section__number">{section.number}</p>
-              <div className="privacy-section__body">
-                <h2>{section.title}</h2>
-                {section.body.map((paragraph) => (
-                  <p key={paragraph}>{paragraph}</p>
-                ))}
-                {section.items && (
-                  <ul>
-                    {section.items.map((item) => (
-                      <li key={item}>{item}</li>
+        {/* 本文 — 番号と罫だけで組む */}
+        <section className="wv-section wv-pp-body" data-ground="paper" aria-label="ポリシー本文">
+          <div className="wv-inner">
+            <ol className="wv-pp-list" data-reveal>
+              {policySections.map((section) => (
+                <li className="wv-pp-item" key={section.number}>
+                  <p className="wv-pp-item__num">{section.number}</p>
+                  <div className="wv-pp-item__body">
+                    <h2>{section.title}</h2>
+                    {section.body.map((paragraph) => (
+                      <p key={paragraph}>{paragraph}</p>
                     ))}
-                  </ul>
-                )}
-              </div>
-            </section>
-          ))}
+                    {section.items && (
+                      <ul className="wv-pp-points">
+                        {section.items.map((item) => (
+                          <li key={item}>{item}</li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </li>
+              ))}
 
-          <section className="privacy-section privacy-section--contact">
-            <p className="privacy-section__number">8.</p>
-            <div className="privacy-section__body">
-              <h2>お問い合わせ窓口</h2>
-              <p>個人情報の取り扱いに関するお問い合わせは、下記までご連絡ください。</p>
-              <div className="privacy-contact-card">
-                <div className="privacy-contact-card__company">
-                  <p>
-                    <ContactIcon type="building" />
-                    <strong>CordMark株式会社</strong>
-                  </p>
-                  <p>
-                    <ContactIcon type="mail" />
-                    <a href="mailto:info@cordmark.co.jp">info@cordmark.co.jp</a>
-                  </p>
-                  <p>
-                    <ContactIcon type="pin" />
-                    <span>
+              <li className="wv-pp-item">
+                <p className="wv-pp-item__num">8.</p>
+                <div className="wv-pp-item__body">
+                  <h2>お問い合わせ窓口</h2>
+                  <p>個人情報の取り扱いに関するお問い合わせは、下記までご連絡ください。</p>
+                  <ul className="wv-pp-contact">
+                    <li>
+                      <strong>CordMark株式会社</strong>
+                    </li>
+                    <li>
+                      <a href="mailto:info@cordmark.co.jp">info@cordmark.co.jp</a>
+                    </li>
+                    <li>
                       神奈川県横浜市
                       <br />
-                      <small className="privacy-location-note">
+                      <small className="wv-pp-note">
                         ※詳細な所在地は、個人情報保護法その他法令に基づき必要な場合、
                         本人確認のうえ遅滞なく開示します。
                       </small>
-                    </span>
-                  </p>
+                    </li>
+                    <li>
+                      <strong>受付時間</strong>
+                      <br />
+                      平日 10:00 - 18:00
+                      <br />
+                      （土日祝日・年末年始を除く）
+                    </li>
+                  </ul>
                 </div>
-                <div className="privacy-contact-card__hours">
-                  <strong>受付時間</strong>
-                  <p>
-                    平日 10:00 - 18:00
-                    <br />
-                    （土日祝日・年末年始を除く）
-                  </p>
-                </div>
-              </div>
-            </div>
-          </section>
-        </div>
+              </li>
+            </ol>
+          </div>
+        </section>
       </main>
-      <Footer />
-    </>
+
+      <Footer mark />
+    </div>
   );
 }
