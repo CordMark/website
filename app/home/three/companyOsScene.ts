@@ -83,7 +83,9 @@ const EXEC = 2;
 const SALES = 3;
 
 /** which way the ring faces, over p: the azimuth (degrees) that is turned
-    to the front. Between keyframes the ring eases round the short way. In
+    to the front. Between keyframes the ring eases round the short way —
+    a quarter turn takes 0.06 of the scroll, and nothing is said while it
+    turns (see `turning`). In
     the overview nobody is in front — the four stand on the diagonals, so
     none of them hides behind the hub or under the headline. */
 const FRONT_OF = (i: number) => ROLES[i].az;
@@ -92,13 +94,13 @@ const FRONT: [number, number][] = [
   [0.3, 45],
   [0.36, FRONT_OF(SALES)],
   [0.46, FRONT_OF(SALES)],
-  [0.5, FRONT_OF(ENGINEER)],
-  [0.57, FRONT_OF(ENGINEER)],
-  [0.61, FRONT_OF(PM)],
-  [0.72, FRONT_OF(PM)],
-  [0.76, FRONT_OF(ENGINEER)],
+  [0.52, FRONT_OF(ENGINEER)],
+  [0.58, FRONT_OF(ENGINEER)],
+  [0.64, FRONT_OF(PM)],
+  [0.73, FRONT_OF(PM)],
+  [0.78, FRONT_OF(ENGINEER)],
   [0.8, FRONT_OF(ENGINEER)],
-  [0.85, FRONT_OF(EXEC)],
+  [0.86, FRONT_OF(EXEC)],
   [0.9, FRONT_OF(EXEC)],
   [0.96, 45],
   [1.0, 45],
@@ -156,6 +158,8 @@ export type CompanyOsScene = {
   /** screen-space positions of the role nodes, for the DOM labels */
   /** `r` is the ring's radius on screen, in px, so words can keep clear of it */
   projectRoles: (out: { x: number; y: number; depth: number; visible: boolean; dim: number; r: number }[]) => void;
+  /** 0 while the ring stands still, else how far through a turn it is (0–1 exclusive) */
+  turning: (p: number) => number;
   /** screen-space position of the core's centre, and the radius of the threads */
   projectCore: (out: { x: number; y: number; r: number }) => void;
 };
@@ -785,6 +789,18 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
 
   const warmCyan = HUMAN_LIT.clone().lerp(CYAN_HOT, 0.45);
 
+  /** which azimuth faces the camera at p, and whether the ring is mid-turn */
+  const frontAt = (p: number) => {
+    let f = 0;
+    while (f < FRONT.length - 2 && p >= FRONT[f + 1][0]) f++;
+    const fa = FRONT[f];
+    const fb = FRONT[f + 1];
+    const ft = smooth(clamp((p - fa[0]) / Math.max(1e-6, fb[0] - fa[0])));
+    const moving = fa[1] !== fb[1] && ft > 0 && ft < 1;
+    return { az: lerpAngle(fa[1], fb[1], ft), turning: moving ? ft : 0 };
+  };
+  const turning = (p: number) => frontAt(p).turning;
+
   const render = (p: number, time: number, shift: number) => {
     const arrive = span(p, 0.0, 0.1);
     const whole = span(p, 0.08, 0.2);
@@ -808,12 +824,7 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
 
     /* ---- the ring turns: the speaker comes to the front ---- */
     void shift;
-    let f = 0;
-    while (f < FRONT.length - 2 && p >= FRONT[f + 1][0]) f++;
-    const fa = FRONT[f];
-    const fb = FRONT[f + 1];
-    const ft = smooth(clamp((p - fa[0]) / Math.max(1e-6, fb[0] - fa[0])));
-    const frontAz = lerpAngle(fa[1], fb[1], ft);
+    const frontAz = frontAt(p).az;
     cell.rotation.set(0, (-frontAz * Math.PI) / 180, -0.04 + Math.sin(time * 0.04) * 0.03);
 
     /* ---- camera ---- */
@@ -831,7 +842,7 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
     shotTarget.set(
       a.target[0] + (b.target[0] - a.target[0]) * t,
       (a.target[1] + (b.target[1] - a.target[1]) * t) * (1 + (lift - 0.9) * (1 - Math.min(1, p / 0.3))) -
-        rise * (0.55 + 0.75 * Math.min(1, p / 0.3)),
+        rise * (0.55 + 0.95 * Math.min(1, p / 0.3)),
       a.target[2] + (b.target[2] - a.target[2]) * t,
     );
     // slide the view: the target moves left, so the scene sits to the right.
@@ -860,7 +871,7 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
     nodeMat.opacity = whole * (1 - invisible);
     ringMat.opacity = whole * (1 - invisible);
 
-    const press = span(p, 0.645, 0.67);
+    const press = span(p, 0.655, 0.68);
 
     // Who this beat is about. Everyone else recedes, so the path reads.
     const w = (a0: number, b0: number) => span(p, a0 - 0.03, a0 + 0.03) * (1 - span(p, b0 - 0.03, b0 + 0.03));
@@ -971,7 +982,7 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
     decisionRing.scale.setScalar(0.4 + (1 - Math.pow(1 - press, 3)) * 0.6);
     // a short ripple; the PM is close to the camera here, so it stays small
     // over before the ACT caption arrives (0.70) and the ring turns away (0.71)
-    const ripple = pulse(p, 0.672, 0.70);
+    const ripple = pulse(p, 0.68, 0.71);
     decisionWaveMat.opacity = ripple * 0.4;
     decisionWave.scale.setScalar(1 + ripple * 0.6);
 
@@ -1035,5 +1046,5 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
     renderer.dispose();
   };
 
-  return { render, resize, setStacked, dispose, projectRoles, projectCore };
+  return { render, resize, setStacked, dispose, projectRoles, projectCore, turning };
 }

@@ -176,20 +176,17 @@
   margin-left: 0.15em;
 }
 
-/* what came back, and from where: a card off a teal rule, the source on its
-   own line above the words, so the eye lands on the label, then the answer */
+/* what came back, and from where: a teal rule, the source on its own line
+   above the words, so the eye lands on the label, then the answer. No box —
+   the scene behind is already moving; a filled card would move with it */
 .wv .wv-os__say .is-os {
   display: block;
   max-width: 22em;
-  padding: 7px 12px 8px 1em;
+  padding: 2px 0 2px 1em;
   border-left: 2px solid var(--os-teal);
-  border-radius: 0 3px 3px 0;
-  background: linear-gradient(90deg, rgba(47, 212, 200, 0.14), rgba(47, 212, 200, 0.03));
-  box-shadow: 0 0 0 1px rgba(47, 212, 200, 0.08), 0 10px 30px rgba(5, 12, 23, 0.55);
   white-space: pre-line;
   line-height: 1.6;
   color: #dcf8f5;
-  text-shadow: none;
 }
 
 .wv .wv-os__say .is-os::before {
@@ -1897,22 +1894,24 @@ html[data-wv-reveal] .wv [data-reveal].is-in {
     line-height: 1.85;
   }
 
-  /* the beat index moves to the top, under the header, out of the caption's way */
+  /* no beat index on a phone: the caption's own tag says where we are, and
+     the two rows of it under the header were noise over the scene */
   .wv .wv-os[data-os-scene="on"] .wv-os__index {
-    align-self: start;
-    gap: 6px 14px;
-    padding: 0;
-    font-size: 9.5px;
-    letter-spacing: 0.14em;
-  }
-
-  .wv .wv-os__index li {
-    padding-top: 7px;
+    display: none;
   }
 
   .wv .wv-os__say {
     /* wide enough for a reply to break where it is written to, not mid-word */
     max-width: min(24em, 82vw);
     line-height: 1.6;
+  }
+}
+
+/* Narrow but tall (a tablet upright, a phone held high): the caption at the
+   very bottom leaves a hole between it and the card. Bring it up, by the
+   height, so the picture and the words read as one column. */
+@media (max-width: 880px) and (min-height: 900px) {
+  .wv .wv-os[data-os-scene="on"] .wv-os__copy {
+    padding-bottom: clamp(60px, 20vh, 280px);
   }
 }

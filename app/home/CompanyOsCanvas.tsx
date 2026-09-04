@@ -18,6 +18,13 @@ const SALES = 3;
  * `step` is the index into STEP_AT; `role` is where it sits.
  */
 type SayLine = { kind: "q" | "os" | "human"; text: string; /** shown from this p on; else from the beat's start */ at?: number };
+/**
+ * One card per beat, beside the person the beat is about. What Company OS
+ * passes on to someone else is folded into that card as a line ("…、PMへ"),
+ * not shown as a second card across the screen — one place to look per beat.
+ * The ring turns at the start of each beat, and nothing is said until it
+ * stands still (see `turning` in the scene). `at` is a value of p, as before.
+ */
 const SAYS: { step: number; role: number; lines: SayLine[] }[] = [
   {
     step: 0,
@@ -27,29 +34,34 @@ const SAYS: { step: number; role: number; lines: SayLine[] }[] = [
       { kind: "os", text: "いまの仕様と実装を確認。\n根拠付きで、その場で回答" },
     ],
   },
-  { step: 1, role: ENGINEER, lines: [{ kind: "q", text: "仕様はAかBか。決めてほしい" }] },
-  { step: 1, role: PM, lines: [{ kind: "os", text: "なぜ必要か、選択肢、選んだ先の影響を\n添えて、PMへ" }] },
+  {
+    step: 1,
+    role: ENGINEER,
+    lines: [
+      { kind: "q", text: "仕様はAかBか。決めてほしい" },
+      { kind: "os", text: "なぜ必要か、選択肢、選んだ先の影響を\n添えて、PMへ" },
+    ],
+  },
   {
     step: 2,
     role: PM,
     lines: [
       { kind: "os", text: "営業の知る顧客の事情も揃えて" },
       // the moment the PM presses — the warm ring in the scene
-      { kind: "human", text: "Bで進める。", at: 0.655 },
+      { kind: "human", text: "Bで進める。", at: 0.665 },
+      // only once the ping has crossed from the hub to the executive
+      { kind: "os", text: "決定と理由を、経営へ通知", at: 0.72 },
     ],
   },
-  // only once the ping has crossed from the hub to the executive
-  { step: 2, role: EXEC, lines: [{ kind: "os", text: "決定と理由を通知", at: 0.715 }] },
   { step: 3, role: ENGINEER, lines: [{ kind: "os", text: "決定Bと理由が、仕様とタスクに" }] },
   // the raw voice from the field reaches the hub, which brings the one thing
   // nobody wrote in a report to the executive — who calls the priority
-  { step: 4, role: ENGINEER, lines: [{ kind: "q", text: "Bは進んでる。Cは、まだ誰も決めてない" }] },
   {
     step: 4,
     role: EXEC,
     lines: [
-      { kind: "os", text: "Cは判断待ちで四日。\n止めている問いと経緯を、そのまま", at: 0.862 },
-      { kind: "human", text: "Cが止まっているほうが、まずい。", at: 0.88 },
+      { kind: "os", text: "Cは判断待ちで四日。\n止めている問いと経緯を、現場の言葉のまま", at: 0.865 },
+      { kind: "human", text: "Cが止まっているほうが、まずい。", at: 0.885 },
     ],
   },
 ];
@@ -169,6 +181,7 @@ export function CompanyOsCanvas() {
       const textBox = (shift > 0.5 ? copyEl : overviewEl)?.getBoundingClientRect();
 
       scene.render(p, time, shift);
+      const turning = scene.turning(p) > 0;
       scene.projectRoles(projected);
       scene.projectCore(coreXY);
 
@@ -283,17 +296,19 @@ export function CompanyOsCanvas() {
           anyOn ||= on;
         }
         let placed = false;
-        if (anyOn && activeStep === say.step && sceneAlpha > 0.85 && q.visible) {
+        // nothing is said while the ring turns: the card of the beat that
+        // ended has gone before the next person has arrived
+        if (anyOn && activeStep === say.step && sceneAlpha > 0.85 && q.visible && !turning) {
           // the centred spots slide sideways to clear the words and the edges.
           // Stacked, the words are under the scene, not beside it, so only the
           // window's edges push the spot about
           const cx = clamp(q.x - w / 2, stacked ? m : Math.max(m, (textBox?.right ?? 0) + pad), vw - m - w);
           // room between the ring's edge and the words, whatever size the
           // ring is on this screen
-          const off = q.r + (stacked ? 22 : 36);
+          const off = q.r + (stacked ? 14 : 36);
           // the role name hangs off one side of the ring; the words go past it
           const labelBelow = q.y > coreXY.y + 20;
-          const lh = (labelRefs.current[say.role]?.offsetHeight || 16) + 10;
+          const lh = (labelRefs.current[say.role]?.offsetHeight || 16) + (stacked ? 6 : 10);
           const spots: [number, number][] = stacked
             ? [
                 // under or over the person first: a phone is taller than it is wide
