@@ -24,7 +24,7 @@ const navItems: NavItem[] = [
       { href: "/service/ai-native-company", label: "組織・業務改善支援" },
     ],
   },
-  { href: "#purpose", label: "考え方" },
+  { href: "#origin", label: "考え方" },
   { href: "/beyond", label: "Phase 2" },
 ];
 

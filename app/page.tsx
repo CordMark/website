@@ -1,6 +1,5 @@
 import { Noto_Sans_JP, Noto_Serif_JP } from "next/font/google";
 import { Footer } from "./Footer";
-import { ChainReveal } from "./home/ChainReveal";
 import { CompanyOsCanvas } from "./home/CompanyOsCanvas";
 import { CordMark } from "./home/CordMark";
 import { GroundWatch } from "./home/GroundWatch";
@@ -20,14 +19,6 @@ const sans = Noto_Sans_JP({
   variable: "--wv-sans",
   display: "swap",
 });
-
-const chain = [
-  "生産力が上がる",
-  "実行の負担が減る",
-  "人に余力が生まれる",
-  "人が考え、決め、創造できる",
-  "時間、自由、尊厳、他者との関わりへ戻る",
-];
 
 /**
  * One spec change, through three roles, back into the day's work. Each beat
@@ -117,10 +108,9 @@ export default function Home() {
   return (
     <div className={`wv ${serif.variable} ${sans.variable}`}>
       <GroundWatch />
-      <ChainReveal />
       <main id="top" className="site-main">
         {/* 1. Hero — 人の意思を主語にする。Scrollで糸が編まれる */}
-        <section className="wv-hero" data-ground="night" aria-labelledby="wv-hero-heading">
+        <section className="wv-hero" data-ground="night" data-blend-down="none" aria-labelledby="wv-hero-heading">
           <div className="wv-hero__pin">
             <HeroCord />
             <div className="wv-hero__scrim" aria-hidden="true" />
@@ -139,7 +129,7 @@ export default function Home() {
                 <a className="wv-button" href="#company-os">
                   Company OS <Arrow />
                 </a>
-                <a className="wv-button wv-button--ghost" href="#purpose">
+                <a className="wv-button wv-button--ghost" href="#origin">
                   会社の考え方 <Arrow />
                 </a>
               </div>
@@ -150,38 +140,8 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 2. Purpose — 会社が存在する理由。糸が因果の結び目を通る */}
-        <section className="wv-section wv-purpose wv-act" id="purpose" data-ground="paper" aria-labelledby="wv-purpose-heading">
-          <div className="wv-inner wv-act__col">
-            <div>
-              <p className="wv-label">Purpose</p>
-              <h2 className="wv-purpose__statement" id="wv-purpose-heading">
-                テクノロジーによる
-                <br />
-                物質的な充足を、
-                <br />
-                精神的な豊かさへ還元する。
-              </h2>
-              <p className="wv-lead">
-                AIによって生産力や実行能力が大きくなったとき、その力を仕事量や競争力の拡大だけに使えば、物質的な充足が増えても、精神的な豊かさにつながるとは限りません。私たちは、技術が生む余力を、人が考え、決め、創造し、他者と関わるための時間と自由へ戻します。
-              </p>
-            </div>
-            <div className="wv-purpose__chain">
-              <p className="wv-label wv-purpose__chain-label">五つの段</p>
-              <ol className="wv-chain" aria-label="Purposeの因果">
-                {chain.map((text, i) => (
-                  <li key={text}>
-                    <span>{String(i + 1).padStart(2, "0")}</span>
-                    {text}
-                  </li>
-                ))}
-              </ol>
-            </div>
-          </div>
-        </section>
-
-        {/* 3. Company OS — 売っているProduct。全画面の3D Sceneが成り立ちを見せる(Scroll連動) */}
-        <section className="wv-os wv-act" id="company-os" data-ground="night" data-blend-down="paper2" aria-labelledby="wv-os-heading">
+        {/* 2. Company OS — 売っているProduct。全画面の3D Sceneが成り立ちを見せる(Scroll連動) */}
+        <section className="wv-os wv-act" id="company-os" data-ground="night" data-blend-up="none" data-blend-down="paper2" aria-labelledby="wv-os-heading">
           <div className="wv-os__pin">
             <CompanyOsCanvas />
             <div className="wv-inner wv-os__grid">
@@ -248,7 +208,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 4. What we do — 三つの実践 */}
+        {/* 3. What we do — 三つの実践 */}
         <section className="wv-section wv-services" id="services" data-ground="paper2" aria-labelledby="wv-services-heading">
           <div className="wv-inner">
             <div className="wv-services__head">
@@ -289,7 +249,39 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 5. Two phases — いまと、その先。Phase 2は/beyondへ */}
+        {/* 4. Origin + Purpose — 名前の由来が問いを立て、Purposeが答える */}
+        <section className="wv-section wv-origin" id="origin" data-ground="charcoal" data-blend-up="paper2" aria-labelledby="wv-origin-heading">
+          <div className="wv-inner wv-origin__grid">
+            <div>
+              <CordMark className="wv-origin__mark" title="CordMarkのマーク" />
+              <p className="wv-label">Origin</p>
+              <h2 className="wv-h2" id="wv-origin-heading">
+                一万年前、人は余った時間で、
+                <br />
+                <span className="wv-nowrap">土器に縄目を刻んだ。</span>
+              </h2>
+              <p className="wv-lead">
+                縄文時代は、自然資源に恵まれ、人々が自分たちの意思で暮らしをつくっていた時代として語られます。CordMarkという名前は、その土器に残る縄目(cord
+                mark)に由来します。私たちがそこに見るのは、過去の理想化ではなく、豊かな資源を人間の豊かな暮らしへつなげた、豊かさの原型です。AIが生む余力で、私たちは何を刻むのか。
+              </p>
+            </div>
+            <div className="wv-origin__purpose">
+              <p className="wv-label">Purpose</p>
+              <p className="wv-origin__statement">
+                テクノロジーによる
+                <br />
+                物質的な充足を、
+                <br />
+                精神的な豊かさへ還元する。
+              </p>
+              <p>
+                生産力が大きくなったとき、その力を仕事量の拡大だけに使えば、物質的な充足が増えても、精神的な豊かさにつながるとは限りません。技術が生む余力を、人が考え、決め、創造し、他者と関わる時間へ戻す。それが、CordMarkの存在理由です。
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* 5. Two phases — 何を刻むのか、への答え。Phase 2は/beyondへ */}
         <section className="wv-section wv-horizons" id="horizons" data-ground="paper" aria-labelledby="wv-horizons-heading">
           <div className="wv-inner">
             <p className="wv-label">Two Phases</p>
@@ -336,30 +328,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 6. Origin — CordMarkと縄文。細い線がここで痕跡になる */}
-        <section className="wv-section wv-origin" id="origin" data-ground="charcoal" data-blend-down="paper2" aria-labelledby="wv-origin-heading">
-          <div className="wv-inner wv-origin__grid">
-            <div>
-              <CordMark className="wv-origin__mark" title="CordMarkのマーク" />
-              <p className="wv-label">Origin</p>
-              <h2 className="wv-h2" id="wv-origin-heading">
-                一万年前、人は余った時間で、
-                <br />
-                <span className="wv-nowrap">土器に縄目を刻んだ。</span>
-              </h2>
-              <p className="wv-lead">
-                縄文時代は、自然資源に恵まれ、人々が自分たちの意思で暮らしをつくっていた時代として語られます。CordMarkという名前は、その土器に残る縄目(cord
-                mark)に由来します。私たちがそこに見るのは、過去の理想化ではなく、豊かな資源を人間の豊かな暮らしへつなげた、豊かさの原型です。AIが生む余力で、私たちは何を刻むのか。この問いをAI時代に更新する試みが、CordMarkです。
-              </p>
-            </div>
-            <div className="wv-origin__note">
-              <b>縄目は、残る。</b>
-              土器に押しつけられた縄の跡は、線が去ったあとも形として残りました。組織の中で交わされた問いと判断も、同じように痕跡として残り、次の判断の土台になる。私たちが「結ぶ」という言葉に込めているのは、この蓄積です。
-            </div>
-          </div>
-        </section>
-
-        {/* 7. Contact — 対話へ */}
+        {/* 6. Contact — 対話へ */}
         <section className="wv-section wv-contact" id="contact" data-ground="paper2" aria-labelledby="wv-contact-heading">
           <div className="wv-inner wv-contact__grid">
             <div>
