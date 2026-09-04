@@ -14,38 +14,42 @@ const SALES = 3;
  * What appears beside a person while a beat plays. What they said, in
  * brackets, and under it what Company OS sent back, marked as such — never a
  * chat window. The role name is on the node already, so it is not repeated.
+ * A "\n" in a reply is where it breaks — a card should never break mid-word.
  * `step` is the index into STEP_AT; `role` is where it sits.
  */
-type SayLine = { kind: "q" | "os" | "human"; text: string };
+type SayLine = { kind: "q" | "os" | "human"; text: string; /** shown from this p on; else from the beat's start */ at?: number };
 const SAYS: { step: number; role: number; lines: SayLine[] }[] = [
   {
     step: 0,
     role: SALES,
     lines: [
       { kind: "q", text: "これって、できないんでしたっけ?" },
-      { kind: "os", text: "いまの仕様と実装を確認。根拠付きで、その場で回答" },
+      { kind: "os", text: "いまの仕様と実装を確認。\n根拠付きで、その場で回答" },
     ],
   },
   { step: 1, role: ENGINEER, lines: [{ kind: "q", text: "仕様はAかBか。決めてほしい" }] },
-  { step: 1, role: PM, lines: [{ kind: "os", text: "なぜ必要か・選択肢・選んだ先の影響を添えて、PMへ" }] },
+  { step: 1, role: PM, lines: [{ kind: "os", text: "なぜ必要か、選択肢、選んだ先の影響を\n添えて、PMへ" }] },
   {
     step: 2,
     role: PM,
     lines: [
       { kind: "os", text: "営業の知る顧客の事情も揃えて" },
-      { kind: "human", text: "Bで進める。" },
+      // the moment the PM presses — the warm ring in the scene
+      { kind: "human", text: "Bで進める。", at: 0.655 },
     ],
   },
-  { step: 2, role: EXEC, lines: [{ kind: "os", text: "決定と理由を通知" }] },
+  // only once the ping has crossed from the hub to the executive
+  { step: 2, role: EXEC, lines: [{ kind: "os", text: "決定と理由を通知", at: 0.715 }] },
   { step: 3, role: ENGINEER, lines: [{ kind: "os", text: "決定Bと理由が、仕様とタスクに" }] },
-  // the raw voice from the field, and the decision, reach the executive together
-  { step: 4, role: ENGINEER, lines: [{ kind: "q", text: "Bだと、納期は厳しいかもしれない" }] },
+  // the raw voice from the field reaches the hub, which brings the one thing
+  // nobody wrote in a report to the executive — who calls the priority
+  { step: 4, role: ENGINEER, lines: [{ kind: "q", text: "Bは進んでる。Cは、まだ誰も決めてない" }] },
   {
     step: 4,
     role: EXEC,
     lines: [
-      { kind: "q", text: "現場は、本当に順調か" },
-      { kind: "os", text: "決定の経緯と、現場の声をそのまま" },
+      { kind: "os", text: "Cは判断待ちで四日。\n止めている問いと経緯を、そのまま", at: 0.862 },
+      { kind: "human", text: "Cが止まっているほうが、まずい。", at: 0.88 },
     ],
   },
 ];
@@ -64,7 +68,7 @@ const SHIFT_TO = 0.34;
 /** the scene goes out from here; then the last beat takes the middle of the screen */
 const FADE_FROM = 0.9;
 const CLOSE_FROM = 0.935;
-const STEP_AT = [0.34, 0.46, 0.58, 0.7, 0.8, 0.9];
+const STEP_AT = [0.34, 0.46, 0.58, 0.73, 0.8, 0.9];
 
 const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const easeInOut = (u: number) => (u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2);
@@ -259,8 +263,17 @@ export function CompanyOsCanvas() {
         const m = stacked ? 16 : 24;
         let x = 0;
         let y = 0;
+        // lines with their own moment come on when p reaches it; a card whose
+        // lines are all still to come is not shown, tick and all
+        let anyOn = false;
+        for (let j = 0; j < say.lines.length; j++) {
+          const on = say.lines[j].at === undefined || p >= (say.lines[j].at as number);
+          const child = el.children[j] as HTMLElement | undefined;
+          if (child && child.classList.contains("is-on") !== on) child.classList.toggle("is-on", on);
+          anyOn ||= on;
+        }
         let placed = false;
-        if (activeStep === say.step && sceneAlpha > 0.85 && q.visible) {
+        if (anyOn && activeStep === say.step && sceneAlpha > 0.85 && q.visible) {
           // the centred spots slide sideways to clear the words and the edges.
           // Stacked, the words are under the scene, not beside it, so only the
           // window's edges push the spot about
@@ -288,13 +301,17 @@ export function CompanyOsCanvas() {
                 [cx, q.y + off + 6 + (labelBelow ? lh : 0)],
                 [cx, q.y - off - 16 - h - (labelBelow ? 0 : lh)],
               ];
-          for (const [sx, sy] of spots) {
+          // which way the words sit from the person, in the order tried above
+          const sides = stacked ? ["under", "over", "right", "left"] : ["right", "left", "under", "over"];
+          for (let k = 0; k < spots.length; k++) {
+            const [sx, sy] = spots[k];
             if (sx < m || sx + w > vw - m || sy < 90 || sy + h > vh - 24) continue;
             if (onWords(sx, sy + h / 2) || onWords(sx + w, sy + h / 2)) continue;
             if (onCore(sx, sy, w, h)) continue;
             x = sx;
             y = sy;
             placed = true;
+            if (el.dataset.side !== sides[k]) el.dataset.side = sides[k];
             break;
           }
         }
@@ -416,7 +433,7 @@ export function CompanyOsCanvas() {
             }}
           >
             {say.lines.map((line) => (
-              <span key={line.text} className={`is-${line.kind}`}>
+              <span key={line.text} className={`is-${line.kind}${line.at === undefined ? " is-on" : ""}`}>
                 {line.text}
               </span>
             ))}

@@ -146,7 +146,22 @@
   will-change: transform, opacity;
 }
 
-/* what the person said: their words, in brackets */
+/* a line that waits for its moment in the beat */
+.wv .wv-os__say > span:not(.is-on) {
+  display: none;
+}
+
+/* what the person said: their words, in brackets. Never broken across
+   lines — a question cut at "っけ?" reads as two — and the opening bracket
+   hangs in the gutter, so the words start on the same line as the card's */
+.wv .wv-os__say .is-q,
+.wv .wv-os__say .is-human {
+  display: block;
+  white-space: nowrap;
+  padding-left: calc(1em + 2px);
+  text-indent: -1em;
+}
+
 .wv .wv-os__say .is-q::before,
 .wv .wv-os__say .is-human::before {
   content: "\300C";
@@ -165,13 +180,13 @@
    own line above the words, so the eye lands on the label, then the answer */
 .wv .wv-os__say .is-os {
   display: block;
-  max-width: 19.5em;
-  padding: 7px 12px 8px 11px;
+  max-width: 22em;
+  padding: 7px 12px 8px 1em;
   border-left: 2px solid var(--os-teal);
   border-radius: 0 3px 3px 0;
   background: linear-gradient(90deg, rgba(47, 212, 200, 0.14), rgba(47, 212, 200, 0.03));
   box-shadow: 0 0 0 1px rgba(47, 212, 200, 0.08), 0 10px 30px rgba(5, 12, 23, 0.55);
-  white-space: normal;
+  white-space: pre-line;
   line-height: 1.6;
   color: #dcf8f5;
   text-shadow: none;
@@ -189,6 +204,27 @@
 
 .wv .wv-os__say .is-human {
   color: #e2643f;
+}
+
+/* beside a person, a short tick from the words toward the ring, level with
+   the first line: which person these words belong to should not need reading */
+.wv .wv-os__say::before {
+  content: "";
+  position: absolute;
+  top: 0.85em;
+  width: 0;
+  height: 1px;
+  background: rgba(157, 180, 189, 0.55);
+}
+
+.wv .wv-os__say[data-side="right"]::before {
+  left: -18px;
+  width: 12px;
+}
+
+.wv .wv-os__say[data-side="left"]::before {
+  right: -18px;
+  width: 12px;
 }
 
 .wv .wv-os__say .is-human::before,
@@ -898,8 +934,7 @@ body:has(.wv-page) .site-header {
 
   /* less room beside the front person: the words may wrap */
   .wv .wv-os__say {
-    white-space: normal;
-    max-width: 15em;
+    max-width: 24em;
   }
 
   .wv .wv-os[data-os-scene="on"] .wv-os__steps b {
@@ -1834,7 +1869,8 @@ html[data-wv-reveal] .wv [data-reveal].is-in {
   }
 
   .wv .wv-os__say {
-    max-width: min(15em, 64vw);
+    /* wide enough for a reply to break where it is written to, not mid-word */
+    max-width: min(24em, 82vw);
     line-height: 1.6;
   }
 }

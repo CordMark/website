@@ -29,12 +29,16 @@ import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
  *                          engineer is never touched
  *   ask         0.46–0.58  the engineer asks; the core gathers the background
  *                          and opens one path, to the PM
- *   decide      0.58–0.70  the hub gathers what sales knows and hands it to
+ *   decide      0.58–0.73  the hub gathers what sales knows and hands it to
  *                          the PM; the PM decides. The one warm light. The
- *                          executive is told, not asked
- *   act         0.70–0.80  it returns to the engineer as work; the trace stays
- *   visibility  0.80–0.90  the engineer's raw worry and the decision reach
- *                          the executive together, before it is too late
+ *                          decision goes back to the hub, and a dim ping
+ *                          reaches the executive — told, not asked — before
+ *                          the beat ends
+ *   act         0.73–0.80  it returns to the engineer as work; the trace stays
+ *   visibility  0.80–0.90  the engineer's raw word reaches the hub, and the
+ *                          hub carries the one thing nobody reported to the
+ *                          executive, who calls the priority — before it is
+ *                          too late
  *   ai-native   0.90–1.00  the scaffolding withdraws; the threads thicken
  */
 
@@ -91,8 +95,8 @@ const FRONT: [number, number][] = [
   [0.5, FRONT_OF(ENGINEER)],
   [0.57, FRONT_OF(ENGINEER)],
   [0.61, FRONT_OF(PM)],
-  [0.71, FRONT_OF(PM)],
-  [0.75, FRONT_OF(ENGINEER)],
+  [0.72, FRONT_OF(PM)],
+  [0.76, FRONT_OF(ENGINEER)],
   [0.8, FRONT_OF(ENGINEER)],
   [0.85, FRONT_OF(EXEC)],
   [0.9, FRONT_OF(EXEC)],
@@ -117,9 +121,11 @@ const SHOTS: Shot[] = [
   // overview: front on, the hub riding high so the headline has the bottom
   { p: 0.0, el: 18, dist: 10.6, target: [0, -0.72, 0], sx: 0 },
   { p: 0.28, el: 18, dist: 10.6, target: [0, -0.72, 0], sx: 0 },
-  // the beats: a little higher, the ring lower on screen, clear of the caption
-  { p: 0.36, el: 22, dist: 10.2, target: [0, -0.15, 0], sx: 1.0 },
-  { p: 0.9, el: 22, dist: 10.2, target: [0, -0.15, 0], sx: 1.0 },
+  // the beats: seen from higher up, so the person behind the hub stands
+  // above it on screen instead of vanishing into it; the ring sits lower,
+  // clear of the caption
+  { p: 0.36, el: 27, dist: 11, target: [0, -0.8, 0], sx: 1.0 },
+  { p: 0.9, el: 27, dist: 11, target: [0, -0.8, 0], sx: 1.0 },
   // ai-native: pull back
   { p: 0.97, el: 16, dist: 13, target: [0, -0.2, 0], sx: 0.7 },
   { p: 1.0, el: 16, dist: 13, target: [0, -0.2, 0], sx: 0.7 },
@@ -783,14 +789,19 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
     const arrive = span(p, 0.0, 0.1);
     const whole = span(p, 0.08, 0.2);
     // the beats — see the header. Each is a window of p.
-    const decide = span(p, 0.62, 0.7);
-    const act = span(p, 0.7, 0.8);
+    const decide = span(p, 0.6, 0.67);
+    const act = span(p, 0.73, 0.8);
     // the tool disappears into the work: at the end the scaffolding fades and
     // only the threads are left. Not a reveal — a withdrawal.
     const invisible = span(p, 0.9, 1.0);
 
     // while the core is working on a question
-    const think = Math.max(pulse(p, 0.36, 0.46), pulse(p, 0.48, 0.58) * 1.0, pulse(p, 0.6, 0.68) * 0.6);
+    const think = Math.max(
+      pulse(p, 0.36, 0.46),
+      pulse(p, 0.48, 0.58) * 1.0,
+      pulse(p, 0.59, 0.65) * 0.6,
+      pulse(p, 0.83, 0.85) * 0.5,
+    );
 
     // context the company owns never goes down, even scrolling back up
     memoryHeld = Math.max(memoryHeld, Math.max(act * 0.35, span(p, 0.8, 1.0)));
@@ -849,26 +860,27 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
     nodeMat.opacity = whole * (1 - invisible);
     ringMat.opacity = whole * (1 - invisible);
 
-    const press = span(p, 0.665, 0.695);
+    const press = span(p, 0.645, 0.67);
 
     // Who this beat is about. Everyone else recedes, so the path reads.
     const w = (a0: number, b0: number) => span(p, a0 - 0.03, a0 + 0.03) * (1 - span(p, b0 - 0.03, b0 + 0.03));
     const inStory = span(p, 0.32, 0.37) * (1 - span(p, 0.9, 0.96));
     const focus = [0, 0, 0, 0];
     focus[SALES] = w(0.34, 0.46);
-    focus[ENGINEER] = Math.max(w(0.46, 0.58), w(0.7, 0.8), w(0.34, 0.46) * 0.35, w(0.8, 0.9) * 0.7);
+    focus[ENGINEER] = Math.max(w(0.46, 0.58), w(0.73, 0.8), w(0.34, 0.46) * 0.35, w(0.8, 0.9) * 0.7);
     focus[PM] = w(0.46, 0.8);
-    focus[SALES] = Math.max(focus[SALES], w(0.58, 0.67) * 0.7);
-    focus[EXEC] = Math.max(w(0.69, 0.75) * 0.5, w(0.8, 0.9));
+    focus[SALES] = Math.max(focus[SALES], w(0.58, 0.65) * 0.7);
+    focus[EXEC] = Math.max(w(0.69, 0.75) * 0.6, w(0.8, 0.9));
 
     // Who is lit, and when. Nobody has their own colour — a palette of four
     // would be read as four ranks. Colour only ever means state.
     const heat = [0, 0, 0, 0];
     heat[SALES] = pulse(p, 0.34, 0.5);
-    heat[ENGINEER] = Math.max(pulse(p, 0.46, 0.6) * 0.9, pulse(p, 0.72, 0.84), pulse(p, 0.8, 0.88) * 0.7);
-    heat[PM] = Math.max(pulse(p, 0.52, 0.66), decide * (1 - span(p, 0.76, 0.84)));
-    heat[SALES] = Math.max(heat[SALES], pulse(p, 0.58, 0.66) * 0.7);
-    heat[EXEC] = Math.max(pulse(p, 0.69, 0.76) * 0.35, pulse(p, 0.82, 0.96));
+    heat[ENGINEER] = Math.max(pulse(p, 0.46, 0.6) * 0.9, pulse(p, 0.74, 0.84), pulse(p, 0.8, 0.88) * 0.7);
+    heat[PM] = Math.max(pulse(p, 0.52, 0.66), decide * (1 - span(p, 0.74, 0.79)));
+    heat[SALES] = Math.max(heat[SALES], pulse(p, 0.58, 0.64) * 0.7);
+    // the ping arrives: the executive lights a little, once, and reads
+    heat[EXEC] = Math.max(pulse(p, 0.7, 0.76) * 0.5, pulse(p, 0.82, 0.96), span(p, 0.875, 0.888) * (1 - span(p, 0.9, 0.92)));
 
     for (let i = 0; i < ROLES.length; i++) {
       const appear = clamp((whole - i * 0.06) / 0.55);
@@ -877,7 +889,13 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
       dimOut[i] = recede;
       const c = NODE.clone().lerp(CYAN_HOT, h);
       c.lerp(NODE_DIM, recede * 0.75);
-      if (i === PM) c.lerp(HUMAN_LIT, decide * (1 - span(p, 0.76, 0.84)) * 0.9);
+      // the warm colour is the moment of a person's call, not a rank: on the
+      // PM while the decision is made and handed on, gone once it is work;
+      // on the executive for the beat in which they call the priority
+      const pmCall = decide * (1 - span(p, 0.74, 0.79));
+      const execCall = span(p, 0.875, 0.888) * (1 - span(p, 0.9, 0.92));
+      if (i === PM) c.lerp(HUMAN_LIT, pmCall * 0.9);
+      if (i === EXEC) c.lerp(HUMAN_LIT, execCall * 0.85);
 
       tmpM.compose(
         rolePos[i],
@@ -894,7 +912,7 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
       tmpQ.setFromRotationMatrix(tmpLook);
       const ringScale = appear * (0.55 + h * 0.65) * (1 - recede * 0.5);
       // the decision ring around the executive is wider still
-      ringWorld[i] = Math.max(0.245 * ringScale, i === PM ? 0.345 * decisionRing.scale.x * (press > 0.01 ? 1 : 0) : 0);
+      ringWorld[i] = Math.max(0.245 * ringScale, i === PM ? 0.345 * decisionRing.scale.x * (decisionMat.opacity > 0.01 ? 1 : 0) : 0);
       tmpM.compose(rolePos[i], tmpQ, tmpS.setScalar(Math.max(0.001, ringScale)));
       nodeRings.setMatrixAt(i, tmpM);
       nodeRings.setColorAt(i, c.clone().multiplyScalar(0.25 + h * 0.75));
@@ -925,18 +943,18 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
     // 03 DECIDE — the hub gathers what sales knows of the customer and hands
     // it to the PM; the PM decides. The executive is told, not asked: a dim
     // ping, and no reply comes back.
-    inbound(SALES, p, 0.58, 0.63, CYAN);
-    outbound(PM, p, 0.62, 0.67, CYAN_HOT);
-    inbound(PM, p, 0.7, 0.735, HUMAN_LIT);
-    outbound(EXEC, p, 0.71, 0.76, BLUE_PALE, 0.4);
+    inbound(SALES, p, 0.58, 0.62, CYAN);
+    outbound(PM, p, 0.61, 0.65, CYAN_HOT);
+    inbound(PM, p, 0.665, 0.7, HUMAN_LIT);
+    outbound(EXEC, p, 0.69, 0.725, BLUE_PALE, 0.55);
 
     // 04 ACT — back to the engineer, the decision with the grounds for it
-    outbound(ENGINEER, p, 0.735, 0.8, warmCyan);
+    outbound(ENGINEER, p, 0.745, 0.8, warmCyan);
 
-    // 05 VISIBILITY — the engineer's unpolished worry comes in to the hub, and
-    // goes on to the executive together with the decision it concerns
-    inbound(ENGINEER, p, 0.81, 0.855, CYAN_HOT);
-    outbound(EXEC, p, 0.85, 0.905, warmCyan, 0.95);
+    // 05 VISIBILITY — the engineer's unpolished word comes in to the hub, and
+    // goes on to the executive unasked, with where C stands
+    inbound(ENGINEER, p, 0.81, 0.84, CYAN_HOT);
+    outbound(EXEC, p, 0.835, 0.865, warmCyan, 0.95);
 
     /* ---- the decision: one person, one warm mark ---- */
     camLocal.copy(camera.position);
@@ -947,7 +965,9 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
     decisionWave.position.copy(rolePos[PM]);
     decisionWave.quaternion.copy(decisionRing.quaternion);
     // the mark stays on the person who decided, quieter once the work has moved on
-    decisionMat.opacity = press * (1 - invisible) * (1 - act * 0.35) * (1 - span(p, 0.78, 0.86) * 0.6);
+    // the ring around the PM lasts while the decision is theirs to hand on,
+    // and is gone once it has become the engineer's work
+    decisionMat.opacity = press * (1 - invisible) * (1 - act * 0.35) * (1 - span(p, 0.74, 0.79));
     decisionRing.scale.setScalar(0.4 + (1 - Math.pow(1 - press, 3)) * 0.6);
     // a short ripple; the PM is close to the camera here, so it stays small
     // over before the ACT caption arrives (0.70) and the ring turns away (0.71)
