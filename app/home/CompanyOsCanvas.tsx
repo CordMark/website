@@ -181,8 +181,18 @@ export function CompanyOsCanvas() {
         stepEls.forEach((el, i) => el.classList.toggle("is-active", i === next));
         indexEls.forEach((el, i) => el.classList.toggle("is-active", i === next));
       }
+      // "before": the section has slid up under the hero but does not own the
+      // screen yet — the hero's mark is still on its way to the header
       const nextPhase =
-        p < SHIFT_FROM ? "overview" : p < SHIFT_TO ? "shift" : p < CLOSE_FROM ? "explain" : "closing";
+        rect.top > 0
+          ? "before"
+          : p < SHIFT_FROM
+            ? "overview"
+            : p < SHIFT_TO
+              ? "shift"
+              : p < CLOSE_FROM
+                ? "explain"
+                : "closing";
       if (nextPhase !== phase) {
         phase = nextPhase;
         section.dataset.osPhase = nextPhase;
@@ -321,9 +331,10 @@ export function CompanyOsCanvas() {
 
       // The scene is position:fixed and covers the whole viewport, so it must
       // stay invisible until this section actually owns the screen — the pin
-      // only fills it once rect.top reaches 0. Fading in any earlier paints
-      // navy (and role labels) over the section above.
-      sceneAlpha = Math.min(clamp((320 - rect.top) / 320), clamp(rect.bottom / 320));
+      // only fills it once rect.top reaches 0. The section starts under the
+      // hero's last screen, and its navy must not paint over the mark on its
+      // way to the header: not a pixel of it before the pin.
+      sceneAlpha = Math.min(clamp(-rect.top / 240), clamp(rect.bottom / 320));
       // the scene goes out behind the closing words
       const fade = 1 - easeInOut(clamp((p - FADE_FROM) / 0.05));
       host.style.opacity = String(sceneAlpha * fade);

@@ -78,12 +78,10 @@ const practices = [
   },
   {
     index: "SUPPORT",
-    title: "組織・業務改善、AI駆動開発の導入・教育・伴走",
-    body: "開発組織を含む業務の進め方を診断し、ドキュメント、計画、レビュー、検証を含む開発プロセスをAI前提に組み替える。",
+    title: "AI駆動開発の導入・教育・伴走",
+    body: "開発チームの工程を診断し、仕様の書き方からレビュー、テスト、文書、教育までをAI前提の型に組み替え、チームの標準として定着させる。",
     href: "/service/support",
     link: "AI駆動開発支援",
-    secondHref: "/company-os",
-    secondLink: "組織・業務改善支援",
     hop: "→ 03  知見の還元",
   },
   {
@@ -135,7 +133,7 @@ export default function Home() {
                 <span className="wv-nowrap">決まる。</span>
               </h1>
               <p className="wv-hero__lead">
-                AIがコードを書く時代、開発を止めているのは実装ではなく、問いと判断の往復です。CordMarkは、その会話の形を組み替え、速くなった分を人の時間へ戻す会社です。自分たちの会社でまず動かし、ソフトウェア開発の現場へ。主要商品は、<span className="wv-nowrap">Company OS</span>。
+                AIで、実装は速くなりました。それでも会社を止めているのは、問いが答えを待ち、判断が上がってくるまでの往復です。CordMarkは、その往復を短くし、速くなった分を人が考え、決め、創造する時間へ戻す会社です。自分たちの会社で先に動かしたものを、顧客の現場へ持ち込みます。
               </p>
               <div className="wv-hero__actions">
                 <a className="wv-button" href="#company-os">
@@ -237,7 +235,7 @@ export default function Home() {
                 </h2>
               </div>
               <p className="wv-lead" data-reveal="2">
-                受託・共同開発で顧客の現場を理解し、そこで得た知見を組織・業務改善の支援とCompany OSへ還元する。支援とProductで得た知見は、次の開発Projectへ戻る。三つは別々のサービスではなく、顧客の現実に根ざした新しい働き方をつくる一つの流れです。
+                受託・共同開発で顧客の現場を理解し、そこで得た知見をAI駆動開発支援とCompany OSへ還元する。支援とProductで得た知見は、次の開発Projectへ戻る。三つは別々のサービスではなく、顧客の現実に根ざした新しい働き方をつくる一つの流れです。
               </p>
             </div>
             <div className="wv-practices">
@@ -255,11 +253,6 @@ export default function Home() {
                         <a className="wv-link" href={item.href}>
                           {item.link} <Arrow />
                         </a>
-                        {"secondHref" in item && (
-                          <a className="wv-link" href={item.secondHref}>
-                            {item.secondLink} <Arrow />
-                          </a>
-                        )}
                       </div>
                       <span className={"back" in item ? "wv-practice__hop is-back" : "wv-practice__hop"}>{item.hop}</span>
                     </div>
@@ -344,7 +337,7 @@ export default function Home() {
                 </div>
                 <h3>意思と実行を、つなぐ。</h3>
                 <p>
-                  会社の意思決定と日々の仕事をつなぎ、人が判断と創造に集中できる状態を、顧客の現場からつくる。Company OS、組織・業務改善の支援、受託・共同開発。
+                  会社の意思決定と日々の仕事をつなぎ、人が判断と創造に集中できる状態を、顧客の現場からつくる。Company OS、AI駆動開発支援、受託・共同開発。
                 </p>
                 <div className="wv-horizon__links">
                   <a className="wv-link" href="#company-os">

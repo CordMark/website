@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://cordmark-website.vercel.app"),
   title: "CordMark | 会社の速さは、いちばん遅い会話で決まる。",
   description:
-    "AIがコードを書く時代、開発を止めているのは問いと判断の往復。CordMarkは、その会話の形を組み替え、速くなった分を人の時間へ戻す会社です。主要商品Company OSのほか、AI駆動開発支援、受託・共同開発を行います。",
+    "AIで実装は速くなった。それでも会社を止めているのは、問いが答えを待ち、判断が上がってくるまでの往復。CordMarkは、その往復を短くし、速くなった分を人が考え、決め、創造する時間へ戻す会社です。主要商品Company OSのほか、AI駆動開発支援、受託・共同開発を行います。",
   icons: {
     icon: "/assets/favicon.png",
   },
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     siteName: "CordMark",
     title: "CordMark | 会社の速さは、いちばん遅い会話で決まる。",
     description:
-      "開発を止めているのは実装ではなく、問いと判断の往復。その会話の形を組み替え、速くなった分を人の時間へ戻す会社です。主要商品は、Company OS。",
+      "会社を止めているのは、問いが答えを待ち、判断が上がってくるまでの往復。その往復を短くし、速くなった分を人が考え、決め、創造する時間へ戻す会社です。主要商品は、Company OS。",
     images: [
       {
         url: "/og.png",
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "CordMark | 会社の速さは、いちばん遅い会話で決まる。",
     description:
-      "開発を止めているのは実装ではなく、問いと判断の往復。その会話の形を組み替え、速くなった分を人の時間へ戻す会社です。主要商品は、Company OS。",
+      "会社を止めているのは、問いが答えを待ち、判断が上がってくるまでの往復。その往復を短くし、速くなった分を人が考え、決め、創造する時間へ戻す会社です。主要商品は、Company OS。",
     images: ["/og.png"],
   },
 };

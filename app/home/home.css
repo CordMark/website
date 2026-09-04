@@ -239,6 +239,9 @@
 
 .wv main {
   display: block;
+  /* the hero has no ground of its own (see .wv-hero); this is what shows
+     behind it while it is pinned */
+  background: var(--wv-night);
 }
 
 .wv h1,
@@ -543,6 +546,14 @@ body:has(.wv-page) .site-header {
   height: 260svh;
   margin-top: calc(var(--header-h) * -1);
   color: var(--wv-linen);
+  /* The Company OS section starts under this one's last screen, so that it is
+     pinned the moment the cord has become the mark and gone up to the header.
+     The hero sits above it, so that section's ground can never slide up over
+     the mark — and the hero has no ground of its own, so once its pin lets go
+     and slides away (everything in it gone by then) the section shows through.
+     The night behind the pin comes from main. */
+  z-index: 2;
+  background: transparent;
 }
 
 .wv .wv-hero__pin {
@@ -553,6 +564,12 @@ body:has(.wv-page) .site-header {
   height: 100svh;
   padding: calc(var(--header-h) + clamp(20px, 6vh, 72px)) var(--wv-x) clamp(32px, 8vh, 96px);
   overflow: hidden;
+  /* while it slides away over the next section it must not take the pointer */
+  pointer-events: none;
+}
+
+.wv .wv-hero__copy {
+  pointer-events: auto;
 }
 
 .wv .wv-hero__scrim {
@@ -628,6 +645,12 @@ body:has(.wv-page) .site-header {
   min-height: 560svh;
   padding: 0 var(--wv-x);
   color: var(--wv-linen);
+  /* Starts under the hero's last screen, so it is pinned the moment the mark
+     has gone up to the header: the cord's last frame and this section's first
+     are the same scroll position. (The cord canvas is fixed above this
+     section, so nothing here can slide over the mark.) Until the pin owns the
+     screen (data-os-phase="before") nothing here is drawn. */
+  margin-top: -100svh;
   /* the scrims behind the words reach past the edges; on a phone that would
      widen the page (clip, not hidden: hidden would break the sticky pin) */
   overflow-x: clip;
@@ -758,7 +781,19 @@ body:has(.wv-page) .site-header {
   pointer-events: none;
 }
 
+/* Under the hero, before the pin: nothing of this section shows, and nothing
+   of it takes the pointer, so the cord finishes on its own ground. */
+.wv .wv-os[data-os-phase="before"] .wv-os__pin {
+  pointer-events: none;
+}
+
+.wv .wv-os[data-os-phase="before"] .wv-os__overview {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
 /* Only one of the two is ever readable, and they cross-fade. */
+.wv .wv-os[data-os-phase="before"] .wv-os__copy,
 .wv .wv-os[data-os-phase="overview"] .wv-os__copy,
 .wv .wv-os[data-os-phase="shift"] .wv-os__copy {
   opacity: 0;
@@ -839,6 +874,7 @@ body:has(.wv-page) .site-header {
   opacity: 1;
 }
 
+.wv .wv-os[data-os-phase="before"] .wv-os__index,
 .wv .wv-os[data-os-phase="overview"] .wv-os__index,
 .wv .wv-os[data-os-phase="shift"] .wv-os__index {
   opacity: 0;
@@ -980,6 +1016,10 @@ body:has(.wv-page) .site-header {
 /* the section is not pinned when there is nothing to scrub */
 .wv .wv-os[data-os-scene="off"] {
   min-height: auto;
+}
+
+.wv .wv-os[data-os-scene="off"] {
+  margin-top: 0;
 }
 
 .wv .wv-os[data-os-scene="off"] .wv-os__pin {
@@ -1745,8 +1785,10 @@ html[data-wv-reveal] .wv [data-reveal].is-in {
     min-height: calc(100svh - var(--header-h));
   }
 
+
   .wv .wv-os {
     min-height: auto;
+    margin-top: 0;
   }
 
   .wv .wv-os__pin {

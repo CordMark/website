@@ -306,9 +306,10 @@ export function HeroCord() {
       const copyAlpha = 1 - span(p, 0.34, 0.6);
       if (heroCopy) heroCopy.style.opacity = String(copyAlpha);
       if (heroHint) heroHint.style.opacity = String(1 - span(p, 0.02, 0.18));
-      // narrow, the scrim covers the whole screen for the words; it leaves
-      // with them so the cord and the mark form on a clear ground
-      if (heroScrim) heroScrim.style.opacity = narrowQuery.matches ? String(copyAlpha) : "";
+      // the scrim is there for the words, and leaves with them: the cord and
+      // the mark form on a clear ground, and the pin — which slides away over
+      // the Company OS section — carries nothing visible by then
+      if (heroScrim) heroScrim.style.opacity = String(copyAlpha);
 
       if (running && !reduce) raf = requestAnimationFrame(draw);
     };
