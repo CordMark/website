@@ -1,5 +1,6 @@
 import { Noto_Sans_JP, Noto_Serif_JP } from "next/font/google";
 import { Footer } from "./Footer";
+import { ChainReveal } from "./home/ChainReveal";
 import { CompanyOsCanvas } from "./home/CompanyOsCanvas";
 import { CordMark } from "./home/CordMark";
 import { GroundWatch } from "./home/GroundWatch";
@@ -70,11 +71,11 @@ const companyOsSteps = [
 
 const practices = [
   {
-    index: "PRODUCT",
-    title: "Company OSの企画・開発・展開",
-    body: "会社の意思と日々の仕事をつなぐProductをつくる。顧客の現場で得た知見を、契約と機密性を守った範囲でProductへ還元する。",
-    href: "#company-os",
-    link: "Company OSについて",
+    index: "DELIVERY",
+    title: "課題に合わせた受託・共同開発",
+    body: "顧客の具体的な課題に応えるアプリ・システムを開発する。現場を理解し、信頼を築き、そこで得た知見を支援とProductへつなぐ。",
+    href: "/contact",
+    link: "開発の相談をする",
   },
   {
     index: "SUPPORT",
@@ -82,36 +83,15 @@ const practices = [
     body: "開発組織を含む業務の進め方を診断し、ドキュメント、計画、レビュー、検証を含む開発プロセスをAI前提に組み替える。",
     href: "/service/ai-driven-development",
     link: "AI駆動開発支援",
+    secondHref: "/service/ai-native-company",
+    secondLink: "組織・業務改善支援",
   },
   {
-    index: "DELIVERY",
-    title: "課題に合わせた受託・共同開発",
-    body: "顧客の具体的な課題に応えるアプリ・システムを開発する。現場を理解し、信頼を築き、そこで得た知見を支援とProductへつなぐ。",
-    href: "/contact",
-    link: "開発の相談をする",
-  },
-];
-
-const principles = [
-  {
-    number: "01",
-    title: "面白さを見失わない。",
-    body: "目標だけを見つめて、いま取り組んでいることの面白さや発見を見失わない。苦悩や困難を美化せず、それらも含めた現在の営みに自分たちなりの面白さを見つけ、つくる。",
-  },
-  {
-    number: "02",
-    title: "遠くを見据えて今を決める。",
-    body: "目先の損得ではなく、技術と社会がどこへ向かうかを見据えて選ぶ。繰り返す仕事はAIと仕組みで再現可能にし、すぐに利益にならない探索や学習にも取り組む。",
-  },
-  {
-    number: "03",
-    title: "摩擦を価値に変える。",
-    body: "意見の違いを前進を妨げるものではなく、一人では考えられなかった答えへのヒントと捉える。相手を信じ、なぜずれているのかを本気で考え、第三の答えをつくる。",
-  },
-  {
-    number: "04",
-    title: "確かさを積み上げる。",
-    body: "推測を事実だと思い込まない。小さく試し、結果を確かめ、必要なら仮説を変える。Productの価値も自己評価ではなく、客観的な反応で確かめる。",
+    index: "PRODUCT",
+    title: "Company OSの企画・開発・展開",
+    body: "会社の意思と日々の仕事をつなぐProductをつくる。顧客の現場で得た知見を、契約と機密性を守った範囲でProductへ還元する。",
+    href: "#company-os",
+    link: "Company OSについて",
   },
 ];
 
@@ -137,6 +117,7 @@ export default function Home() {
   return (
     <div className={`wv ${serif.variable} ${sans.variable}`}>
       <GroundWatch />
+      <ChainReveal />
       <main id="top" className="site-main">
         {/* 1. Hero — 人の意思を主語にする。Scrollで糸が編まれる */}
         <section className="wv-hero" data-ground="night" aria-labelledby="wv-hero-heading">
@@ -146,13 +127,13 @@ export default function Home() {
             <div className="wv-hero__copy">
               <p className="wv-label">CordMark — Marking a more human future</p>
               <h1 id="wv-hero-heading">
-                <span className="wv-nowrap">ばらばらの線が、</span>
+                <span className="wv-nowrap">会社の速さは、</span>
                 <br />
-                <span className="wv-nowrap">ひとつの意思に</span>
-                <span className="wv-nowrap">結ばれる。</span>
+                <span className="wv-nowrap">いちばん遅い会話で</span>
+                <span className="wv-nowrap">決まる。</span>
               </h1>
               <p className="wv-hero__lead">
-                異なる経験と文脈が、摩擦を経て一本の意思になる。AIはその意思を現実へ運ぶ力であり、人の判断に置き換わるものではありません。
+                AIがコードを書く時代、開発を止めているのは実装ではなく、問いと判断の往復です。CordMarkは、その会話の形を組み替え、速くなった分を人の時間へ戻す会社です。自分たちの会社でまず動かし、ソフトウェア開発の現場へ。主要商品は、<span className="wv-nowrap">Company OS</span>。
               </p>
               <div className="wv-hero__actions">
                 <a className="wv-button" href="#company-os">
@@ -186,7 +167,7 @@ export default function Home() {
               </p>
             </div>
             <div className="wv-purpose__chain">
-              <p className="wv-label wv-purpose__chain-label">余力は、人へ戻る</p>
+              <p className="wv-label wv-purpose__chain-label">五つの段</p>
               <ol className="wv-chain" aria-label="Purposeの因果">
                 {chain.map((text, i) => (
                   <li key={text}>
@@ -200,7 +181,7 @@ export default function Home() {
         </section>
 
         {/* 3. Company OS — 売っているProduct。全画面の3D Sceneが成り立ちを見せる(Scroll連動) */}
-        <section className="wv-os wv-act" id="company-os" data-ground="night" aria-labelledby="wv-os-heading">
+        <section className="wv-os wv-act" id="company-os" data-ground="night" data-blend-down="paper2" aria-labelledby="wv-os-heading">
           <div className="wv-os__pin">
             <CompanyOsCanvas />
             <div className="wv-inner wv-os__grid">
@@ -214,7 +195,7 @@ export default function Home() {
                   <span className="wv-nowrap">重要な判断を、見失わない。</span>
                 </h2>
                 <p className="wv-os__overview-lead">
-                  作業はAIに置き換わっていく。エンジニアリングだけでなく、あらゆる業務で。その先で詰まるのは、問いが答えを待ち、判断が上がってくるまでの時間。
+                  実装は、速くなった。次に詰まるのは、決めることと、伝えること。問いが答えを待ち、判断が上がってくるまでの時間を、開発の現場から取り戻す。
                 </p>
               </div>
 
@@ -241,8 +222,10 @@ export default function Home() {
               {/* The last beat is not a caption. It comes back to the middle,
                   the way the section opened, while the scene behind it goes
                   out. Pinned screens only; the list above carries it elsewhere. */}
-              <div className="wv-os__closing" aria-hidden="true">
-                <p className="wv-label">Company OS</p>
+              <div className="wv-os__closing">
+                <p className="wv-label" aria-hidden="true">
+                  Company OS
+                </p>
                 <p className="wv-h2">
                   <span className="wv-nowrap">会社が、AIネイティブに</span>
                   <br />
@@ -287,9 +270,16 @@ export default function Home() {
                   </div>
                   <h3>{item.title}</h3>
                   <p>{item.body}</p>
-                  <a className="wv-link" href={item.href}>
-                    {item.link} <Arrow />
-                  </a>
+                  <div className="wv-practice__links">
+                    <a className="wv-link" href={item.href}>
+                      {item.link} <Arrow />
+                    </a>
+                    {"secondHref" in item && (
+                      <a className="wv-link" href={item.secondHref}>
+                        {item.secondLink} <Arrow />
+                      </a>
+                    )}
+                  </div>
                 </article>
               ))}
             </div>
@@ -299,48 +289,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 5. Principles — 判断の仕方 */}
-        <section className="wv-section wv-principles" id="principles" data-ground="paper" aria-labelledby="wv-principles-heading">
-          <div className="wv-inner">
-            <p className="wv-label">Principles</p>
-            <h2 className="wv-h2" id="wv-principles-heading">
-              私たちが、どう考え、どう選ぶか。
-            </h2>
-            <ol className="wv-principles__list">
-              {principles.map((item) => (
-                <li className="wv-principle" key={item.number}>
-                  <span>{item.number}</span>
-                  <h3>{item.title}</h3>
-                  <p>{item.body}</p>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </section>
-
-        {/* 6. Origin — CordMarkと縄文。細い線がここで痕跡になる */}
-        <section className="wv-section wv-origin" id="origin" data-ground="charcoal" aria-labelledby="wv-origin-heading">
-          <div className="wv-inner wv-origin__grid">
-            <div>
-              <CordMark className="wv-origin__mark" title="CordMarkのマーク" />
-              <p className="wv-label">Origin</p>
-              <h2 className="wv-h2" id="wv-origin-heading">
-                CordMarkという名前は、
-                <br />
-                縄文の縄目に由来します。
-              </h2>
-              <p className="wv-lead">
-                縄文時代は、文字による記録こそ少ないものの、自然資源に恵まれ、人々が自分たちの意思で暮らしをつくっていた時代として語られます。CordMarkがそこに見るのは、過去の理想化ではなく、豊かな資源を人間の豊かな暮らしへつなげるという、人間の豊かさの原型です。AIが生む余力を、人の時間、自由、尊厳へ還元する。それは、この問いをAI時代に更新する試みです。
-              </p>
-            </div>
-            <div className="wv-origin__note">
-              <b>縄目は、残る。</b>
-              土器に押しつけられた縄の跡は、線が去ったあとも形として残りました。組織の中で交わされた問いと判断も、同じように痕跡として残り、次の判断の土台になる。私たちが「結ぶ」という言葉に込めているのは、この蓄積です。
-            </div>
-          </div>
-        </section>
-
-        {/* 7. Two phases — 全体を見渡す締め。Phase 2は/beyondへ */}
+        {/* 5. Two phases — いまと、その先。Phase 2は/beyondへ */}
         <section className="wv-section wv-horizons" id="horizons" data-ground="paper" aria-labelledby="wv-horizons-heading">
           <div className="wv-inner">
             <p className="wv-label">Two Phases</p>
@@ -387,7 +336,30 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 8. Contact — 対話へ */}
+        {/* 6. Origin — CordMarkと縄文。細い線がここで痕跡になる */}
+        <section className="wv-section wv-origin" id="origin" data-ground="charcoal" data-blend-down="paper2" aria-labelledby="wv-origin-heading">
+          <div className="wv-inner wv-origin__grid">
+            <div>
+              <CordMark className="wv-origin__mark" title="CordMarkのマーク" />
+              <p className="wv-label">Origin</p>
+              <h2 className="wv-h2" id="wv-origin-heading">
+                一万年前、人は余った時間で、
+                <br />
+                <span className="wv-nowrap">土器に縄目を刻んだ。</span>
+              </h2>
+              <p className="wv-lead">
+                縄文時代は、自然資源に恵まれ、人々が自分たちの意思で暮らしをつくっていた時代として語られます。CordMarkという名前は、その土器に残る縄目(cord
+                mark)に由来します。私たちがそこに見るのは、過去の理想化ではなく、豊かな資源を人間の豊かな暮らしへつなげた、豊かさの原型です。AIが生む余力で、私たちは何を刻むのか。この問いをAI時代に更新する試みが、CordMarkです。
+              </p>
+            </div>
+            <div className="wv-origin__note">
+              <b>縄目は、残る。</b>
+              土器に押しつけられた縄の跡は、線が去ったあとも形として残りました。組織の中で交わされた問いと判断も、同じように痕跡として残り、次の判断の土台になる。私たちが「結ぶ」という言葉に込めているのは、この蓄積です。
+            </div>
+          </div>
+        </section>
+
+        {/* 7. Contact — 対話へ */}
         <section className="wv-section wv-contact" id="contact" data-ground="paper2" aria-labelledby="wv-contact-heading">
           <div className="wv-inner wv-contact__grid">
             <div>

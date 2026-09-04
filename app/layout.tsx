@@ -5,9 +5,9 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://cordmark-website.vercel.app"),
-  title: "CordMark | ばらばらの線が、ひとつの意思に結ばれる。",
+  title: "CordMark | 会社の速さは、いちばん遅い会話で決まる。",
   description:
-    "CordMarkは、テクノロジーによる物質的な充足を精神的な豊かさへ還元することを目指す会社です。会社の意思と日々の仕事をつなぐCompany OSを中心に、組織・業務改善、AI駆動開発支援、受託・共同開発を行います。",
+    "AIがコードを書く時代、開発を止めているのは問いと判断の往復。CordMarkは、その会話の形を組み替え、速くなった分を人の時間へ戻す会社です。主要商品Company OSのほか、組織・業務改善、AI駆動開発支援、受託・共同開発を行います。",
   icons: {
     icon: "/assets/favicon.png",
   },
@@ -15,9 +15,9 @@ export const metadata: Metadata = {
     type: "website",
     locale: "ja_JP",
     siteName: "CordMark",
-    title: "CordMark | ばらばらの線が、ひとつの意思に結ばれる。",
+    title: "CordMark | 会社の速さは、いちばん遅い会話で決まる。",
     description:
-      "人の意思を現実へ運ぶ力としてAIを扱い、会社の意思と日々の仕事をつなぐCompany OSをつくる会社です。",
+      "開発を止めているのは実装ではなく、問いと判断の往復。その会話の形を組み替え、速くなった分を人の時間へ戻す会社です。主要商品は、Company OS。",
     images: [
       {
         url: "/og.png",
@@ -29,9 +29,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "CordMark | ばらばらの線が、ひとつの意思に結ばれる。",
+    title: "CordMark | 会社の速さは、いちばん遅い会話で決まる。",
     description:
-      "人の意思を現実へ運ぶ力としてAIを扱い、会社の意思と日々の仕事をつなぐCompany OSをつくる会社です。",
+      "開発を止めているのは実装ではなく、問いと判断の往復。その会話の形を組み替え、速くなった分を人の時間へ戻す会社です。主要商品は、Company OS。",
     images: ["/og.png"],
   },
 };

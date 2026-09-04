@@ -19,6 +19,15 @@
   --wv-copper-light: #c98a55;
   --wv-moss: #4e6b57;
   --wv-vermilion: #b5482e;
+  /* 同じ役割の色を、地の明暗で持ち替える。銅も石も朱も、紙の上では沈め、
+     闇の上では起こす。どの地でも小さな文字が 4.5:1 を下回らない値 */
+  --wv-accent: #8f5833;
+  --wv-quiet: #666158;
+  --wv-mark: #c4553a;
+  --wv-pad-y: clamp(80px, 11vw, 160px);
+  /* 地の境目を溶かす帯。節の余白より必ず短く保ち、本文には決して掛けない。
+     帯は縦、余白は横で決まるので、min() で低いほうに合わせる */
+  --wv-blend: min(clamp(88px, 12vh, 150px), var(--wv-pad-y));
   --wv-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --wv-x: clamp(22px, 5vw, 88px);
   --wv-max: 1240px;
@@ -215,11 +224,11 @@
   font-weight: 500;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--wv-copper);
+  color: var(--wv-accent);
 }
 
 .wv .wv-section {
-  padding: clamp(80px, 11vw, 160px) var(--wv-x);
+  padding: var(--wv-pad-y) var(--wv-x);
 }
 
 .wv .wv-inner {
@@ -252,7 +261,6 @@
 /* 本文の小さな段落も、縦の行間に対して横が詰まりすぎないよう字間を開ける */
 .wv .wv-os__steps p,
 .wv .wv-practice p,
-.wv .wv-principle p,
 .wv .wv-horizon p,
 .wv .wv-origin__note,
 .wv .wv-beyond__phases dd {
@@ -265,7 +273,7 @@
   gap: 10px;
   padding-bottom: 3px;
   border-bottom: 1px solid currentColor;
-  color: var(--wv-copper);
+  color: var(--wv-accent);
   font-size: 13px;
   letter-spacing: 0.08em;
   transition: gap 0.25s ease, opacity 0.2s ease;
@@ -446,15 +454,36 @@ body:has(.wv-page) .site-header {
   background: var(--wv-night);
 }
 
+.wv [data-ground="night"],
+.wv [data-ground="charcoal"],
+.wv-page [data-ground="night"],
+.wv-page [data-ground="charcoal"],
+.wv .site-footer {
+  --wv-accent: var(--wv-copper-light);
+  --wv-quiet: var(--wv-stone);
+  --wv-mark: #e2643f;
+}
+
 /* Boundaries between a dark and a light ground dissolve instead of cutting.
    The blend lives inside the dark section (z-index -1: above its own
    background, below its text), because a pseudo-element hanging outside would
-   be painted over by the next section. Every neighbour of a dark section is
-   paper, so one colour covers both edges. */
+   be painted over by the next section.
+   溶かす先は隣の節の地の色。paper でない隣を持つ節だけ、markup 側で
+   data-blend-down / data-blend-up を宣言する(節の並び順と同じ場所に置く)。 */
 .wv [data-ground="night"],
 .wv [data-ground="charcoal"] {
   position: relative;
   isolation: isolate;
+  --wv-blend-up: var(--wv-paper);
+  --wv-blend-down: var(--wv-paper);
+}
+
+.wv [data-blend-up="paper2"] {
+  --wv-blend-up: var(--wv-paper-2);
+}
+
+.wv [data-blend-down="paper2"] {
+  --wv-blend-down: var(--wv-paper-2);
 }
 
 .wv [data-ground="night"]::before,
@@ -466,7 +495,7 @@ body:has(.wv-page) .site-header {
   left: 0;
   right: 0;
   z-index: -1;
-  height: clamp(120px, 26vh, 300px);
+  height: var(--wv-blend);
   pointer-events: none;
 }
 
@@ -474,13 +503,13 @@ body:has(.wv-page) .site-header {
 .wv [data-ground="charcoal"]::before {
   top: 0;
   /* through a warm stone, never a neutral grey */
-  background: linear-gradient(to bottom, var(--wv-paper), #7d7263 42%, transparent);
+  background: linear-gradient(to bottom, var(--wv-blend-up), #7d7263 42%, transparent);
 }
 
 .wv [data-ground="night"]::after,
 .wv [data-ground="charcoal"]::after {
   bottom: 0;
-  background: linear-gradient(to top, var(--wv-paper), #7d7263 42%, transparent);
+  background: linear-gradient(to top, var(--wv-blend-down), #7d7263 42%, transparent);
 }
 
 /* The hero has nothing above it to blend into. */
@@ -510,7 +539,7 @@ body:has(.wv-page) .site-header {
   display: grid;
   align-items: center;
   height: 100svh;
-  padding: calc(var(--header-h) + clamp(24px, 6vh, 72px)) var(--wv-x) clamp(48px, 8vh, 96px);
+  padding: calc(var(--header-h) + clamp(20px, 6vh, 72px)) var(--wv-x) clamp(32px, 8vh, 96px);
   overflow: hidden;
 }
 
@@ -544,19 +573,22 @@ body:has(.wv-page) .site-header {
 .wv .wv-hero h1 {
   font-family: var(--wv-serif), "Hiragino Mincho ProN", "Yu Mincho", serif;
   font-weight: 300;
-  font-size: clamp(30px, 4.8vw, 62px);
+  /* 低い窓では横幅ではなく高さが効く。min() で低いほうの軸に合わせないと、
+     Pin(sticky・overflow hidden)の下に沈んで二度と出てこない */
+  font-size: clamp(30px, min(4.8vw, 8.4vh), 62px);
   line-height: 1.42;
   letter-spacing: 0.05em;
-  margin-top: 28px;
+  margin-top: clamp(16px, 3vh, 28px);
   text-wrap: balance;
 }
 
 .wv .wv-hero__lead {
-  margin-top: 28px;
+  margin-top: clamp(16px, 3vh, 28px);
   max-width: 30em;
   font-size: clamp(14px, 1.05vw, 15.5px);
   font-weight: 400;
   line-height: 2.05;
+  letter-spacing: 0.03em;
   color: #d9d3c5;
 }
 
@@ -564,7 +596,7 @@ body:has(.wv-page) .site-header {
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
-  margin-top: 40px;
+  margin-top: clamp(22px, 4.4vh, 40px);
 }
 
 .wv .wv-hero__hint {
@@ -620,12 +652,17 @@ body:has(.wv-page) .site-header {
   font-size: clamp(16px, 1.4vw, 20px);
   line-height: 1.6;
   text-wrap: pretty;
-  opacity: 0.3;
-  transform: translateY(8px);
   transition: opacity 0.7s ease, transform 0.7s ease;
 }
 
-.wv .wv-chain li.is-on {
+/* 伏せるのは ChainReveal が data-reveal を着けたときだけ。CSS 側で伏せると、
+   点す側が動かなかったときに本文が 0.3 のまま残る */
+.wv .wv-chain[data-reveal] li {
+  opacity: 0.3;
+  transform: translateY(8px);
+}
+
+.wv .wv-chain[data-reveal] li.is-on {
   opacity: 1;
   transform: none;
 }
@@ -634,11 +671,11 @@ body:has(.wv-page) .site-header {
   font-family: var(--wv-mono);
   font-size: 11px;
   letter-spacing: 0.12em;
-  color: var(--wv-stone);
+  color: var(--wv-quiet);
 }
 
 .wv .wv-chain li:last-child {
-  color: var(--wv-copper);
+  color: var(--wv-accent);
 }
 
 
@@ -822,7 +859,7 @@ body:has(.wv-page) .site-header {
   font-family: var(--wv-mono);
   font-size: 11px;
   letter-spacing: 0.18em;
-  color: var(--wv-stone);
+  color: var(--wv-quiet);
   transition: opacity 0.3s ease 0.22s;
 }
 
@@ -851,7 +888,7 @@ body:has(.wv-page) .site-header {
 }
 
 .wv .wv-os__index li.is-human.is-active {
-  color: var(--wv-vermilion);
+  color: var(--wv-mark);
 }
 
 .wv .wv-os__index li.is-active::before {
@@ -862,50 +899,6 @@ body:has(.wv-page) .site-header {
 .wv .wv-os[data-os-phase="shift"] .wv-os__index {
   opacity: 0;
   transition-delay: 0s;
-}
-
-/* a narrower window has less room beside the ball */
-@media (max-width: 1200px) {
-  .wv .wv-os[data-os-scene="on"] .wv-os__copy {
-    width: min(24em, 100%);
-    padding-top: clamp(8px, 4vh, 40px);
-  }
-
-  .wv .wv-os[data-os-scene="on"] .wv-os__steps b {
-    font-size: clamp(22px, 2.4vw, 30px);
-  }
-
-  .wv .wv-os[data-os-scene="on"] .wv-os__steps li > p {
-    margin-top: 12px;
-    font-size: 13.5px;
-    line-height: 1.9;
-  }
-
-  .wv .wv-os[data-os-scene="on"] .wv-os__index {
-    gap: 8px 18px;
-    font-size: 10px;
-  }
-}
-
-@media (max-width: 1100px) {
-  .wv .wv-os[data-os-scene="on"] .wv-os__copy {
-    width: min(20em, 100%);
-  }
-
-  /* less room beside the front person: the words may wrap */
-  .wv .wv-os__say {
-    white-space: normal;
-    max-width: 15em;
-  }
-
-  .wv .wv-os[data-os-scene="on"] .wv-os__steps b {
-    font-size: clamp(21px, 2.3vw, 26px);
-  }
-
-  .wv .wv-os[data-os-scene="on"] .wv-os__steps li > p {
-    font-size: 13px;
-    max-width: 22em;
-  }
 }
 
 .wv .wv-os[data-os-scene="on"] .wv-os__copy-lead {
@@ -965,6 +958,52 @@ body:has(.wv-page) .site-header {
   overflow: visible;
 }
 
+/* a narrower window has less room beside the ball.
+   Media query は詳細度を足さないので、同じ Selector で上書きするこの二つは
+   上の [data-os-scene="on"] より後ろに置く(前に置いていた頃は死んでいた) */
+@media (max-width: 1200px) {
+  .wv .wv-os[data-os-scene="on"] .wv-os__copy {
+    width: min(24em, 100%);
+    padding-top: clamp(8px, 4vh, 40px);
+  }
+
+  .wv .wv-os[data-os-scene="on"] .wv-os__steps b {
+    font-size: clamp(22px, 2.4vw, 30px);
+  }
+
+  .wv .wv-os[data-os-scene="on"] .wv-os__steps li > p {
+    margin-top: 12px;
+    font-size: 13.5px;
+    line-height: 1.9;
+  }
+
+  .wv .wv-os[data-os-scene="on"] .wv-os__index {
+    gap: 8px 18px;
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .wv .wv-os[data-os-scene="on"] .wv-os__copy {
+    width: min(20em, 100%);
+  }
+
+  /* less room beside the front person: the words may wrap */
+  .wv .wv-os__say {
+    white-space: normal;
+    max-width: 15em;
+  }
+
+  .wv .wv-os[data-os-scene="on"] .wv-os__steps b {
+    font-size: clamp(21px, 2.3vw, 26px);
+  }
+
+  .wv .wv-os[data-os-scene="on"] .wv-os__steps li > p {
+    font-size: 13px;
+    max-width: 22em;
+  }
+}
+
 /* No scene at all — reduced motion, or no WebGL. The two blocks can no longer
    share one grid cell and cross-fade, so they simply stack and both read. */
 .wv .wv-os[data-os-scene="off"] .wv-os__grid,
@@ -998,8 +1037,7 @@ body:has(.wv-page) .site-header {
   margin-top: 8px;
 }
 
-.wv .wv-os[data-os-scene="static"] .wv-os__pin,
-.wv .wv-os[data-os-scene="off"] .wv-os__pin {
+.wv .wv-os[data-os-scene="static"] .wv-os__pin {
   padding-bottom: clamp(160px, 30vh, 320px);
 }
 
@@ -1041,7 +1079,7 @@ body:has(.wv-page) .site-header {
 }
 
 .wv .wv-os__steps li.is-human {
-  border-left-color: var(--wv-vermilion);
+  border-left-color: var(--wv-mark);
 }
 
 .wv .wv-os .wv-label {
@@ -1057,7 +1095,7 @@ body:has(.wv-page) .site-header {
 }
 
 .wv .wv-os__steps li.is-human .wv-os__tag {
-  color: var(--wv-vermilion);
+  color: var(--wv-mark);
 }
 
 .wv .wv-os__steps b {
@@ -1065,6 +1103,7 @@ body:has(.wv-page) .site-header {
   margin-top: 8px;
   font-size: 16px;
   font-weight: 700;
+  letter-spacing: 0.03em;
   color: var(--wv-linen);
 }
 
@@ -1077,10 +1116,6 @@ body:has(.wv-page) .site-header {
 }
 
 /* ---------- What we do ---------- */
-
-.wv .wv-services {
-  background: transparent;
-}
 
 .wv .wv-services__head {
   display: grid;
@@ -1121,7 +1156,7 @@ body:has(.wv-page) .site-header {
   font-family: var(--wv-mono);
   font-size: 11px;
   letter-spacing: 0.12em;
-  color: var(--wv-stone);
+  color: var(--wv-quiet);
 }
 
 .wv .wv-practice h3 {
@@ -1140,8 +1175,14 @@ body:has(.wv-page) .site-header {
   color: var(--wv-ink-2);
 }
 
-.wv .wv-practice .wv-link {
+.wv .wv-practice__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 22px;
   margin-top: 24px;
+}
+
+.wv .wv-practice .wv-link {
   align-self: flex-start;
 }
 
@@ -1149,59 +1190,15 @@ body:has(.wv-page) .site-header {
   margin-top: 28px;
   font-size: 13px;
   line-height: 1.9;
-  color: var(--wv-stone);
-}
-
-/* ---------- Principles ---------- */
-
-.wv .wv-principles {
-  background: transparent;
-}
-
-.wv .wv-principles__list {
-  list-style: none;
-  margin: clamp(40px, 5vw, 64px) 0 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(28px, 4vw, 56px) clamp(40px, 6vw, 96px);
-}
-
-.wv .wv-principle {
-  padding-top: 22px;
-  border-top: 1px solid var(--wv-ink);
-}
-
-.wv .wv-principle span {
-  font-family: var(--wv-mono);
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  color: var(--wv-stone);
-}
-
-.wv .wv-principle h3 {
-  margin-top: 12px;
-  font-family: var(--wv-serif), "Hiragino Mincho ProN", serif;
-  font-weight: 400;
-  font-size: clamp(22px, 2.2vw, 28px);
-  letter-spacing: 0.04em;
-}
-
-.wv .wv-principle p {
-  margin-top: 14px;
-  max-width: 30em;
-  font-size: 14px;
-  line-height: 2;
-  color: var(--wv-ink-2);
+  letter-spacing: 0.03em;
+  color: var(--wv-quiet);
 }
 
 /* ---------- Origin ---------- */
 
 .wv .wv-origin {
   position: relative;
-  padding-bottom: clamp(150px, 18vw, 250px); /* room for the cord-mark band */
   color: var(--wv-linen);
-  background: transparent;
 }
 
 .wv .wv-origin__grid {
@@ -1210,7 +1207,7 @@ body:has(.wv-page) .site-header {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: clamp(32px, 5vw, 80px);
-  align-items: center;
+  align-items: end;
 }
 
 .wv .wv-origin .wv-h2 {
@@ -1223,8 +1220,8 @@ body:has(.wv-page) .site-header {
 
 .wv .wv-origin__note {
   padding: 26px 28px;
-  border: 1px solid var(--wv-line-dark);
-  background: rgba(27, 31, 28, 0.55);
+  border: 1px solid rgba(237, 231, 218, 0.16);
+  background: rgba(15, 14, 12, 0.42);
   font-size: 14px;
   line-height: 2;
   color: #c9c3b4;
@@ -1241,10 +1238,6 @@ body:has(.wv-page) .site-header {
 
 /* ---------- Two horizons ---------- */
 
-.wv .wv-horizons {
-  background: transparent;
-}
-
 .wv .wv-horizons__grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1254,6 +1247,8 @@ body:has(.wv-page) .site-header {
 
 .wv .wv-horizon {
   position: relative;
+  display: flex;
+  flex-direction: column;
   padding: 30px 30px 32px;
   border: 1px solid var(--wv-line);
   background: var(--wv-paper-2);
@@ -1331,7 +1326,7 @@ body:has(.wv-page) .site-header {
 }
 
 .wv .wv-horizon:hover .wv-horizon__meta {
-  color: var(--wv-copper);
+  color: var(--wv-accent);
 }
 
 .wv .wv-horizon__meta span:last-child {
@@ -1344,7 +1339,7 @@ body:has(.wv-page) .site-header {
 
 .wv .wv-horizon:hover .wv-horizon__links .wv-link {
   gap: 16px;
-  color: var(--wv-copper);
+  color: var(--wv-accent);
 }
 
 .wv .wv-horizon__meta {
@@ -1353,11 +1348,11 @@ body:has(.wv-page) .site-header {
   font-family: var(--wv-mono);
   font-size: 11px;
   letter-spacing: 0.14em;
-  color: var(--wv-stone);
+  color: var(--wv-quiet);
 }
 
 .wv .wv-horizon.is-now .wv-horizon__meta {
-  color: var(--wv-copper);
+  color: var(--wv-accent);
 }
 
 .wv .wv-horizon h3 {
@@ -1370,6 +1365,7 @@ body:has(.wv-page) .site-header {
 }
 
 .wv .wv-horizon p {
+  flex: 1;
   margin-top: 14px;
   font-size: 14px;
   line-height: 2;
@@ -1389,15 +1385,17 @@ body:has(.wv-page) .site-header {
 
 /* ---------- Contact ---------- */
 
-.wv .wv-contact {
-  background: transparent;
-}
-
 .wv .wv-contact__grid {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) auto;
   gap: clamp(32px, 5vw, 80px);
   align-items: end;
+}
+
+/* 1列に畳んだとき、Grid の item は既定で段いっぱいに伸びる。Hero の同じ
+   Button は 163px なので、こちらも文字の幅で止める */
+.wv .wv-contact__grid .wv-button {
+  justify-self: start;
 }
 
 /* ---------- Footer within the new palette ---------- */
@@ -1407,6 +1405,16 @@ body:has(.wv-page) .site-header {
   z-index: 1;
   color: var(--wv-linen);
   background: var(--wv-night);
+}
+
+/* globals.css には、差し替える前の紺のPaletteの色が残っている */
+.wv .site-footer .brand--footer,
+.wv .site-footer .to-top {
+  color: var(--wv-linen);
+}
+
+.wv .site-footer .site-footer__brand small {
+  color: var(--wv-quiet);
 }
 
 /* ---------- Responsive ---------- */
@@ -1445,15 +1453,8 @@ body:has(.wv-page) .site-header {
   .wv .wv-os__pin {
     position: static;
     min-height: auto;
-    padding: clamp(80px, 11vw, 160px) 0 0;
-  }
-
-  .wv .wv-os__steps li {
-    grid-template-columns: 1fr;
-  }
-
-  .wv .wv-os__steps p {
-    grid-column: 1;
+    /* 下は data-os-scene="static" と同じ値。JS が着く前後で高さが動かない */
+    padding: var(--wv-pad-y) 0 clamp(160px, 30vh, 320px);
   }
 
   .wv .wv-hero__scrim {
@@ -1469,12 +1470,9 @@ body:has(.wv-page) .site-header {
   .wv .wv-services__head,
   .wv .wv-origin__grid,
   .wv .wv-horizons__grid,
-  .wv .wv-contact__grid,
-  .wv .wv-principles__list {
+  .wv .wv-contact__grid {
     grid-template-columns: 1fr;
   }
-
-
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1520,7 +1518,8 @@ body:has(.wv-page) .site-header {
   .wv .wv-os__pin {
     position: static;
     min-height: auto;
-    padding: clamp(80px, 11vw, 160px) 0 0;
+    /* 下は data-os-scene="static" と同じ値。JS が着く前後で高さが動かない */
+    padding: var(--wv-pad-y) 0 clamp(160px, 30vh, 320px);
   }
 }
 
@@ -1580,11 +1579,11 @@ body:has(.wv-page) .site-header {
   font-family: var(--wv-mono);
   font-size: 11px;
   letter-spacing: 0.12em;
-  color: var(--wv-stone);
+  color: var(--wv-quiet);
 }
 
 .wv .wv-beyond__phases > div.is-here dt {
-  color: var(--wv-copper);
+  color: var(--wv-accent);
 }
 
 .wv .wv-beyond__phases dd {
@@ -1730,7 +1729,7 @@ body:has(.wv-page) .site-header {
   font-family: var(--wv-mono);
   font-size: 10px;
   letter-spacing: 0.12em;
-  color: var(--wv-stone);
+  color: var(--wv-quiet);
 }
 
 .wv .wv-beyond__wave {

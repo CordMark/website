@@ -6,39 +6,44 @@ import { LaplaceFeature } from "../LaplaceFeature";
 export const metadata: Metadata = {
   title: "About | CordMark",
   description:
-    "CordMarkは、会社の中核にAIを据えるCompanyOSの実装と、その先に生まれる人間の営みを構想するAI Native Implementation Studioです。",
+    "CordMarkは、テクノロジーによる物質的な充足を精神的な豊かさへ還元することを目指す会社です。主要商品Company OSのほか、組織・業務改善、AI駆動開発支援、受託・共同開発を行います。",
 };
 
 const principles = [
   {
     number: "01",
-    title: "AI at the core",
-    body: "AIを一機能で終わらせず、経営と現場を動かす中核に据える。",
+    title: "面白さを見失わない",
+    body: "仕事も、その先の営みも、人が面白いと感じることから離れない。",
   },
   {
     number: "02",
-    title: "Structure over tools",
-    body: "一時的なツール導入ではなく、持続可能な構造設計を行う。",
+    title: "遠くを見据えて今を決める",
+    body: "AIの先にある人の生き方から逆算して、今日の判断を選ぶ。",
   },
   {
     number: "03",
-    title: "Implementation, not slogans",
-    body: "言葉ではなく、成果を生む実装にこだわる。",
+    title: "摩擦を価値に変える",
+    body: "異なる経験と文脈のずれを消さず、判断の材料として残す。",
+  },
+  {
+    number: "04",
+    title: "確かさを積み上げる",
+    body: "自分たちの会社で先に動かし、顧客の現場で確かめたものだけを広げる。",
   },
 ];
 
 const horizons = [
   {
     number: "01",
-    period: "THE NEXT DECADE",
-    title: "AIで、社会の仕組みを組み替える。",
-    body: "企業と働き方を起点に、教育、介護をはじめとする領域へ。AIを中核に据え、意思決定・業務・知識・プロダクトを構造から変えていきます。",
+    period: "PHASE 1 · AI-NATIVE",
+    title: "意思と実行を、つなぐ。",
+    body: "会社の意思決定と日々の仕事をつなぎ、人が判断と創造に集中できる状態を、ソフトウェア開発の現場からつくる。Company OS、組織・業務改善の支援、受託・共同開発。",
   },
   {
     number: "02",
-    period: "AFTER AI TRANSFORMATION",
-    title: "余白に、人間の営みを形づくる。",
-    body: "人と人が競い、遊び、つながり、文化をつくる。Laplaceをはじめ、AIの先に残るエンターテインメントやコミュニティを構想します。",
+    period: "PHASE 2 · BEYOND",
+    title: "人に残る営みを、形にする。",
+    body: "技術が行き渡ったあとにも、人が自ら行う価値のある営みがある。仲間の心理を読み合う2v2の戦略ボードゲームLaplace、社会と人間の先を考えるメディアDotCraft。",
   },
 ];
 
@@ -58,7 +63,7 @@ const companyInfo: Array<[string, ReactNode]> = [
   ],
   [
     "事業内容",
-    "CompanyOS / AI Native化支援、AI Agent / Workflow設計、業務プロセス再設計、AI駆動開発支援、文化・エンターテインメント領域のプロダクト開発、メディア運営",
+    "Company OSの企画・開発・展開、組織・業務改善支援、AI駆動開発の導入・教育・伴走、受託・共同開発、ボードゲーム・メディア等のプロダクト開発・運営",
   ],
   ["お問い合わせ", "info@cordmark.co.jp"],
 ];
@@ -71,20 +76,20 @@ export default function AboutPage() {
           <div className="about-hero__copy">
             <p className="about-kicker">About CordMark</p>
             <h1 id="about-heading">
-              <span>会社の中核にAIを。</span>
-              <span>AIの先に、人間の営みを。</span>
+              <span>余力を、人へ戻す。</span>
+              <span>その先の営みまで、考える。</span>
             </h1>
             <p className="about-hero__lead">
-              CordMarkは、経営、意思決定、業務、ナレッジ、
+              CordMarkは、テクノロジーによる物質的な充足を、
               <br />
-              プロダクトをAIでつなぎ、会社をひとつのOSとして再設計する実装スタジオです。
+              精神的な豊かさへ還元することを目指す会社です。
             </p>
             <p>
-              私たちが目指すのは、AIチャットボットを導入することではありません。
+              AIで生産力が上がったとき、その力を仕事量の拡大だけに使うのではなく、
               <br />
-              人間とAIがともに判断し、動き、学習する構造を会社の中核につくること。
+              人が考え、決め、創造し、他者と関わる時間へ戻す。
               <br />
-              そして、その変革の先に生まれる人間の時間までを構想することです。
+              会社の意思と日々の仕事をつなぐCompany OSを主要商品に、ソフトウェア開発の現場からそれを始めています。
             </p>
           </div>
           <div className="about-hero__visual" aria-hidden="true">
@@ -96,28 +101,28 @@ export default function AboutPage() {
           <div className="about-philosophy__inner">
             <p className="about-kicker">Philosophy</p>
             <h2 id="about-philosophy-heading">
-              <span>AI Native化とは、</span>
-              <span>ツールを増やすことではなく、</span>
+              <span>AIを足すのではなく、</span>
+              <span>仕事の形を変える。</span>
               <span className="about-philosophy-desktop-line">
-                会社そのものを再設計することだ。
+                決めるのは、人のまま。
               </span>
-              <span className="about-philosophy-mobile-line">会社そのものを</span>
-              <span className="about-philosophy-mobile-line">再設計することだ。</span>
+              <span className="about-philosophy-mobile-line">決めるのは、</span>
+              <span className="about-philosophy-mobile-line">人のまま。</span>
             </h2>
             <div className="about-philosophy__body">
               <p>
-                AIによって変わるべきなのは、ひとつの作業だけではありません。
+                ツールを一つ増やしても、会社は速くなりません。
                 <br />
-                変わるべきなのは、会社が判断し、実行し、顧客に価値を届け、学習する仕組みそのものです。
+                変わるべきなのは、問いが答えに届き、判断が実行に届くまでの、仕事の流れそのものです。
               </p>
               <p>
-                個人のAI活用で終わらせず、業務フロー、ナレッジ、データ、ガバナンス、
+                AIは、人の意思を現実へ運ぶ力であり、判断に置き換わるものではありません。
                 <br />
-                プロダクト開発までを接続する。
+                誰が、何を根拠に決めたかが残り、次の判断の土台になる。
                 <br />
-                それによって、AIが一部の人の能力拡張ではなく、
+                その仕組みを自分たちの会社でまず動かし、
                 <br />
-                会社全体のOperating Systemとして機能する状態をつくります。
+                顧客の現場に合わせて持ち込みます。
               </p>
             </div>
 
@@ -136,9 +141,9 @@ export default function AboutPage() {
         <section className="about-future" aria-labelledby="about-future-heading">
           <div className="about-future__intro">
             <p className="about-kicker">Two Horizons</p>
-            <h2 id="about-future-heading">AI変革の、さらに先まで。</h2>
+            <h2 id="about-future-heading">社会をAIネイティブに。その先の、人の営みを考える。</h2>
             <p>
-              CordMarkという名は、土器に刻まれた縄目――「縄文」に由来します。縄文の人々には、比較的豊かな余白があったとする見方があります。その余白のなかで道具に模様を刻み、文化を残したのかもしれない。私たちは、AIが社会を構造から変えたあと、人間がその余白に何を刻むのかまでを見ています。
+              一万年前、人は余った時間で、土器に縄目を刻んだ。CordMarkという名は、その縄目(cord mark)に由来します。豊かな資源を人間の豊かな暮らしへつなげた、豊かさの原型。AIが生む余力で、私たちは何を刻むのか。その問いを、二つの段階で考えています。
             </p>
           </div>
           <div className="about-horizons">
@@ -174,9 +179,9 @@ export default function AboutPage() {
             ))}
           </dl>
           <div className="about-company__cta">
-            <p>AIを試す段階から、AIで事業を動かす段階へ。</p>
+            <p>何をつくるかから、一緒に考えましょう。</p>
             <a className="button button--dark about-company__button" href="/contact">
-              無料で相談する <span aria-hidden="true">→</span>
+              相談する <span aria-hidden="true">→</span>
             </a>
           </div>
         </section>

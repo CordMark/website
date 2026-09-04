@@ -3,9 +3,9 @@ import type { Metadata } from "next";
 import { QueryFormStatus } from "../../FormStatus";
 import { LoadingSubmitButton } from "../../LoadingSubmitButton";
 
-const pageTitle = "CompanyOS / AI Native Company変革支援 | CordMark";
+const pageTitle = "組織・業務改善支援 | AI Native Company | CordMark";
 const pageDescription =
-  "AIを会社の中核に据え、意思決定・業務・ナレッジ・データ・ガバナンスをひとつのCompanyOSとして再設計。3〜4週間で実装ロードマップを具体化します。";
+  "業務の進め方を診断し、意思決定・業務・ナレッジ・ガバナンスをAI前提に組み替える支援。3〜4週間で実装ロードマップを具体化します。";
 
 export const metadata: Metadata = {
   title: pageTitle,
@@ -753,20 +753,20 @@ export default function AiNativeCompanyPage() {
       <main id="top" className="anc-page site-main">
         <section className="anc-hero" aria-labelledby="anc-heading">
           <div className="anc-hero__copy">
-            <p className="anc-kicker">CompanyOS / AI Native Company Transformation</p>
+            <p className="anc-kicker">組織・業務改善支援 / AI Native Company</p>
             <h1 id="anc-heading">
-              会社を、
+              AIを足すのではなく、
               <br />
-              AI前提の
+              仕事の流れを
               <br />
-              Operating Systemへ。
+              組み替える。
             </h1>
             <p className="anc-lead">
-              AIツールを足すのではなく、AIを会社の中核に据える。
+              ツールを一つ増やしても、会社は速くなりません。
               <br />
-              意思決定、業務、ナレッジ、データ、顧客体験、ガバナンスをつなぎ、
+              意思決定、業務、ナレッジ、データ、ガバナンスの流れを診断し、
               <br />
-              人間とAIがともに考え、動き、学習するCompanyOSを実装します。
+              人が決め、AIが運ぶ仕事の形へ組み替える支援です。
             </p>
             <div className="anc-actions">
               <a className="anc-primary" href="#contact">
@@ -814,10 +814,10 @@ export default function AiNativeCompanyPage() {
               <h2 id="anc-definition-heading">
                 目的は、AIを使うことではなく、
                 <br />
-                AIを会社の中核に据えること。
+                問いと判断が止まらない会社にすること。
               </h2>
               <p>
-                チャットボットは、数あるインターフェースのひとつにすぎません。経営から現場、顧客体験までをつなぎ、会社全体がAIとともに判断・実行・学習する構造へ変えることで、継続的な成果をつくります。
+                チャットボットは、数あるインターフェースのひとつにすぎません。経営から現場までの問いと判断の流れを組み替え、決めるのは人のまま、実行と記録をAIが支える構造へ変えることで、継続的な成果をつくります。
               </p>
             </div>
             <dl className="anc-shift-list">

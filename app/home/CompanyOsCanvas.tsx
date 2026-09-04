@@ -91,6 +91,25 @@ export function CompanyOsCanvas() {
   const labelRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const sayRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [failed, setFailed] = useState(false);
+  // 881px を跨ぐと、固定して見せるか流し込むかが入れ替わる。State にしておくと
+  // Effect ごと組み直され、後片付けが走ってから正しい側で建て直る。
+  // 一度読んだだけの頃は、窓を細くしても "on" のまま、Tabletを回すたびに
+  // 節が壊れていた
+  const [pinned, setPinned] = useState(true);
+
+  useEffect(() => {
+    const q = window.matchMedia("(min-width: 881px)");
+    // resize も見るのは、環境によって matchMedia の change が飛ばないため。
+    // setPinned は同じ値なら React が捨てるので、拾いすぎても害はない
+    const sync = () => setPinned(q.matches);
+    sync();
+    q.addEventListener("change", sync);
+    window.addEventListener("resize", sync, { passive: true });
+    return () => {
+      q.removeEventListener("change", sync);
+      window.removeEventListener("resize", sync);
+    };
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -108,7 +127,6 @@ export function CompanyOsCanvas() {
 
     // Below 881px the CSS drops the sticky pin. There the scene is a block in
     // normal flow above the text — it never shares space with the words.
-    const pinned = window.matchMedia("(min-width: 881px)").matches;
     const HELD_P = 0.2;
 
     let scene: CompanyOsScene | null = null;
@@ -347,8 +365,10 @@ export function CompanyOsCanvas() {
       delete section.dataset.osScene;
       delete section.dataset.osPhase;
       stepEls.forEach((el) => el.classList.remove("is-active"));
+      indexEls.forEach((el) => el.classList.remove("is-active"));
+      host.style.opacity = "";
     };
-  }, []);
+  }, [pinned]);
 
   useEffect(() => {
     if (!failed) return;

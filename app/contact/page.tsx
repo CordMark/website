@@ -7,12 +7,14 @@ import { ServiceGuideDownload } from "./ServiceGuideDownload";
 export const metadata: Metadata = {
   title: "お問い合わせ | CordMark",
   description:
-    "CordMarkへのお問い合わせページです。AI Native化、AI駆動開発、AI Agent / Workflowに関するご相談を受け付けています。",
+    "CordMarkへのお問い合わせページです。Company OS、AI駆動開発支援、組織・業務改善支援、受託・共同開発に関するご相談を受け付けています。",
 };
 
 const consultationOptions = [
-  "AI-Driven Development",
-  "AI Native Company Transformation",
+  "Company OS",
+  "AI駆動開発支援",
+  "組織・業務改善支援",
+  "受託・共同開発",
   "まだ決まっていない・相談しながら整理したい",
 ];
 

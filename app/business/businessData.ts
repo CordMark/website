@@ -1,13 +1,13 @@
 export const businesses = [
   {
     slug: "ai-dx-support",
-    title: "CompanyOS・AI変革支援",
+    title: "Company OS・組織・業務改善支援",
     image: "/assets/service-ai.webp",
     alt: "分析画面が表示されたノートPC",
     summary:
-      "企業や施設の現場に入り、経営、業務、ナレッジ、プロダクトをAIでつなぎます。単発の導入ではなく、会社全体が判断・実行・学習するCompanyOSを設計・実装します。",
-    lead: "AIを会社の中核に据え、経営の意思と現場の仕事がつながる構造をつくります。",
-    links: ["CompanyOS診断", "業務自動化", "システム開発", "研修・伴走支援"],
+      "顧客の現場に入り、業務の進め方を診断してAI前提に組み替えます。会社の意思と日々の仕事をつなぐProduct、Company OSの導入と展開も行います。",
+    lead: "問いと判断が止まらない会社の形を、顧客の現場からつくります。",
+    links: ["Company OS", "業務改善", "システム開発", "研修・伴走支援"],
     details: ["業務棚卸しと改善設計", "AIツール導入・研修", "業務システム開発", "介護・地域現場のDX支援"],
   },
   {

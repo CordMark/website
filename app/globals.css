@@ -40,6 +40,12 @@ html {
   scroll-behavior: smooth;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 [id] {
   scroll-margin-top: var(--header-h);
 }
@@ -153,13 +159,21 @@ button {
   }
 }
 
+/* Header の Mark を出すのは .wv の Page だけ。そこでは home.css が
+   .site-header .brand__mark を (0,2,0) で立て直す。この規則がないと、
+   home.css を読まない Page で素の SVG が原寸のまま Header をはみ出す */
+.brand__mark {
+  display: none;
+}
+
 .site-header {
   position: fixed;
   z-index: 50;
   top: 0;
   left: 0;
   display: grid;
-  grid-template-columns: minmax(0, 1.55fr) auto minmax(0, 0.45fr);
+  grid-template-columns: minmax(0, 1.55fr) auto minmax(auto, 0.45fr);
+  column-gap: clamp(16px, 2.5vw, 56px);
   align-items: center;
   width: 100%;
   height: var(--header-h);
@@ -175,7 +189,10 @@ button {
 }
 
 .brand {
+  display: inline-flex;
+  align-items: center;
   width: fit-content;
+  min-height: 44px;
   font-size: 23px;
   font-weight: 700;
   letter-spacing: 0.15em;
@@ -185,7 +202,7 @@ button {
 
 .site-nav {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   gap: clamp(28px, 3.8vw, 58px);
   font-size: 11px;
   font-weight: 700;
@@ -200,9 +217,12 @@ button {
   min-height: var(--header-h);
 }
 
+/* Header は 78px あるのに、掴めるのは文字の 20px だけだった */
+.site-nav > a,
 .site-nav__trigger {
   display: inline-flex;
   align-items: center;
+  min-height: var(--header-h);
 }
 
 .site-nav__menu {
@@ -1450,6 +1470,9 @@ button {
 }
 
 .site-footer nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   font-size: clamp(11px, 0.78vw, 15px);
   font-weight: 800;
   line-height: 1;
@@ -1462,8 +1485,8 @@ button {
   align-items: center;
   justify-content: center;
   justify-self: end;
-  width: fit-content;
-  height: auto;
+  width: 44px;
+  height: 44px;
   border: 0;
   color: #080808;
   font-size: clamp(20px, 1.2vw, 24px);
@@ -1623,7 +1646,7 @@ body:has(.about-page) .header-contact {
 
 .about-principles {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 28px;
   margin-top: 42px;
 }

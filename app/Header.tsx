@@ -21,10 +21,10 @@ const navItems: NavItem[] = [
     label: "事業",
     children: [
       { href: "/service/ai-driven-development", label: "AI駆動開発支援" },
-      { href: "/service/ai-native-company", label: "AI Native Company" },
+      { href: "/service/ai-native-company", label: "組織・業務改善支援" },
     ],
   },
-  { href: "#principles", label: "考え方" },
+  { href: "#purpose", label: "考え方" },
   { href: "/beyond", label: "Phase 2" },
 ];
 
