@@ -180,44 +180,28 @@ export default function DevelopmentPage() {
 
         {/* 実績の節はここ(許可後) */}
 
-        {/* 節3 三つの実践との関係 — 縦罫で二列。開発で得たものの行き先 */}
+        {/* 節3 次の章 — 現場で確かめた進め方は、支援へ */}
         <section className="wv-section wv-dev-loop" data-ground="paper" aria-labelledby="dev-loop-heading">
           <div className="wv-inner">
-            <div data-reveal>
-              <p className="wv-label">Practices</p>
-              <h2 className="wv-h2" id="dev-loop-heading">
-                <span className="wv-nowrap">現場で得たものは、</span>
-                <br />
-                <span className="wv-nowrap">支援とProductへ戻る。</span>
-              </h2>
-              <p className="wv-lead wv-dev-loop__lead">
-                開発の現場でしか分からないことがあります。何が判断を止めているか、どの情報が届いていないか。そこで得た知見を、支援の内容とCompany
-                OSの設計へ戻します。
-              </p>
-            </div>
-            <div className="wv-split" data-reveal="2">
+            <div className="wv-next" data-reveal>
               <div>
-                <p className="wv-split__label">02 / SUPPORT</p>
-                <h3>進め方そのものを、顧客の組織へ。</h3>
-                <p>自分たちの開発で確かめたやり方を、顧客のチームと会社の仕事の流れに合わせて持ち込む。</p>
-                <div className="wv-index__links">
-                  <a className="wv-link" href="/service/support">
-                    AI活用支援 <Arrow />
-                  </a>
-                </div>
+                <p className="wv-next__num">02</p>
+                <span className="wv-next__role">SUPPORT</span>
               </div>
-              <div>
-                <p className="wv-split__label">03 / PRODUCT</p>
-                <h3>現場で見たものを、Productの形へ。</h3>
-                <p>契約と機密性を守った範囲で、現場で見た課題をCompany OSの設計へ還元する。</p>
-                <div className="wv-index__links">
-                  <a className="wv-link" href="/company-os">
-                    Company OS <Arrow />
+              <div className="wv-next__body">
+                <p className="wv-next__label">Next</p>
+                <h2 id="dev-loop-heading">
+                  <span className="wv-nowrap">現場で確かめた進め方を、</span>
+                  <span className="wv-nowrap">顧客の開発組織へ。</span>
+                </h2>
+                <p>
+                  開発の現場でしか分からないことがあります。何が判断を止めているか、どの情報が届いていないか。ここで動いているやり方を、顧客の開発チームの工程に合わせて持ち込みます。
+                </p>
+                <p className="wv-next__link">
+                  <a className="wv-link" href="/service/support">
+                    AI駆動開発支援 <Arrow />
                   </a>
-                  <a className="wv-link" href="/#services">
-                    事業の索引へ <Arrow />
-                  </a>
-                </div>
+                </p>
               </div>
             </div>
           </div>

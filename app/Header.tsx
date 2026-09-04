@@ -15,7 +15,7 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   { href: "/service/development", label: "受託・共同開発" },
-  { href: "/service/support", label: "AI活用支援" },
+  { href: "/service/support", label: "AI駆動開発支援" },
   { href: "/company-os", label: "Company OS" },
   { href: "/about", label: "私たちについて" },
 ];

@@ -224,7 +224,7 @@ export default function Beyond() {
                 Company OS <Arrow />
               </a>
               <a className="wv-link" href="/service/support">
-                AI活用支援 <Arrow />
+                AI駆動開発支援 <Arrow />
               </a>
               <a className="wv-link" href="/about">
                 私たちについて <Arrow />

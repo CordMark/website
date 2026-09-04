@@ -1,156 +1,61 @@
 /* ------------------------------------------------------------
    /service/support — what only this chapter needs.
-   Two ways in (the dev team, the whole company) on one page.
-   Everything shared lives in app/wv-page.css.
+   One track: the development organisation. Everything shared
+   lives in app/wv-page.css.
    ------------------------------------------------------------ */
 
 .wv .wv-sp-hero {
   padding-top: clamp(48px, 7vw, 96px);
 }
 
-/* ---------- 扉の下: 二つの入口 ---------- */
+/* ---------- 節1 一本の線 ---------- */
 
-/* two doors side by side, one rule between them; each carries the name
-   of the track, one line of who it is for, and the way down the page */
-.wv .wv-sp-doors {
-  margin-top: clamp(48px, 6vw, 88px);
-}
-
-.wv .wv-sp-doors .wv-split {
-  margin-top: 0;
-}
-
-.wv .wv-sp-doors h3 {
-  margin-top: 12px;
-}
-
-.wv .wv-sp-doors__for {
-  margin-top: 14px;
-  max-width: 28em;
-  font-size: 14px;
-  line-height: 1.95;
-  letter-spacing: 0.02em;
-  color: var(--wv-ink-2);
-}
-
-.wv .wv-sp-doors__link {
-  margin-top: 20px;
-}
-
-/* ---------- 各入口の扉 ---------- */
-
-/* the track opens with its number and name at the left, the heading and
-   a short lead at the right; a hairline above closes the part before */
-.wv .wv-sp-track {
+/* A three-row table. The stage names sit on one hairline with a knot
+   each; under them, one short phrase for what AI carries and one for
+   what a person decides. On paper the six stages stand side by side;
+   on a phone the table turns and the stages stack as rows. */
+.wv .wv-sp-flow {
   display: grid;
-  grid-template-columns: clamp(104px, 12vw, 168px) minmax(0, 1fr);
-  column-gap: clamp(24px, 3vw, 48px);
-  align-items: start;
+  grid-template-columns: clamp(72px, 8vw, 110px) repeat(6, minmax(0, 1fr));
+  column-gap: clamp(12px, 1.6vw, 24px);
+  margin-top: clamp(46px, 5.6vw, 76px);
 }
 
-.wv .wv-sp-track__num {
-  font-family: var(--wv-serif), "Hiragino Mincho ProN", serif;
-  font-weight: 300;
-  font-size: clamp(34px, 4.4vw, 60px);
-  line-height: 1;
-  letter-spacing: 0.04em;
-  font-feature-settings: "palt";
-  color: var(--wv-accent);
+.wv .wv-sp-flow__stage {
+  display: contents;
 }
 
-.wv .wv-sp-track__role {
-  display: block;
-  margin-top: 10px;
+/* the row labels at the left, in mono */
+.wv .wv-sp-flow__head {
+  align-self: end;
+  padding: 14px 0 10px;
   font-family: var(--wv-mono);
-  font-size: 11px;
+  font-size: 10.5px;
   letter-spacing: 0.18em;
   color: var(--wv-quiet);
 }
 
-.wv .wv-sp-track .wv-lead {
-  margin-top: 22px;
+.wv .wv-sp-flow__head.is-stage {
+  grid-row: 1;
 }
 
-.wv .wv-sp-track .wv-list--two {
-  margin-top: clamp(36px, 4.4vw, 56px);
+.wv .wv-sp-flow__head:not(.is-stage) {
+  grid-row: 2;
 }
 
-/* the one line under the list: quiet, at the right, in mono */
-.wv .wv-sp-aside {
-  margin-top: 22px;
-  text-align: right;
-  font-family: var(--wv-mono);
-  font-size: 11.5px;
-  letter-spacing: 0.1em;
-  color: var(--wv-quiet);
+.wv .wv-sp-flow__head.is-human {
+  grid-row: 3;
+  color: var(--wv-accent);
 }
 
-/* ---------- 開発組織: 工程の一本の線 ---------- */
-
-/* One line through six stages, on paper. The rail is drawn from the left
-   as the block arrives; the knots sit on it where each stage begins. */
-.wv .wv-sp-flow {
+/* row 1: the line and the names. Each name cell carries a piece of the
+   rail on top and its knot at the left */
+.wv .wv-sp-flow__stage > b {
+  grid-row: 1;
   position: relative;
-  margin-top: clamp(46px, 5.6vw, 76px);
-  padding-top: 36px;
-}
-
-.wv .wv-sp-flow__rail {
-  position: absolute;
-  top: 16px;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  overflow: visible;
-}
-
-.wv .wv-sp-flow__rail path {
-  fill: none;
-  stroke: var(--wv-line);
-  stroke-width: 1;
-  vector-effect: non-scaling-stroke;
-  stroke-dasharray: 1200;
-  stroke-dashoffset: 0;
-}
-
-.wv .wv-sp-flow__rail--v {
-  display: none;
-}
-
-html[data-wv-reveal] .wv [data-reveal] .wv-sp-flow__rail path {
-  stroke-dashoffset: 1200;
-  transition: stroke-dashoffset 1.5s cubic-bezier(0.22, 1, 0.36, 1) 0.2s;
-}
-
-html[data-wv-reveal] .wv [data-reveal].is-in .wv-sp-flow__rail path {
-  stroke-dashoffset: 0;
-}
-
-.wv .wv-sp-flow__steps {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  column-gap: clamp(12px, 1.6vw, 24px);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.wv .wv-sp-flow__steps > li {
-  position: relative;
-}
-
-.wv .wv-sp-flow__knot {
-  position: absolute;
-  top: -21px;
-  left: 0;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--wv-accent);
-}
-
-.wv .wv-sp-flow__steps b {
   display: block;
+  padding-top: 22px;
+  border-top: 1px solid var(--wv-line);
   font-family: var(--wv-serif), "Hiragino Mincho ProN", serif;
   font-weight: 400;
   font-size: clamp(16px, 1.6vw, 21px);
@@ -160,306 +65,165 @@ html[data-wv-reveal] .wv [data-reveal].is-in .wv-sp-flow__rail path {
   color: var(--wv-ink);
 }
 
-.wv .wv-sp-flow__role {
-  display: block;
-  margin-top: 12px;
-  font-size: 12.5px;
-  line-height: 1.75;
+.wv .wv-sp-flow__stage > b::before {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--wv-accent);
+}
+
+/* rows 2 and 3: one phrase each */
+.wv .wv-sp-flow__stage > span {
+  grid-row: 2;
+  padding: 14px 0 10px;
+  font-size: 13.5px;
+  line-height: 1.7;
   letter-spacing: 0.02em;
   color: var(--wv-quiet);
 }
 
-.wv .wv-sp-flow__role i {
-  display: block;
-  margin-bottom: 2px;
-  font-family: var(--wv-mono);
-  font-style: normal;
-  font-size: 10px;
-  letter-spacing: 0.2em;
-  color: var(--wv-quiet);
-}
-
-.wv .wv-sp-flow__role.is-human {
+.wv .wv-sp-flow__stage > span.is-human {
+  grid-row: 3;
   color: var(--wv-ink);
 }
 
-.wv .wv-sp-flow__role.is-human i {
-  color: var(--wv-accent);
+/* the block itself does not fade; the stages arrive left to right */
+html[data-wv-reveal] .wv .wv-sp-flow[data-reveal] {
+  opacity: 1;
+  transform: none;
+}
+
+html[data-wv-reveal] .wv [data-reveal] .wv-sp-flow__stage > * {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: calc(0.1s + var(--i) * 0.12s);
+}
+
+html[data-wv-reveal] .wv [data-reveal].is-in .wv-sp-flow__stage > * {
+  opacity: 1;
+  transform: none;
 }
 
 .wv .wv-sp-flow__lead {
   margin-top: clamp(40px, 4.6vw, 64px);
 }
 
-/* ---------- 進め方の索引 ---------- */
+/* ---------- 節2 どこから始めるか ---------- */
 
-/* these indexes carry small lists on the right, so the side column takes
-   more of the row than the shared default gives it */
-.wv .wv-sp-steps .wv-index__row {
-  grid-template-columns: clamp(96px, 11vw, 150px) minmax(0, 0.9fr) minmax(0, 1.5fr);
-}
-
-/* 「3〜4週間」は一行で読ませる。期間は句であって数字の列ではない */
-.wv .wv-sp-steps .wv-index__num {
-  white-space: nowrap;
-  font-size: clamp(19px, 2.1vw, 29px);
-}
-
-.wv .wv-sp-notes {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(20px, 2.4vw, 36px);
-  margin-top: 24px;
-}
-
-.wv .wv-sp-notes__head {
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--wv-line);
-  font-family: var(--wv-mono);
-  font-size: 10.5px;
-  letter-spacing: 0.18em;
-  color: var(--wv-quiet);
-}
-
-.wv .wv-sp-notes ul {
-  margin: 12px 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.wv .wv-sp-notes li {
-  font-size: 12.5px;
-  line-height: 1.85;
-  letter-spacing: 0.02em;
-  color: var(--wv-ink-2);
-}
-
-.wv .wv-sp-notes li + li {
-  margin-top: 4px;
-}
-
-.wv .wv-sp-notes--one {
-  grid-template-columns: minmax(0, 1fr);
-}
-
-.wv .wv-sp-notes__inline {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 20px;
-}
-
-.wv .wv-sp-notes__inline li + li {
-  margin-top: 0;
-}
-
-.wv .wv-sp-steps__link {
-  margin-top: clamp(28px, 3vw, 40px);
-}
-
-/* the fit list under the process, two columns joined by one rule */
-.wv .wv-sp-fit {
-  margin-top: clamp(48px, 5.6vw, 76px);
-}
-
-.wv .wv-sp-fit .wv-list {
+.wv .wv-sp-start__link {
   margin-top: 20px;
 }
 
-/* ---------- 五つの層: この章の唯一の闇 ---------- */
+/* ---------- 節3 進め方: この章の唯一の闇 ---------- */
 
-.wv .wv-sp-layers {
+.wv .wv-sp-process {
   color: var(--wv-linen);
 }
 
-.wv .wv-sp-strata {
-  margin: clamp(46px, 5.6vw, 76px) 0 0;
-  padding: 0;
-  list-style: none;
-  border-bottom: 1px solid var(--wv-line-dark);
-}
-
-.wv .wv-sp-strata > li {
+/* one line under each step: what stays with the customer */
+.wv .wv-sp-leaves {
   display: grid;
-  grid-template-columns: clamp(56px, 6vw, 88px) minmax(0, 0.85fr) minmax(0, 1.25fr);
-  column-gap: clamp(20px, 2.6vw, 40px);
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 16px;
   align-items: baseline;
-  padding: clamp(20px, 2.4vw, 30px) 0;
+  margin: 18px 0 0;
+  padding-top: 12px;
   border-top: 1px solid var(--wv-line-dark);
 }
 
-.wv .wv-sp-strata__num {
-  font-family: var(--wv-serif), "Hiragino Mincho ProN", serif;
-  font-weight: 300;
-  font-size: clamp(20px, 2.2vw, 30px);
-  line-height: 1.2;
-  letter-spacing: 0.04em;
-  font-feature-settings: "palt";
+.wv .wv-sp-leaves dt {
+  font-family: var(--wv-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
   color: var(--wv-accent);
 }
 
-.wv .wv-sp-strata__name {
+.wv .wv-sp-leaves dd {
+  margin: 0;
   font-family: var(--wv-serif), "Hiragino Mincho ProN", serif;
-  font-weight: 400;
-  font-size: clamp(17px, 1.8vw, 24px);
-  line-height: 1.45;
-  letter-spacing: 0.04em;
-  font-feature-settings: "palt";
+  font-size: clamp(14px, 1.2vw, 16px);
+  line-height: 1.7;
+  letter-spacing: 0.03em;
   color: var(--wv-linen);
 }
 
-.wv .wv-sp-strata__body {
-  font-size: 13.5px;
-  line-height: 1.9;
-  letter-spacing: 0.02em;
-  color: #b3ada0;
+.wv .wv-sp-process__lead {
+  margin-top: clamp(40px, 4.6vw, 64px);
+  max-width: 36em;
 }
 
-/* the block itself does not fade — its bands do, in order */
-html[data-wv-reveal] .wv .wv-sp-strata[data-reveal] {
-  opacity: 1;
-  transform: none;
-}
-
-html[data-wv-reveal] .wv [data-reveal] .wv-sp-strata > li {
-  opacity: 0;
-  transform: translateY(14px);
-  transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-html[data-wv-reveal] .wv [data-reveal].is-in .wv-sp-strata > li {
-  opacity: 1;
-  transform: none;
-}
-
-.wv .wv-sp-strata > li:nth-child(2) {
-  transition-delay: 0.1s;
-}
-
-.wv .wv-sp-strata > li:nth-child(3) {
-  transition-delay: 0.2s;
-}
-
-.wv .wv-sp-strata > li:nth-child(4) {
-  transition-delay: 0.3s;
-}
-
-.wv .wv-sp-strata > li:nth-child(5) {
-  transition-delay: 0.4s;
-}
-
-.wv .wv-sp-layers__lead {
-  margin-top: clamp(44px, 5vw, 68px);
-}
-
-/* ---------- Company OS との関係 ---------- */
+/* ---------- 節4 次の章 ---------- */
 
 .wv .wv-sp-next {
   padding-top: calc(var(--wv-pad-y) * 0.7);
   padding-bottom: calc(var(--wv-pad-y) * 0.7);
 }
 
-.wv .wv-sp-next .wv-split {
-  margin-top: 0;
-}
-
-.wv .wv-sp-next__link {
-  margin-top: 22px;
-}
-
 /* ---------- Responsive ---------- */
 
 @media (max-width: 880px) {
-  .wv .wv-sp-track {
-    grid-template-columns: minmax(0, 1fr);
-    row-gap: 20px;
-  }
-
-  .wv .wv-sp-track__num {
-    font-size: clamp(28px, 7vw, 40px);
-  }
-
-  .wv .wv-sp-track__role {
-    display: inline;
-    margin: 0 0 0 14px;
-  }
-
-  /* the six stages stand in one column, and the line runs down beside them */
+  /* the table turns: stages are rows, AI and 人 are columns */
   .wv .wv-sp-flow {
-    padding-top: 6px;
-    padding-left: 30px;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: clamp(10px, 2.6vw, 20px);
   }
 
-  .wv .wv-sp-flow__rail--h {
-    display: none;
+  .wv .wv-sp-flow__head,
+  .wv .wv-sp-flow__head.is-stage,
+  .wv .wv-sp-flow__head:not(.is-stage),
+  .wv .wv-sp-flow__head.is-human {
+    grid-row: 1;
+    padding: 0 0 10px;
   }
 
-  .wv .wv-sp-flow__rail--v {
-    display: block;
-    top: 0;
-    left: 3px;
-    width: 2px;
-    height: 100%;
+  .wv .wv-sp-flow__stage > b,
+  .wv .wv-sp-flow__stage > span,
+  .wv .wv-sp-flow__stage > span.is-human {
+    grid-row: calc(var(--i) + 2);
+    padding: 12px 0;
+    border-top: 1px solid var(--wv-line);
   }
 
-  .wv .wv-sp-flow__steps {
-    grid-template-columns: 1fr;
-    row-gap: 30px;
+  .wv .wv-sp-flow__stage > b {
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    padding-left: 13px;
+    white-space: nowrap;
   }
 
-  .wv .wv-sp-flow__knot {
-    top: 7px;
-    left: -30px;
+  .wv .wv-sp-flow__stage > b::before {
+    top: 19px;
+    left: 0;
+    width: 5px;
+    height: 5px;
   }
 
-  .wv .wv-sp-flow__role {
-    margin-top: 8px;
+  .wv .wv-sp-flow__stage > span {
+    font-size: 12.5px;
+    line-height: 1.6;
   }
 
-  .wv .wv-sp-steps .wv-index__row {
-    grid-template-columns: clamp(72px, 20vw, 120px) minmax(0, 1fr);
-  }
-
-  .wv .wv-sp-notes {
-    gap: 20px;
-  }
-
-  .wv .wv-sp-aside {
-    text-align: left;
-  }
-
-  .wv .wv-sp-strata > li {
-    grid-template-columns: clamp(44px, 12vw, 64px) minmax(0, 1fr);
-    row-gap: 8px;
-    align-items: start;
-  }
-
-  .wv .wv-sp-strata__num {
-    font-size: clamp(15px, 3.6vw, 19px);
-    padding-top: 4px;
-  }
-
-  .wv .wv-sp-strata__body {
-    grid-column: 2;
+  .wv .wv-sp-flow__stage:last-child > * {
+    border-bottom: 1px solid var(--wv-line);
   }
 }
 
 @media (max-width: 600px) {
-  .wv .wv-sp-steps .wv-index__row {
+  .wv .wv-sp-leaves {
     grid-template-columns: minmax(0, 1fr);
-  }
-
-  .wv .wv-sp-notes {
-    grid-template-columns: 1fr;
+    row-gap: 6px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .wv .wv-sp-flow__rail path {
-    stroke-dashoffset: 0;
-    transition: none;
-  }
-
-  .wv .wv-sp-strata > li {
+  .wv .wv-sp-flow__stage > * {
+    opacity: 1;
+    transform: none;
     transition: none;
   }
 }

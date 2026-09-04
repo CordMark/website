@@ -415,6 +415,94 @@
   border-color: var(--wv-line-dark);
 }
 
+/* ---------- 4b. Next: the one link each chapter carries to the next ---------- */
+
+/* chapter number and role at the left, the next chapter's claim, one line
+   of why, and the link at the right; a hairline above closes the chapter */
+.wv .wv-next {
+  display: grid;
+  grid-template-columns: clamp(104px, 12vw, 168px) minmax(0, 1fr);
+  column-gap: clamp(24px, 3vw, 48px);
+  align-items: start;
+  padding-top: clamp(28px, 3.2vw, 44px);
+  border-top: 1px solid var(--wv-line);
+}
+
+.wv .wv-next__num {
+  font-family: var(--wv-serif), "Hiragino Mincho ProN", serif;
+  font-weight: 300;
+  font-size: clamp(34px, 4.4vw, 60px);
+  line-height: 1;
+  letter-spacing: 0.04em;
+  font-feature-settings: "palt";
+  color: var(--wv-accent);
+}
+
+.wv .wv-next__role {
+  display: block;
+  margin-top: 10px;
+  font-family: var(--wv-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--wv-quiet);
+}
+
+.wv .wv-next__body .wv-next__label {
+  font-family: var(--wv-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--wv-accent);
+}
+
+.wv .wv-next__body h2 {
+  margin-top: 14px;
+  font-family: var(--wv-serif), "Hiragino Mincho ProN", serif;
+  font-weight: 400;
+  font-size: clamp(22px, 2.4vw, 34px);
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  font-feature-settings: "palt";
+}
+
+.wv .wv-next__body p {
+  margin-top: 16px;
+  max-width: 34em;
+  font-size: 14px;
+  line-height: 1.95;
+  letter-spacing: 0.02em;
+  color: var(--wv-ink-2);
+}
+
+.wv .wv-next__body .wv-next__link {
+  margin-top: 22px;
+}
+
+.wv .wv-next--foot {
+  margin-top: clamp(40px, 4.6vw, 64px);
+}
+
+.wv [data-ground="night"] .wv-next,
+.wv [data-ground="charcoal"] .wv-next {
+  border-color: var(--wv-line-dark);
+}
+
+@media (max-width: 880px) {
+  .wv .wv-next {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 20px;
+  }
+
+  .wv .wv-next__num {
+    font-size: clamp(28px, 7vw, 40px);
+  }
+
+  .wv .wv-next__role {
+    display: inline;
+    margin: 0 0 0 14px;
+  }
+}
+
 /* ---------- 5. Contact: the form on the dark ground ---------- */
 
 .wv .wv-page__contact {

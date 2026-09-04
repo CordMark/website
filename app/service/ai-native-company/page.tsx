@@ -1,6 +1,6 @@
 import { permanentRedirect } from "next/navigation";
 
-/** 旧 /service/ai-native-company。AI活用支援の入口Bへ送る */
+/** 旧 /service/ai-native-company。会社全体のAI化はCompany OSの領域。そちらへ送る */
 export default function LegacyAiNativeCompanyPage() {
-  permanentRedirect("/service/support#company");
+  permanentRedirect("/company-os");
 }

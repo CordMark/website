@@ -103,14 +103,11 @@
   color: var(--wv-accent);
 }
 
-/* ---------- 節3 三つの実践との関係 ---------- */
+/* ---------- 節3 次の章 ---------- */
 
-.wv .wv-dev-loop__lead {
-  max-width: 34em;
-}
-
-.wv .wv-dev-loop .wv-index__links {
-  margin-top: 20px;
+.wv .wv-dev-loop {
+  padding-top: calc(var(--wv-pad-y) * 0.7);
+  padding-bottom: calc(var(--wv-pad-y) * 0.7);
 }
 
 /* ---------- Responsive ---------- */
@@ -122,8 +119,7 @@
 
   /* one column: the text takes the width it is given instead of leaving the right side empty */
   .wv .wv-dev-speed__body p,
-  .wv .wv-dev-proof,
-  .wv .wv-dev-loop__lead {
+  .wv .wv-dev-proof {
     max-width: none;
   }
 }

@@ -295,11 +295,28 @@ export default function CompanyOsPage() {
                   <span>それが、AIネイティブ化です。</span>
                 </span>
               </p>
-              <p className="wv-cos-native__link">
-                <a className="wv-link" href="/service/support">
-                  いまの仕事の流れを組み替える、AI活用支援 <Arrow />
-                </a>
-              </p>
+              <div className="wv-next wv-next--foot">
+                <div>
+                  <p className="wv-next__num">01</p>
+                  <span className="wv-next__role">DELIVERY</span>
+                </div>
+                <div className="wv-next__body">
+                  <p className="wv-next__label">Next</p>
+                  <h2>
+                    <span className="wv-nowrap">現場で得た知見は、</span>
+                    <span className="wv-nowrap">次の開発へ戻る。</span>
+                  </h2>
+                  <p>
+                    Company
+                    OSの設計は、受託・共同開発の現場で見たものから育ちます。三つの実践は一つの輪で、ここから最初の章へ戻ります。
+                  </p>
+                  <p className="wv-next__link">
+                    <a className="wv-link" href="/service/development">
+                      受託・共同開発 <Arrow />
+                    </a>
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </section>

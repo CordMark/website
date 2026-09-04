@@ -15,7 +15,7 @@ const sans = Noto_Sans_JP({ subsets: ["latin"], weight: ["400", "500", "700"], v
 
 const pageTitle = "お問い合わせ | CordMark";
 const pageDescription =
-  "CordMarkへのお問い合わせページです。Company OS、AI駆動開発支援、組織・業務改善支援、受託・共同開発に関するご相談を受け付けています。";
+  "CordMarkへのお問い合わせページです。Company OS、AI駆動開発支援、講演・研修、受託・共同開発に関するご相談を受け付けています。";
 
 export const metadata: Metadata = {
   title: pageTitle,
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
 const consultationOptions = [
   "Company OS",
   "AI駆動開発支援",
-  "組織・業務改善支援",
+  "講演・研修",
   "受託・共同開発",
   "まだ決まっていない・相談しながら整理したい",
 ];
@@ -45,9 +45,19 @@ const consultationOptions = [
 const interestToOption: Record<string, string> = {
   os: "Company OS",
   aid: "AI駆動開発支援",
-  anc: "組織・業務改善支援",
+  talk: "講演・研修",
+  anc: "Company OS",
   dev: "受託・共同開発",
 };
+
+/** 本文の例文。選ばれたテーマに合わせる。テーマ未選択なら支援の例 */
+const messageExamples: Record<string, string> = {
+  "Company OS": "例）開発は速くなったが、判断待ちで止まることが増えた。まず一つの部門で試せるか相談したい。",
+  "AI駆動開発支援": "例）開発チームでAIツールを使い始めたが、個人利用に留まっている。進め方から相談したい。",
+  "講演・研修": "例）経営層と開発チームに向けて、AIで何ができるかを話してほしい。人数と時期は未定。",
+  "受託・共同開発": "例）つくりたいものの構想はあるが、仕様はまだ固まっていない。要件定義から相談したい。",
+};
+const defaultMessageExample = messageExamples["AI駆動開発支援"];
 
 function Arrow() {
   return (
@@ -67,6 +77,7 @@ export default async function ContactPage({ searchParams }: ContactPageProps) {
   const rawInterest = params.interest;
   const interest = Array.isArray(rawInterest) ? rawInterest[0] : rawInterest;
   const selectedConsultation = (interest && interestToOption[interest]) ?? "";
+  const messageExample = messageExamples[selectedConsultation] ?? defaultMessageExample;
 
   return (
     <div className={`wv wv-page wv-ct ${serif.variable} ${sans.variable}`}>
@@ -84,7 +95,7 @@ export default async function ContactPage({ searchParams }: ContactPageProps) {
                 <span className="wv-nowrap">その手前から。</span>
               </h1>
               <p className="wv-lead">
-                開発のこと、組織のこと、AIとの働き方のこと。テーマが決まっていなくて構いません。現状を伺い、最初の一歩を一緒に整理します。
+                開発のこと、組織のこと、AIとの働き方のこと。講演や研修のご依頼も、ここから。テーマが決まっていなくて構いません。現状を伺い、最初の一歩を一緒に整理します。
               </p>
               <p className="wv-ct-mail">
                 フォームを使わない場合は、
@@ -155,7 +166,7 @@ export default async function ContactPage({ searchParams }: ContactPageProps) {
                     id="message"
                     name="message"
                     maxLength={500}
-                    placeholder="例）開発チームでAIツールを使い始めたが、個人利用に留まっている。進め方から相談したい。"
+                    placeholder={messageExample}
                   />
                   <span className="wv-ct-counter">500文字まで</span>
                 </div>

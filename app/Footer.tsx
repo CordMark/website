@@ -1,7 +1,7 @@
 /** 全体地図。サイトの節と下層ページを、順に並べる */
 const footerLinks = [
   { label: "受託・共同開発", href: "/service/development" },
-  { label: "AI活用支援", href: "/service/support" },
+  { label: "AI駆動開発支援", href: "/service/support" },
   { label: "Company OS", href: "/company-os" },
   { label: "私たちについて", href: "/about" },
   { label: "Phase 2", href: "/beyond" },

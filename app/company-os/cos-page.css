@@ -477,10 +477,6 @@ html[data-wv-reveal] .wv [data-reveal] .wv-cos-native__close .wv-line:nth-child(
   transition-delay: 0.42s;
 }
 
-.wv .wv-cos-native__link {
-  margin-top: clamp(20px, 2.4vw, 30px);
-}
-
 /* ---------- Responsive ---------- */
 
 @media (max-width: 880px) {

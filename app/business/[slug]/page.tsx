@@ -2,7 +2,7 @@ import { permanentRedirect } from "next/navigation";
 
 /** 旧 /business/[slug]。いまの章へ送る */
 const destinations: Record<string, string> = {
-  "ai-dx-support": "/service/support#company",
+  "ai-dx-support": "/company-os",
   "culture-co-creation": "/about",
 };
 

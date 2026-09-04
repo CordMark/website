@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://cordmark-website.vercel.app"),
   title: "CordMark | 会社の速さは、いちばん遅い会話で決まる。",
   description:
-    "AIがコードを書く時代、開発を止めているのは問いと判断の往復。CordMarkは、その会話の形を組み替え、速くなった分を人の時間へ戻す会社です。主要商品Company OSのほか、組織・業務改善、AI駆動開発支援、受託・共同開発を行います。",
+    "AIがコードを書く時代、開発を止めているのは問いと判断の往復。CordMarkは、その会話の形を組み替え、速くなった分を人の時間へ戻す会社です。主要商品Company OSのほか、AI駆動開発支援、受託・共同開発を行います。",
   icons: {
     icon: "/assets/favicon.png",
   },

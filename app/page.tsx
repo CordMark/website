@@ -80,9 +80,9 @@ const practices = [
     index: "SUPPORT",
     title: "組織・業務改善、AI駆動開発の導入・教育・伴走",
     body: "開発組織を含む業務の進め方を診断し、ドキュメント、計画、レビュー、検証を含む開発プロセスをAI前提に組み替える。",
-    href: "/service/support#dev",
+    href: "/service/support",
     link: "AI駆動開発支援",
-    secondHref: "/service/support#company",
+    secondHref: "/company-os",
     secondLink: "組織・業務改善支援",
     hop: "→ 03  知見の還元",
   },
@@ -350,8 +350,11 @@ export default function Home() {
                   <a className="wv-link" href="#company-os">
                     Company OS <Arrow />
                   </a>
-                  <a className="wv-link" href="/service/support#dev">
+                  <a className="wv-link" href="/service/support">
                     AI駆動開発支援 <Arrow />
+                  </a>
+                  <a className="wv-link" href="/service/development">
+                    受託・共同開発 <Arrow />
                   </a>
                 </div>
               </div>
