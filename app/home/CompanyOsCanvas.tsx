@@ -22,22 +22,22 @@ const SAYS: { step: number; role: number; lines: SayLine[] }[] = [
     step: 0,
     role: SALES,
     lines: [
-      { kind: "q", text: "この機能、いまどうなってますか?" },
-      { kind: "os", text: "根拠付きで回答" },
+      { kind: "q", text: "これって、できないんでしたっけ?" },
+      { kind: "os", text: "いまの仕様と実装を確認。根拠付きで、その場で回答" },
     ],
   },
-  { step: 1, role: ENGINEER, lines: [{ kind: "q", text: "仕様はAかBか。どちらで進めますか?" }] },
-  { step: 1, role: PM, lines: [{ kind: "os", text: "背景・選択肢・影響を添えて" }] },
+  { step: 1, role: ENGINEER, lines: [{ kind: "q", text: "仕様はAかBか。決めてほしい" }] },
+  { step: 1, role: PM, lines: [{ kind: "os", text: "なぜ必要か・選択肢・選んだ先の影響を添えて、PMへ" }] },
   {
     step: 2,
     role: PM,
     lines: [
-      { kind: "os", text: "営業の知る顧客の事情を添えて" },
+      { kind: "os", text: "営業の知る顧客の事情も揃えて" },
       { kind: "human", text: "Bで進める。" },
     ],
   },
-  { step: 2, role: EXEC, lines: [{ kind: "os", text: "決定を通知" }] },
-  { step: 3, role: ENGINEER, lines: [{ kind: "os", text: "決定Bと理由を、仕様・タスクに" }] },
+  { step: 2, role: EXEC, lines: [{ kind: "os", text: "決定と理由を通知" }] },
+  { step: 3, role: ENGINEER, lines: [{ kind: "os", text: "決定Bと理由が、仕様とタスクに" }] },
   // the raw voice from the field, and the decision, reach the executive together
   { step: 4, role: ENGINEER, lines: [{ kind: "q", text: "Bだと、納期は厳しいかもしれない" }] },
   {
@@ -45,7 +45,7 @@ const SAYS: { step: number; role: number; lines: SayLine[] }[] = [
     role: EXEC,
     lines: [
       { kind: "q", text: "現場は、本当に順調か" },
-      { kind: "os", text: "経緯と現場の声を、そのまま" },
+      { kind: "os", text: "決定の経緯と、現場の声をそのまま" },
     ],
   },
 ];
@@ -280,10 +280,13 @@ export function CompanyOsCanvas() {
                 [q.x - off - w, q.y - h / 2 + 4],
               ]
             : [
-                [q.x + off, q.y - h / 2 + 4],
-                [q.x - off - w, q.y - h / 2 + 4],
-                [cx, q.y + off + 10],
-                [cx, q.y - off - 20 - h],
+                // beside the person, the card's top a little above the ring's
+                // middle — the label line lands level with the point
+                [q.x + off, q.y - Math.min(h / 2, 22)],
+                [q.x - off - w, q.y - Math.min(h / 2, 22)],
+                // under or over: past the role name, which hangs off the ring
+                [cx, q.y + off + 6 + (labelBelow ? lh : 0)],
+                [cx, q.y - off - 16 - h - (labelBelow ? 0 : lh)],
               ];
           for (const [sx, sy] of spots) {
             if (sx < m || sx + w > vw - m || sy < 90 || sy + h > vh - 24) continue;

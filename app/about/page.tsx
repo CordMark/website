@@ -8,8 +8,18 @@ import "../home/home.css";
 import "../wv-page.css";
 import "./about-page.css";
 
-const serif = Noto_Serif_JP({ subsets: ["latin"], weight: ["300", "400"], variable: "--wv-serif", display: "swap" });
-const sans = Noto_Sans_JP({ subsets: ["latin"], weight: ["400", "500", "700"], variable: "--wv-sans", display: "swap" });
+const serif = Noto_Serif_JP({
+  subsets: ["latin"],
+  weight: ["300", "400"],
+  variable: "--wv-serif",
+  display: "swap",
+});
+const sans = Noto_Sans_JP({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  variable: "--wv-sans",
+  display: "swap",
+});
 
 const pageTitle = "私たちについて | CordMark";
 const pageDescription =
@@ -21,7 +31,14 @@ export const metadata: Metadata = {
   openGraph: {
     title: pageTitle,
     description: pageDescription,
-    images: [{ url: "/og.png", width: 1200, height: 630, alt: "私たちについて | CordMark" }],
+    images: [
+      {
+        url: "/og.png",
+        width: 1200,
+        height: 630,
+        alt: "私たちについて | CordMark",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
@@ -114,31 +131,31 @@ export default function AboutPage() {
         {/* 扉 — 会社の名乗りと、名前そのもののマーク。帯は最小限の三項目 */}
         <section className="wv-section wv-about-hero" data-ground="paper" aria-labelledby="about-heading">
           <div className="wv-inner">
-            <div className="wv-page__hero">
-              <div className="wv-page__hero-copy" data-reveal>
+            <div className="wv-page__opening">
+              <div className="wv-page__hero" data-reveal>
                 <p className="wv-label">About</p>
                 <h1 className="wv-h1" id="about-heading">
                   余力を、人へ戻す。
                 </h1>
+              </div>
+              <div className="wv-page__door" data-reveal="2">
+                <aside className="wv-chapter wv-about-chapter" aria-label="この章の位置">
+                  <CordMark className="wv-about-chapter__mark" title="CordMarkのマーク" />
+                  <p className="wv-chapter__role">CORD MARK</p>
+                  <p className="wv-chapter__note">社名は、土器に残る縄目から。</p>
+                </aside>
                 <p className="wv-lead">
-                  CordMarkは、2026年に横浜で始めた会社です。AIで生産力が上がった分を、仕事量の拡大ではなく、人が考え、決め、創造し、他者と関わる時間へ戻す。そのために会社の意思と日々の仕事をつなぐ<span className="wv-nowrap">Company OS</span>をつくり、まず自分たちの会社で使い、ソフトウェア開発の現場へ持ち込んでいます。
+                  CordMarkは、2026年に横浜で始めた会社です。AIで生産力が上がった分を、仕事量の拡大ではなく、人が考え、決め、創造し、他者と関わる時間へ戻す。そのために会社の意思と日々の仕事をつなぐ
+                  <span className="wv-nowrap">Company OS</span>
+                  をつくり、まず自分たちの会社で使い、ソフトウェア開発の現場へ持ち込んでいます。
                 </p>
               </div>
-              <aside className="wv-chapter wv-about-chapter" data-reveal="2" aria-label="この章の位置">
-                <CordMark className="wv-about-chapter__mark" title="CordMarkのマーク" />
-                <p className="wv-chapter__role">CORD MARK</p>
-                <p className="wv-chapter__note">社名は、土器に残る縄目から。</p>
-              </aside>
             </div>
           </div>
         </section>
 
         {/* 節1 — 順番の話。二列を縦罫で継ぐ */}
-        <section
-          className="wv-section wv-about-practice"
-          data-ground="paper2"
-          aria-labelledby="about-practice-heading"
-        >
+        <section className="wv-section wv-about-practice" data-ground="paper2" aria-labelledby="about-practice-heading">
           <div className="wv-inner">
             <div data-reveal>
               <p className="wv-label">Practice</p>

@@ -6,8 +6,18 @@ import "../../home/home.css";
 import "../../wv-page.css";
 import "./dev-page.css";
 
-const serif = Noto_Serif_JP({ subsets: ["latin"], weight: ["300", "400"], variable: "--wv-serif", display: "swap" });
-const sans = Noto_Sans_JP({ subsets: ["latin"], weight: ["400", "500", "700"], variable: "--wv-sans", display: "swap" });
+const serif = Noto_Serif_JP({
+  subsets: ["latin"],
+  weight: ["300", "400"],
+  variable: "--wv-serif",
+  display: "swap",
+});
+const sans = Noto_Sans_JP({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  variable: "--wv-sans",
+  display: "swap",
+});
 
 const pageTitle = "受託・共同開発 | CordMark";
 const pageDescription =
@@ -19,7 +29,14 @@ export const metadata: Metadata = {
   openGraph: {
     title: pageTitle,
     description: pageDescription,
-    images: [{ url: "/og.png", width: 1200, height: 630, alt: "受託・共同開発 | CordMark" }],
+    images: [
+      {
+        url: "/og.png",
+        width: 1200,
+        height: 630,
+        alt: "受託・共同開発 | CordMark",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
@@ -74,22 +91,24 @@ export default function DevelopmentPage() {
         {/* 扉 — 何の章か、どこに属するか、事実の帯 */}
         <section className="wv-section wv-dev-hero" data-ground="paper" aria-labelledby="dev-heading">
           <div className="wv-inner">
-            <div className="wv-page__hero">
-              <div className="wv-page__hero-copy" data-reveal>
-                <p className="wv-label">受託・共同開発 — 01 / DELIVERY</p>
+            <div className="wv-page__opening">
+              <div className="wv-page__hero" data-reveal>
+                <p className="wv-label">受託・共同開発</p>
                 <h1 className="wv-h1" id="dev-heading">
                   <span className="wv-nowrap">まだ言葉になっていない。</span>
                   <br />
                   <span className="wv-nowrap">そこから、つくり始める。</span>
                 </h1>
+              </div>
+              <div className="wv-page__door" data-reveal="2">
+                <aside className="wv-chapter" aria-label="この章の位置">
+                  <p className="wv-chapter__num">01</p>
+                  <p className="wv-chapter__role">DELIVERY</p>
+                </aside>
                 <p className="wv-lead">
                   つくりたいものが仕様として固まっていることは、多くありません。CordMarkの受託・共同開発は、構想と課題を言葉にする要件定義から引き受け、積み上げた開発の経験を土台に実装し、運用保守まで続けます。顧客の具体的な課題に応えるアプリ・システムを、現場を理解したうえでつくります。
                 </p>
               </div>
-              <aside className="wv-chapter" data-reveal="2" aria-label="この章の位置">
-                <p className="wv-chapter__num">01</p>
-                <p className="wv-chapter__role">DELIVERY</p>
-              </aside>
             </div>
           </div>
         </section>
@@ -111,7 +130,9 @@ export default function DevelopmentPage() {
                   AIがまだ賢くなかった頃から、開発に使い続けてきました。どのモデルに何を任せ、どこに人が要るか。自分たちの開発の仕組みを自分たちでつくり、それで開発してきた蓄積が、いまの速さです。
                 </p>
                 <p className="wv-dev-proof">
-                  このサイトも、仕事の合間の<span className="wv-dev-proof__num">二日</span>でつくりました。
+                  このサイトも、仕事の合間の
+                  <span className="wv-dev-proof__num">二日</span>
+                  でつくりました。
                 </p>
               </div>
             </div>
@@ -170,7 +191,8 @@ export default function DevelopmentPage() {
                 <span className="wv-nowrap">支援とProductへ戻る。</span>
               </h2>
               <p className="wv-lead wv-dev-loop__lead">
-                開発の現場でしか分からないことがあります。何が判断を止めているか、どの情報が届いていないか。そこで得た知見を、支援の内容とCompany OSの設計へ戻します。
+                開発の現場でしか分からないことがあります。何が判断を止めているか、どの情報が届いていないか。そこで得た知見を、支援の内容とCompany
+                OSの設計へ戻します。
               </p>
             </div>
             <div className="wv-split" data-reveal="2">
@@ -202,7 +224,12 @@ export default function DevelopmentPage() {
         </section>
 
         {/* Contact — 闇でページを閉じる。Footerがそのまま続く */}
-        <section className="wv-section wv-page__contact" id="contact" data-ground="night" aria-labelledby="dev-contact-heading">
+        <section
+          className="wv-section wv-page__contact"
+          id="contact"
+          data-ground="night"
+          aria-labelledby="dev-contact-heading"
+        >
           <div className="wv-inner">
             <div data-reveal>
               <p className="wv-label">Contact</p>

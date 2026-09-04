@@ -6,8 +6,18 @@ import "../../home/home.css";
 import "../../wv-page.css";
 import "./sp-page.css";
 
-const serif = Noto_Serif_JP({ subsets: ["latin"], weight: ["300", "400"], variable: "--wv-serif", display: "swap" });
-const sans = Noto_Sans_JP({ subsets: ["latin"], weight: ["400", "500", "700"], variable: "--wv-sans", display: "swap" });
+const serif = Noto_Serif_JP({
+  subsets: ["latin"],
+  weight: ["300", "400"],
+  variable: "--wv-serif",
+  display: "swap",
+});
+const sans = Noto_Sans_JP({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  variable: "--wv-sans",
+  display: "swap",
+});
 
 const pageTitle = "AI活用支援 | CordMark";
 const pageDescription =
@@ -19,7 +29,14 @@ export const metadata: Metadata = {
   openGraph: {
     title: pageTitle,
     description: pageDescription,
-    images: [{ url: "/og.png", width: 1200, height: 630, alt: "AI活用支援 | CordMark" }],
+    images: [
+      {
+        url: "/og.png",
+        width: 1200,
+        height: 630,
+        alt: "AI活用支援 | CordMark",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
@@ -32,10 +49,22 @@ export const metadata: Metadata = {
 /* ---------- 入口A 開発組織から ---------- */
 
 const devSymptoms = [
-  { title: "導入は進んだが、速度も品質も変わらない", body: "ツールは行き渡ったのに、開発の成果に現れていない。" },
-  { title: "一部の人の技になり、チームの標準になっていない", body: "使える人だけが速く、次の人が同じようには進めない。" },
-  { title: "レビュー、テスト、文書が工程ごとに分断している", body: "工程ごとにAIを使っていて、前後がつながっていない。" },
-  { title: "導入前後の変化を測る指標がない", body: "何がどれだけ変わったかを、投資の判断に使えない。" },
+  {
+    title: "導入は進んだが、速度も品質も変わらない",
+    body: "ツールは行き渡ったのに、開発の成果に現れていない。",
+  },
+  {
+    title: "一部の人の技になり、チームの標準になっていない",
+    body: "使える人だけが速く、次の人が同じようには進めない。",
+  },
+  {
+    title: "レビュー、テスト、文書が工程ごとに分断している",
+    body: "工程ごとにAIを使っていて、前後がつながっていない。",
+  },
+  {
+    title: "導入前後の変化を測る指標がない",
+    body: "何がどれだけ変わったかを、投資の判断に使えない。",
+  },
 ];
 
 /** 工程の一本の線。AIが担うことと、人が決めることを、工程ごとに一行ずつ */
@@ -43,8 +72,16 @@ const stages = [
   { name: "仕様", ai: "要件の曖昧さを洗い出す", human: "何を作るかを決める" },
   { name: "実装", ai: "コードを書く・直す", human: "設計の判断" },
   { name: "レビュー", ai: "指摘と根拠を揃える", human: "通すかを決める" },
-  { name: "テスト", ai: "テストを設計し自動化する", human: "何を担保するかを決める" },
-  { name: "ドキュメント", ai: "知見を体系化し続ける", human: "残す基準を決める" },
+  {
+    name: "テスト",
+    ai: "テストを設計し自動化する",
+    human: "何を担保するかを決める",
+  },
+  {
+    name: "ドキュメント",
+    ai: "知見を体系化し続ける",
+    human: "残す基準を決める",
+  },
   { name: "測定", ai: "指標を集め可視化する", human: "投資を判断する" },
 ];
 
@@ -65,9 +102,21 @@ const devDiagnosisOutputs = [
   "6週間実装パイロット提案書",
 ];
 
-const pilotMetrics = ["開発リードタイム", "PR作成時間", "レビュー待ち時間", "テスト作成時間", "AIツール利用率", "利用者満足度"];
+const pilotMetrics = [
+  "開発リードタイム",
+  "PR作成時間",
+  "レビュー待ち時間",
+  "テスト作成時間",
+  "AIツール利用率",
+  "利用者満足度",
+];
 
-const devTargets = ["SIer / SES / 受託開発企業", "SaaS事業会社", "事業会社の内製開発部門", "チーム規模 5名〜数百名程度"];
+const devTargets = [
+  "SIer / SES / 受託開発企業",
+  "SaaS事業会社",
+  "事業会社の内製開発部門",
+  "チーム規模 5名〜数百名程度",
+];
 
 const devFit = [
   "AIツールを一部導入済みだが、成果が出ていない",
@@ -79,10 +128,22 @@ const devFit = [
 /* ---------- 入口B 会社全体から ---------- */
 
 const orgSymptoms = [
-  { title: "部署ごとに試しており、全社で広がらない", body: "うまくいったやり方が、隣の部署へ渡っていない。" },
-  { title: "PoCやツール導入で止まり、運用に乗らない", body: "試すところまでは進み、日々の仕事には入っていない。" },
-  { title: "業務プロセス自体が人間前提のまま", body: "人が集まって決める形は変わらず、手順だけが増える。" },
-  { title: "ガバナンスが曖昧で、本格展開できない", body: "どこまで任せてよいかが決まらず、広げる判断が止まる。" },
+  {
+    title: "部署ごとに試しており、全社で広がらない",
+    body: "うまくいったやり方が、隣の部署へ渡っていない。",
+  },
+  {
+    title: "PoCやツール導入で止まり、運用に乗らない",
+    body: "試すところまでは進み、日々の仕事には入っていない。",
+  },
+  {
+    title: "業務プロセス自体が人間前提のまま",
+    body: "人が集まって決める形は変わらず、手順だけが増える。",
+  },
+  {
+    title: "ガバナンスが曖昧で、本格展開できない",
+    body: "どこまで任せてよいかが決まらず、広げる判断が止まる。",
+  },
 ];
 
 const orgDiagnosisFlow = [
@@ -110,11 +171,31 @@ const orgTargets = ["営業部門", "CS部門", "バックオフィス", "開発
 /* ---------- 共通: 五つの層 ---------- */
 
 const layers = [
-  { num: "01", name: "Strategy / KPI", body: "経営課題とAI活用テーマを接続する。" },
-  { num: "02", name: "Workflow", body: "営業・CS・管理・開発の業務プロセスを再設計する。" },
-  { num: "03", name: "Knowledge / Data", body: "社内ナレッジとデータをAIが使える形に整える。" },
-  { num: "04", name: "Agent / Application", body: "AI Agent、RAG、業務アプリを実装する。" },
-  { num: "05", name: "Governance / Enablement", body: "権限、ルール、教育、運用体制を設計する。" },
+  {
+    num: "01",
+    name: "Strategy / KPI",
+    body: "経営課題とAI活用テーマを接続する。",
+  },
+  {
+    num: "02",
+    name: "Workflow",
+    body: "営業・CS・管理・開発の業務プロセスを再設計する。",
+  },
+  {
+    num: "03",
+    name: "Knowledge / Data",
+    body: "社内ナレッジとデータをAIが使える形に整える。",
+  },
+  {
+    num: "04",
+    name: "Agent / Application",
+    body: "AI Agent、RAG、業務アプリを実装する。",
+  },
+  {
+    num: "05",
+    name: "Governance / Enablement",
+    body: "権限、ルール、教育、運用体制を設計する。",
+  },
 ];
 
 function Arrow() {
@@ -134,22 +215,24 @@ export default function SupportPage() {
         {/* 扉 — 何の章か、どこに属するか。主張はトップに置いてきた。ここは一文と二つの入口 */}
         <section className="wv-section wv-sp-hero" data-ground="paper" aria-labelledby="sp-heading">
           <div className="wv-inner">
-            <div className="wv-page__hero">
-              <div className="wv-page__hero-copy" data-reveal>
-                <p className="wv-label">AI活用支援 — 02 / SUPPORT</p>
+            <div className="wv-page__opening">
+              <div className="wv-page__hero" data-reveal>
+                <p className="wv-label">AI活用支援</p>
                 <h1 className="wv-h1" id="sp-heading">
                   <span className="wv-nowrap">AIを入れた会社と、</span>
                   <br />
                   <span className="wv-nowrap">AIで動く会社は、違う。</span>
                 </h1>
+              </div>
+              <div className="wv-page__door" data-reveal="2">
+                <aside className="wv-chapter" aria-label="この章の位置">
+                  <p className="wv-chapter__num">02</p>
+                  <p className="wv-chapter__role">SUPPORT</p>
+                </aside>
                 <p className="wv-lead">
                   ツールが増えても、仕事の進め方が人だけを前提にしたままなら、会社は速くなりません。CordMarkは、いまの進め方を診断し、人が決め、AIが運ぶ形へ組み替え、測り、標準として定着させます。入口は二つ。開発組織から入るか、会社全体から入るか。
                 </p>
               </div>
-              <aside className="wv-chapter" data-reveal="2" aria-label="この章の位置">
-                <p className="wv-chapter__num">02</p>
-                <p className="wv-chapter__role">SUPPORT</p>
-              </aside>
             </div>
 
             {/* 二つの入口。名前、誰向けか、ページ内の行き先 */}
@@ -235,10 +318,20 @@ export default function SupportPage() {
               </h2>
             </div>
             <div className="wv-sp-flow" data-reveal="2">
-              <svg className="wv-sp-flow__rail wv-sp-flow__rail--h" viewBox="0 0 1200 2" preserveAspectRatio="none" aria-hidden="true">
+              <svg
+                className="wv-sp-flow__rail wv-sp-flow__rail--h"
+                viewBox="0 0 1200 2"
+                preserveAspectRatio="none"
+                aria-hidden="true"
+              >
                 <path d="M0 1H1200" />
               </svg>
-              <svg className="wv-sp-flow__rail wv-sp-flow__rail--v" viewBox="0 0 2 1200" preserveAspectRatio="none" aria-hidden="true">
+              <svg
+                className="wv-sp-flow__rail wv-sp-flow__rail--v"
+                viewBox="0 0 2 1200"
+                preserveAspectRatio="none"
+                aria-hidden="true"
+              >
                 <path d="M1 0V1200" />
               </svg>
               <ol className="wv-sp-flow__steps" aria-label="開発の工程">
@@ -335,7 +428,9 @@ export default function SupportPage() {
                   <h3>開発組織への定着・横展開</h3>
                 </div>
                 <div className="wv-index__side">
-                  <p>利用状況とKPIを見ながら、チーム標準の開発プロセスとして定着させ、他チームへ広げる。教育と伴走を含む。</p>
+                  <p>
+                    利用状況とKPIを見ながら、チーム標準の開発プロセスとして定着させ、他チームへ広げる。教育と伴走を含む。
+                  </p>
                 </div>
               </li>
             </ol>
@@ -425,7 +520,8 @@ export default function SupportPage() {
                 </div>
                 <div className="wv-index__side">
                   <p>
-                    1つの経営テーマと2〜3部門に絞り、業務と意思決定の実態の可視化から、AI活用テーマ、優先順位、ガバナンス、90日の実装計画までを設計する。初期モニター 200万円〜(税別)。
+                    1つの経営テーマと2〜3部門に絞り、業務と意思決定の実態の可視化から、AI活用テーマ、優先順位、ガバナンス、90日の実装計画までを設計する。初期モニター
+                    200万円〜(税別)。
                   </p>
                   <div className="wv-sp-notes">
                     <div>
@@ -454,7 +550,9 @@ export default function SupportPage() {
                   <h3>90日の実装</h3>
                 </div>
                 <div className="wv-index__side">
-                  <p>診断で決めたテーマから着手し、ワークフロー、ナレッジ、Agentを実装して日々の運用に乗せる。運用ルールと教育を含む。</p>
+                  <p>
+                    診断で決めたテーマから着手し、ワークフロー、ナレッジ、Agentを実装して日々の運用に乗せる。運用ルールと教育を含む。
+                  </p>
                   <div className="wv-sp-notes wv-sp-notes--one">
                     <div>
                       <p className="wv-sp-notes__head">実装領域</p>
@@ -537,7 +635,10 @@ export default function SupportPage() {
                   <span className="wv-nowrap">組み替えた流れは、</span>
                   <span className="wv-nowrap">載せる場所を前提に設計する。</span>
                 </h3>
-                <p>支援で組み替えた業務と判断の流れは、会社の意思と日々の仕事をつなぐCompany OSに載せることを前提に設計します。</p>
+                <p>
+                  支援で組み替えた業務と判断の流れは、会社の意思と日々の仕事をつなぐCompany
+                  OSに載せることを前提に設計します。
+                </p>
                 <p className="wv-sp-next__link">
                   <a className="wv-link" href="/company-os">
                     Company OS <Arrow />
@@ -562,7 +663,12 @@ export default function SupportPage() {
         </section>
 
         {/* Contact — 闇でページを閉じる。Footerがそのまま続く */}
-        <section className="wv-section wv-page__contact" id="contact" data-ground="night" aria-labelledby="sp-contact-heading">
+        <section
+          className="wv-section wv-page__contact"
+          id="contact"
+          data-ground="night"
+          aria-labelledby="sp-contact-heading"
+        >
           <div className="wv-inner">
             <div data-reveal>
               <p className="wv-label">Contact</p>

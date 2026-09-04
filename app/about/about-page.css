@@ -134,3 +134,8 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* the door on /about carries the mark, not a numeral: stacked, not a row */
+.wv .wv-about-chapter {
+  display: block;
+}

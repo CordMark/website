@@ -31,29 +31,34 @@ const sans = Noto_Sans_JP({
 const companyOsSteps = [
   {
     tag: "01 / ANSWER",
-    title: "まず、AIに聞ける。",
-    body: "コードと過去の決定を知るAIが、根拠付きで答える。エンジニアの手は止まらない。",
+    who: "営業",
+    title: "顧客の問いに、その場で答えられる。",
+    body: "「これ、できましたっけ」をエンジニアに聞かなくていい。仕様と実装を知るAIが根拠付きで答え、顧客への返事は当日に戻る。開発の手は止まらない。",
   },
   {
     tag: "02 / ASK",
-    title: "問いは、背景を連れて届く。",
-    body: "答えるべき人へ、なぜ必要か、何が決まっていないか、選ぶと何が起きるかを添えて届く。説明を受け直さなくていい。",
+    who: "エンジニア",
+    title: "決めてほしいことが、背景ごと届く。",
+    body: "なぜ必要か、何が決まっていないか、選ぶと何が起きるか。AIが添えて、決める人へ直接届ける。説明を受け直す往復がなくなる。",
   },
   {
     tag: "03 / DECIDE",
-    title: "決めるのは、人。",
-    body: "AIが営業の知る顧客の事情まで集め、PMが決める。誰が、何を根拠に決めたかが、決定と一緒に残り、経営には知らされる。",
+    who: "PM",
+    title: "問いを運ばず、決めることに時間を使う。",
+    body: "営業の知る顧客の事情まで揃った状態で、PMが決める。誰が何を根拠に決めたかが決定と一緒に残り、経営には知らされる。",
     human: true,
   },
   {
     tag: "04 / ACT",
+    who: "エンジニア",
     title: "決定は、その日の仕事に戻る。",
-    body: "決定と理由が仕様とタスクになり、止まっていた開発が動き出す。",
+    body: "決定と理由が仕様とタスクになり、止まっていた開発が動き出す。進み具合はAIが追うから、状態の更新はしなくていい。",
   },
   {
     tag: "05 / VISIBILITY",
-    title: "重要な判断が、現場の状況ごと届く。",
-    body: "整えられた報告を待たない。決定の経緯と現場の声が、そのまま経営に届く。「できています」の裏で育つ問題を、手遅れになる前に知る。",
+    who: "経営",
+    title: "整えられた報告を、待たなくていい。",
+    body: "重要な判断が、決定の経緯と現場の言葉のまま届く。決まらずに止まっている問いも見える。「できています」の裏で育つ問題を、手遅れになる前に知る。",
   },
   {
     tag: "06 / AI-NATIVE",
@@ -176,7 +181,10 @@ export default function Home() {
                 <ol className="wv-os__steps" aria-label="Company OSの流れ">
                   {companyOsSteps.map((step) => (
                     <li key={step.tag} className={step.human ? "is-human" : undefined}>
-                      <span className="wv-os__tag">{step.tag}</span>
+                      <span className="wv-os__tag">
+                        {step.tag}
+                        {step.who && <i>{step.who}</i>}
+                      </span>
                       <b>{step.title}</b>
                       <p>
                         <span>{step.body}</span>

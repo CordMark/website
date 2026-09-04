@@ -6,8 +6,18 @@ import "../home/home.css";
 import "../wv-page.css";
 import "./beyond-page.css";
 
-const serif = Noto_Serif_JP({ subsets: ["latin"], weight: ["300", "400"], variable: "--wv-serif", display: "swap" });
-const sans = Noto_Sans_JP({ subsets: ["latin"], weight: ["400", "500", "700"], variable: "--wv-sans", display: "swap" });
+const serif = Noto_Serif_JP({
+  subsets: ["latin"],
+  weight: ["300", "400"],
+  variable: "--wv-serif",
+  display: "swap",
+});
+const sans = Noto_Sans_JP({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  variable: "--wv-sans",
+  display: "swap",
+});
 
 const pageTitle = "Phase 2 | AIの先で、人はどう生きるか。 | CordMark";
 const pageDescription =
@@ -49,9 +59,15 @@ function External() {
 
 /** DotCraftの三つの主題。名前は既存のまま、説明は本文の範囲に留める */
 const themes = [
-  { name: "LOOP ENGINEERING", body: "開発の現場で回している、作り方そのもの。" },
+  {
+    name: "LOOP ENGINEERING",
+    body: "開発の現場で回している、作り方そのもの。",
+  },
   { name: "AI AGENTS", body: "現場でどう使うか。仕事のどこを預けるか。" },
-  { name: "AI & SOCIETY", body: "その先の社会に、人の営みとして何が残るのか。" },
+  {
+    name: "AI & SOCIETY",
+    body: "その先の社会に、人の営みとして何が残るのか。",
+  },
 ];
 
 export default function Beyond() {
@@ -62,22 +78,24 @@ export default function Beyond() {
         {/* 扉 — 何の章か、どこに属するか、事実の帯 */}
         <section className="wv-section wv-beyond__hero" data-ground="paper" aria-labelledby="wv-beyond-heading">
           <div className="wv-inner">
-            <div className="wv-page__hero">
-              <div className="wv-page__hero-copy" data-reveal>
+            <div className="wv-page__opening">
+              <div className="wv-page__hero" data-reveal>
                 <p className="wv-label">Phase 2 · Beyond</p>
                 <h1 className="wv-h1" id="wv-beyond-heading">
                   <span className="wv-nowrap">AIの先で、</span>
                   <br />
                   <span className="wv-nowrap">人はどう生きるか。</span>
                 </h1>
+              </div>
+              <div className="wv-page__door" data-reveal="2">
+                <aside className="wv-chapter" aria-label="この章の位置">
+                  <p className="wv-chapter__num">02</p>
+                  <p className="wv-chapter__role">PHASE 2 · BEYOND</p>
+                </aside>
                 <p className="wv-lead">
                   機械が上手にこなせる仕事は、これから増えていきます。それでも、人が自ら行うからこそ価値のある営みがある。遊び、学び、競技、創作、交流。CordMarkはそれを、ゲームとメディアという二つの形で確かめています。
                 </p>
               </div>
-              <aside className="wv-chapter" data-reveal="2" aria-label="この章の位置">
-                <p className="wv-chapter__num">02</p>
-                <p className="wv-chapter__role">PHASE 2 · BEYOND</p>
-              </aside>
             </div>
           </div>
         </section>
@@ -197,7 +215,8 @@ export default function Beyond() {
                 問いは、行き来する。
               </h2>
               <p className="wv-lead">
-                ここで見つけた「人に残るもの」の問いは、Company OSの設計に戻る。現場でAIを据える中で生まれる違和感は、次の探索の種になる。
+                ここで見つけた「人に残るもの」の問いは、Company
+                OSの設計に戻る。現場でAIを据える中で生まれる違和感は、次の探索の種になる。
               </p>
             </div>
             <nav className="wv-beyond__links" data-reveal="2" aria-label="Phase 1へ">

@@ -6,8 +6,18 @@ import "../home/home.css";
 import "../wv-page.css";
 import "./cos-page.css";
 
-const serif = Noto_Serif_JP({ subsets: ["latin"], weight: ["300", "400"], variable: "--wv-serif", display: "swap" });
-const sans = Noto_Sans_JP({ subsets: ["latin"], weight: ["400", "500", "700"], variable: "--wv-sans", display: "swap" });
+const serif = Noto_Serif_JP({
+  subsets: ["latin"],
+  weight: ["300", "400"],
+  variable: "--wv-serif",
+  display: "swap",
+});
+const sans = Noto_Sans_JP({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  variable: "--wv-sans",
+  display: "swap",
+});
 
 const pageTitle = "Company OS | CordMark";
 const pageDescription =
@@ -19,7 +29,14 @@ export const metadata: Metadata = {
   openGraph: {
     title: pageTitle,
     description: pageDescription,
-    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Company OS | CordMark" }],
+    images: [
+      {
+        url: "/og.png",
+        width: 1200,
+        height: 630,
+        alt: "Company OS | CordMark",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
@@ -74,17 +91,35 @@ const scenes = [
 
 /** 使い方が広がっても、動かないもの */
 const boundaries = [
-  { title: "決めるのは、人。", body: "AIは答えられることに答え、決めるべき人へ材料を揃えて渡す。判断そのものは委ねない。" },
-  { title: "聞くことと、変えることは、分けられる。", body: "誰でも聞ける。システムとデータを変えられるのは、会社が許した役割だけ。実行がAIに移っていっても、誰に許すかを決めるのは会社のまま。" },
-  { title: "答えるのは、権限と機密の範囲で。", body: "誰が何を見てよいかは会社が決め、AIはその中で答える。" },
+  {
+    title: "決めるのは、人。",
+    body: "AIは答えられることに答え、決めるべき人へ材料を揃えて渡す。判断そのものは委ねない。",
+  },
+  {
+    title: "聞くことと、変えることは、分けられる。",
+    body: "誰でも聞ける。システムとデータを変えられるのは、会社が許した役割だけ。実行がAIに移っていっても、誰に許すかを決めるのは会社のまま。",
+  },
+  {
+    title: "答えるのは、権限と機密の範囲で。",
+    body: "誰が何を見てよいかは会社が決め、AIはその中で答える。",
+  },
 ];
 
 /** AIを「使わせる」から、仕事の裏側で「働かせる」へ。左が配る側、右がCompany OS */
 const shifts = [
   { from: "ツールを全員に配る", to: "仕事の裏側で、AIを働かせる" },
-  { from: "費用が、人数分積み上がる", to: "使うほど、会社にコンテキストが溜まる" },
-  { from: "使いこなしが、個人のスキルに依存する", to: "普段の仕事をするだけで、AIと一緒に進む" },
-  { from: "コンテキストが、個人のチャットに散る", to: "溜まるほど会社を理解して、さらに使われる" },
+  {
+    from: "費用が、人数分積み上がる",
+    to: "使うほど、会社にコンテキストが溜まる",
+  },
+  {
+    from: "使いこなしが、個人のスキルに依存する",
+    to: "普段の仕事をするだけで、AIと一緒に進む",
+  },
+  {
+    from: "コンテキストが、個人のチャットに散る",
+    to: "溜まるほど会社を理解して、さらに使われる",
+  },
 ];
 
 function Arrow() {
@@ -104,22 +139,25 @@ export default function CompanyOsPage() {
         {/* 扉 — 何の章か、どこに属するか、事実の帯 */}
         <section className="wv-section wv-cos-hero" data-ground="paper" aria-labelledby="cos-heading">
           <div className="wv-inner">
-            <div className="wv-page__hero">
-              <div className="wv-page__hero-copy" data-reveal>
-                <p className="wv-label">Company OS — 03 / PRODUCT</p>
+            <div className="wv-page__opening">
+              <div className="wv-page__hero" data-reveal>
+                <p className="wv-label">Company OS</p>
                 <h1 className="wv-h1" id="cos-heading">
                   <span className="wv-nowrap">現場を止めない。</span>
                   <br />
                   <span className="wv-nowrap">重要な判断を、見失わない。</span>
                 </h1>
+              </div>
+              <div className="wv-page__door" data-reveal="2">
+                <aside className="wv-chapter" aria-label="この章の位置">
+                  <p className="wv-chapter__num">03</p>
+                  <p className="wv-chapter__role">PRODUCT</p>
+                </aside>
                 <p className="wv-lead">
-                  Company OSは、会社の意思と日々の仕事をつなぐCordMarkの主要商品です。営業も、エンジニアも、PMも、経営者も、いつもの言葉で聞ける。答えられることはAIが答え、決めるべきことは決める人へ届き、決まったことはその日の仕事に戻る。
+                  Company
+                  OSは、会社の意思と日々の仕事をつなぐCordMarkの主要商品です。営業も、エンジニアも、PMも、経営者も、いつもの言葉で聞ける。答えられることはAIが答え、決めるべきことは決める人へ届き、決まったことはその日の仕事に戻る。
                 </p>
               </div>
-              <aside className="wv-chapter" data-reveal="2" aria-label="この章の位置">
-                <p className="wv-chapter__num">03</p>
-                <p className="wv-chapter__role">PRODUCT</p>
-              </aside>
             </div>
           </div>
         </section>
@@ -267,7 +305,12 @@ export default function CompanyOsPage() {
         </section>
 
         {/* Contact — 闇でページを閉じる。Footerがそのまま続く */}
-        <section className="wv-section wv-page__contact" id="contact" data-ground="night" aria-labelledby="cos-contact-heading">
+        <section
+          className="wv-section wv-page__contact"
+          id="contact"
+          data-ground="night"
+          aria-labelledby="cos-contact-heading"
+        >
           <div className="wv-inner">
             <div data-reveal>
               <p className="wv-label">Contact</p>

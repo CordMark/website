@@ -445,23 +445,12 @@ html[data-wv-reveal] .wv .wv-cos-shift__rows > li[data-reveal].is-in .wv-cos-shi
   color: var(--wv-quiet);
 }
 
-/* the closing lines sit on the same grid as the table, starting where its
-   words start (after the numeral column) and running to the right edge, so
-   they line up with the table at every width instead of floating */
+/* the closing lines: under the table, from the section's own left edge
+   (the same edge the heading and the numerals sit on), with one rule above */
 .wv .wv-cos-native__foot {
-  display: grid;
-  grid-template-columns:
-    clamp(30px, 4vw, 52px) minmax(0, 0.9fr)
-    clamp(72px, 12vw, 180px) minmax(0, 1.1fr);
-  column-gap: clamp(10px, 1.6vw, 22px);
   margin-top: clamp(56px, 6.4vw, 96px);
   padding-top: clamp(28px, 3.2vw, 44px);
   border-top: 1px solid var(--wv-line);
-}
-
-.wv .wv-cos-native__close,
-.wv .wv-cos-native__link {
-  grid-column: 2 / -1;
 }
 
 .wv .wv-cos-native__close {
@@ -606,14 +595,7 @@ html[data-wv-reveal] .wv [data-reveal] .wv-cos-native__close .wv-line:nth-child(
     grid-column: 1;
   }
 
-  .wv .wv-cos-native__foot {
-    grid-template-columns: 1fr;
-  }
 
-  .wv .wv-cos-native__close,
-  .wv .wv-cos-native__link {
-    grid-column: 1;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

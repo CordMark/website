@@ -125,14 +125,15 @@
   will-change: transform, opacity;
 }
 
-/* What a person says, and what comes back to them. One line of question, a
-   short tag of the answer. Hangs below the role name. */
+/* What a person says, and what comes back to them. The person's words in
+   brackets; under them, what Company OS returned, as a small card with its
+   own label line — the reply has to read as a reply, not as more dialogue. */
 .wv .wv-os__say {
   position: absolute;
   top: 0;
   left: 0;
   display: grid;
-  gap: 3px;
+  gap: 7px;
   opacity: 0;
   white-space: nowrap;
   font-family: var(--wv-mono);
@@ -160,22 +161,28 @@
   margin-left: 0.15em;
 }
 
-/* what came back, and from where */
+/* what came back, and from where: a card off a teal rule, the source on its
+   own line above the words, so the eye lands on the label, then the answer */
 .wv .wv-os__say .is-os {
-  color: var(--os-teal);
-  padding-left: 0.6em;
+  display: block;
+  max-width: 19.5em;
+  padding: 7px 12px 8px 11px;
+  border-left: 2px solid var(--os-teal);
+  border-radius: 0 3px 3px 0;
+  background: linear-gradient(90deg, rgba(47, 212, 200, 0.14), rgba(47, 212, 200, 0.03));
+  box-shadow: 0 0 0 1px rgba(47, 212, 200, 0.08), 0 10px 30px rgba(5, 12, 23, 0.55);
+  white-space: normal;
+  line-height: 1.6;
+  color: #dcf8f5;
+  text-shadow: none;
 }
 
 .wv .wv-os__say .is-os::before {
   content: "COMPANY OS";
-  display: inline-block;
-  margin-right: 0.8em;
-  padding: 0.1em 0.5em;
-  border: 1px solid rgba(47, 212, 200, 0.45);
-  border-radius: 2px;
+  display: block;
+  margin-bottom: 3px;
   font-size: 0.7em;
-  letter-spacing: 0.18em;
-  vertical-align: 0.15em;
+  letter-spacing: 0.22em;
   color: var(--os-teal);
   opacity: 0.9;
 }
@@ -985,6 +992,17 @@ body:has(.wv-page) .site-header {
 
 .wv .wv-os__steps li.is-human .wv-os__tag {
   color: var(--wv-mark);
+}
+
+/* whose beat this is, after the tag: 01 / ANSWER  営業 */
+.wv .wv-os__tag i {
+  margin-left: 1.1em;
+  padding-left: 1.1em;
+  border-left: 1px solid rgba(237, 231, 218, 0.25);
+  font-style: normal;
+  letter-spacing: 0.12em;
+  color: var(--wv-linen);
+  opacity: 0.8;
 }
 
 .wv .wv-os__steps b {
