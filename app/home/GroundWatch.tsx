@@ -13,6 +13,9 @@ import { useEffect } from "react";
  *   html[data-wv-scrolled] "1" when scrolled — a scrim under the nav
  *   html[data-wv-mark]     "docked" once the hero cord has become the mark,
  *                          which is when the header logo takes over
+ *   html[data-wv-hero]     "1" while the hero owns the screen — the header
+ *                          keeps no backdrop then, so the mark can fly up
+ *                          to it without passing behind a scrim
  */
 
 const DARK = new Set(["night", "charcoal"]);
@@ -29,6 +32,7 @@ export function GroundWatch() {
     let ground = "";
     let scrolled = "";
     let marked = "";
+    let inHero = "";
 
     const update = () => {
       raf = 0;
@@ -40,8 +44,11 @@ export function GroundWatch() {
         if (r.top <= probe && r.bottom > probe) dark = DARK.has(s.dataset.ground ?? "");
       }
       const heroRect = hero?.getBoundingClientRect();
-      // the cord finishes becoming the mark near the end of the hero pin
-      const docked = heroRect ? -heroRect.top / Math.max(1, heroRect.height - window.innerHeight) > 0.92 : false;
+      // the cord finishes becoming the mark, and flying up to the header,
+      // near the end of the hero pin (HeroCord fades it from 0.96)
+      const heroP = heroRect ? -heroRect.top / Math.max(1, heroRect.height - window.innerHeight) : 1;
+      const docked = heroP > 0.965;
+      const heroOwns = !!heroRect && heroP < 1 && heroRect.bottom > 0;
       const isScrolled = window.scrollY > 24;
 
       // write
@@ -54,6 +61,12 @@ export function GroundWatch() {
       if (nextScrolled !== scrolled) {
         scrolled = nextScrolled;
         document.documentElement.dataset.wvScrolled = nextScrolled;
+      }
+      const nextHero = heroOwns ? "1" : "";
+      if (nextHero !== inHero) {
+        inHero = nextHero;
+        if (heroOwns) document.documentElement.dataset.wvHero = "1";
+        else delete document.documentElement.dataset.wvHero;
       }
       const nextMark = docked ? "docked" : "";
       if (nextMark !== marked) {
@@ -78,6 +91,7 @@ export function GroundWatch() {
       delete document.documentElement.dataset.wvGround;
       delete document.documentElement.dataset.wvScrolled;
       delete document.documentElement.dataset.wvMark;
+      delete document.documentElement.dataset.wvHero;
     };
   }, []);
 

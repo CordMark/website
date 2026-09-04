@@ -16,7 +16,11 @@ import { useEffect, useRef } from "react";
  *   0.00 – 0.46   loose strands, full width, quiet behind the copy
  *   0.42 – 0.76   the strands twist into one cord
  *   0.66 – 0.94   the cord coils and splits into the mark
- *   0.88 – 1.00   the mark dissolves
+ *   0.90 – 0.985  the mark drifts up to the top left, shrinking, until it
+ *                 sits where the header's own mark is; on the way the left
+ *                 ring loses the part inside the right one — a C and an O,
+ *                 which is the logo
+ *   0.96 – 1.00   it goes out there, and the header's mark comes in
  */
 
 const STRANDS = [
@@ -63,6 +67,9 @@ export function HeroCord() {
     const root = hero.closest<HTMLElement>(".wv");
     const heroCopy = root?.querySelector<HTMLElement>(".wv-hero__copy") ?? null;
     const heroHint = root?.querySelector<HTMLElement>(".wv-hero__hint") ?? null;
+    const heroScrim = root?.querySelector<HTMLElement>(".wv-hero__scrim") ?? null;
+    // where the mark ends up: the header's own mark, measured when needed
+    const brandMark = document.querySelector<HTMLElement>(".site-header .brand__mark");
 
     const reduceQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     const narrowQuery = window.matchMedia("(max-width: 880px)");
@@ -84,21 +91,38 @@ export function HeroCord() {
     };
 
     /* ---------- the cord: a centreline, six strands twisted around it ---------- */
-    const drawCord = (pW: number, pC: number, pM: number, alpha: number, t: number) => {
+    const drawCord = (pW: number, pC: number, pM: number, pF: number, pE: number, alpha: number, t: number) => {
       const n = STRANDS.length;
       const narrow = narrowQuery.matches;
       const cy = H * 0.52;
       const spread = H * 0.3;
 
-      // where the mark sits once the cord has coiled
-      const R = Math.min(W, H) * (narrow ? 0.26 : 0.2);
+      // where the mark sits once the cord has coiled — and then, as it flies,
+      // where the header's mark is. The pin covers the viewport, so the
+      // header's box is already in canvas coordinates. The header mark is
+      // two rings three radii wide, the same shape as the one drawn here.
+      const R0 = Math.min(W, H) * (narrow ? 0.26 : 0.2);
+      let R = R0;
       const center = { x: W * 0.5, y: H * 0.5 };
+      if (pF > 0) {
+        const b = brandMark?.getBoundingClientRect();
+        const tx = b && b.width > 0 ? b.left + b.width / 2 : 48;
+        const ty = b && b.width > 0 ? b.top + b.height / 2 : 36;
+        const Rt = b && b.width > 0 ? b.width / 3 / 0.92 : 12;
+        const f = smooth(pF);
+        center.x = mix(center.x, tx, f);
+        // a little lift first, so it reads as drifting up, not sliding
+        center.y = mix(center.y, ty, f) - Math.sin(f * Math.PI) * H * 0.04;
+        R = mix(R0, Rt, f);
+      }
+      const shrink = R / R0;
       const Rm = R * 0.92;
       const leftC = { x: center.x - Rm * 0.5, y: center.y };
       const rightC = { x: center.x + Rm * 0.5, y: center.y };
 
       const ropeAmp = 7 + H * 0.007;
       const ringAmp = R * 0.17;
+      const lw = Math.max(0.45, Math.sqrt(shrink));
       const amp = mix(ropeAmp, ringAmp, pC);
       const lineTwists = W / 150;
       const ringTwists = 7;
@@ -192,22 +216,19 @@ export function HeroCord() {
           ctx.strokeStyle = g;
         };
 
-        // pass 1: the whole strand, thin and quiet (the part that runs behind)
-        ctx.beginPath();
-        for (let j = 0; j < SAMPLES; j++) {
-          if (j === 0) ctx.moveTo(pts[j].x, pts[j].y);
-          else ctx.lineTo(pts[j].x, pts[j].y);
-        }
-        stroke(base * (1 - 0.5 * qMean));
-        ctx.lineWidth = st.width * (1 - 0.25 * qMean);
-        ctx.stroke();
+        // The mark is a C and an O: the left ring has no part inside the
+        // right one. Once the rings have formed, that part of the left ring
+        // (the even strands) goes out, and the two rings read as the logo.
+        const cut = pE > 0 && i % 2 === 0;
+        const inO = (j: number) => cut && Math.hypot(pts[j].x - rightC.x, pts[j].y - rightC.y) < Rm * 0.985;
 
-        // pass 2: only the parts that come to the front → the over/under of a twist
-        if (qMean > 0.02) {
+        // strokes the runs of consecutive samples that `keep` accepts
+        const strokeRuns = (keep: (j: number) => boolean, a: number, width: number) => {
+          if (a <= 0.003) return;
           ctx.beginPath();
           let open = false;
           for (let j = 0; j < SAMPLES; j++) {
-            if (depths[j] > -0.05 && qs[j] > 0.5) {
+            if (keep(j)) {
               if (!open) ctx.moveTo(pts[j].x, pts[j].y);
               else ctx.lineTo(pts[j].x, pts[j].y);
               open = true;
@@ -216,9 +237,32 @@ export function HeroCord() {
               open = false;
             }
           }
-          stroke(base * 1.18);
-          ctx.lineWidth = st.width * 1.35;
+          stroke(a);
+          ctx.lineWidth = width;
           ctx.stroke();
+        };
+
+        // pass 1: the whole strand, thin and quiet (the part that runs behind)
+        const a1 = base * (1 - 0.5 * qMean);
+        const w1 = st.width * (1 - 0.25 * qMean) * lw;
+        if (cut) {
+          strokeRuns((j) => !inO(j), a1, w1);
+          strokeRuns(inO, a1 * (1 - pE), w1);
+        } else {
+          strokeRuns(() => true, a1, w1);
+        }
+
+        // pass 2: only the parts that come to the front → the over/under of a twist
+        if (qMean > 0.02) {
+          const front = (j: number) => depths[j] > -0.05 && qs[j] > 0.5;
+          const a2 = base * 1.18;
+          const w2 = st.width * 1.35 * lw;
+          if (cut) {
+            strokeRuns((j) => front(j) && !inO(j), a2, w2);
+            strokeRuns((j) => front(j) && inO(j), a2 * (1 - pE), w2);
+          } else {
+            strokeRuns(front, a2, w2);
+          }
         }
       }
     };
@@ -238,7 +282,11 @@ export function HeroCord() {
       const pW = span(p, 0.0, 0.46);
       const pC = span(p, 0.42, 0.76);
       const pM = span(p, 0.66, 0.94);
-      const alpha = 1 - span(p, 0.88, 1.0);
+      const pF = span(p, 0.9, 0.985);
+      // the C opens as the mark sets off: the left ring's part inside the O goes out
+      const pE = span(p, 0.905, 0.95);
+      // out only once it has arrived: the header's mark takes over there
+      const alpha = 1 - span(p, 0.96, 1.0);
 
       // a warm, low light behind the cord — it dies out before the paper begins
       const glow = (1 - span(p, 0.72, 1.0)) * alpha;
@@ -252,11 +300,15 @@ export function HeroCord() {
         ctx.fillRect(0, 0, W, H);
       }
 
-      drawCord(pW, pC, pM, alpha, t);
+      drawCord(pW, pC, pM, pF, pE, alpha, t);
 
       // the copy leaves before the mark forms, so the two never compete
-      if (heroCopy) heroCopy.style.opacity = String(1 - span(p, 0.34, 0.6));
+      const copyAlpha = 1 - span(p, 0.34, 0.6);
+      if (heroCopy) heroCopy.style.opacity = String(copyAlpha);
       if (heroHint) heroHint.style.opacity = String(1 - span(p, 0.02, 0.18));
+      // narrow, the scrim covers the whole screen for the words; it leaves
+      // with them so the cord and the mark form on a clear ground
+      if (heroScrim) heroScrim.style.opacity = narrowQuery.matches ? String(copyAlpha) : "";
 
       if (running && !reduce) raf = requestAnimationFrame(draw);
     };
@@ -298,6 +350,7 @@ export function HeroCord() {
       reduceQuery.removeEventListener("change", onReduce);
       if (heroCopy) heroCopy.style.opacity = "";
       if (heroHint) heroHint.style.opacity = "";
+      if (heroScrim) heroScrim.style.opacity = "";
     };
   }, []);
 

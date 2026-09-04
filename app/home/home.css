@@ -39,10 +39,7 @@
 
 /* 字詰め(palt)は見出しにだけ使う。本文に掛けると横が詰まって読みにくい */
 .wv h1,
-.wv h2,
-.wv .wv-beyond__title,
-.wv .wv-beyond__name,
-.wv .wv-beyond__tagline {
+.wv h2 {
   font-feature-settings: "palt";
 }
 
@@ -74,6 +71,8 @@
   z-index: 0;
   opacity: 0;
   pointer-events: none;
+  /* a label pushed past the right edge must not widen the page on a phone */
+  overflow: clip;
 }
 
 /* The ground the scene sits on. The halftone dots are a printed screen, not a
@@ -266,8 +265,7 @@
 .wv .wv-os__steps p,
 .wv .wv-practice p,
 .wv .wv-horizon p,
-.wv .wv-origin__purpose,
-.wv .wv-beyond__phases dd {
+.wv .wv-origin__purpose {
   letter-spacing: 0.02em;
 }
 
@@ -376,6 +374,11 @@ html[data-wv-ground="dark"] .site-header.site-header--over-dark .header-contact 
   background: transparent;
 }
 
+/* the toggle is three lines, not a white tile: it sits on whatever ground the header is on */
+body:has(.wv) .site-header .mobile-menu-toggle {
+  background: transparent;
+}
+
 html[data-wv-ground="dark"] .site-header.site-header--over-dark .mobile-menu-toggle__lines span {
   background: #ede7da;
 }
@@ -395,6 +398,13 @@ html[data-wv-ground="dark"][data-wv-scrolled="1"] .site-header.site-header--over
   backdrop-filter: blur(8px);
 }
 
+/* not while the hero has the screen: its words are gone by then, and the
+   mark flies up to the header — it must not pass behind a scrim */
+html[data-wv-hero="1"] .site-header.site-header--over-dark {
+  background: transparent;
+  backdrop-filter: none;
+}
+
 /* ---------- The mark, once the cord has become it ---------- */
 
 .site-header .brand {
@@ -408,8 +418,9 @@ html[data-wv-ground="dark"][data-wv-scrolled="1"] .site-header.site-header--over
   width: 34px;
   height: 22px;
   opacity: 0;
-  transform: translateY(2px) scale(0.85);
-  transition: opacity 0.35s ease, transform 0.35s ease;
+  /* the cord's mark arrives here at this size; the swap is a fade, not a pop */
+  transform: none;
+  transition: opacity 0.3s ease;
 }
 
 .site-header .brand__mark svg {
@@ -574,6 +585,9 @@ body:has(.wv-page) .site-header {
   min-height: 560svh;
   padding: 0 var(--wv-x);
   color: var(--wv-linen);
+  /* the scrims behind the words reach past the edges; on a phone that would
+     widen the page (clip, not hidden: hidden would break the sticky pin) */
+  overflow-x: clip;
 }
 
 .wv .wv-os__pin {
@@ -893,13 +907,11 @@ body:has(.wv-page) .site-header {
 
 /* No scene at all — reduced motion, or no WebGL. The two blocks can no longer
    share one grid cell and cross-fade, so they simply stack and both read. */
-.wv .wv-os[data-os-scene="off"] .wv-os__grid,
-.wv .wv-os[data-os-scene="static"] .wv-os__grid {
+.wv .wv-os[data-os-scene="off"] .wv-os__grid {
   display: block;
 }
 
-.wv .wv-os[data-os-scene="off"] .wv-os__overview,
-.wv .wv-os[data-os-scene="static"] .wv-os__overview {
+.wv .wv-os[data-os-scene="off"] .wv-os__overview {
   align-self: auto;
   max-width: none;
   margin: 0 0 clamp(28px, 5vw, 56px);
@@ -909,23 +921,13 @@ body:has(.wv-page) .site-header {
   transform: none;
 }
 
-.wv .wv-os[data-os-scene="off"] .wv-os__overview::before,
-.wv .wv-os[data-os-scene="static"] .wv-os__overview::before {
+.wv .wv-os[data-os-scene="off"] .wv-os__overview::before {
   content: none;
 }
 
-.wv .wv-os[data-os-scene="off"] .wv-os__overview-lead,
-.wv .wv-os[data-os-scene="static"] .wv-os__overview-lead {
+.wv .wv-os[data-os-scene="off"] .wv-os__overview-lead {
   margin-left: 0;
   margin-right: 0;
-}
-
-.wv .wv-os[data-os-scene="static"] .wv-os__copy-lead {
-  margin-top: 8px;
-}
-
-.wv .wv-os[data-os-scene="static"] .wv-os__pin {
-  padding-bottom: clamp(160px, 30vh, 320px);
 }
 
 .wv .wv-os[data-os-scene="off"] .wv-os__copy {
@@ -1557,8 +1559,7 @@ html[data-wv-reveal] .wv [data-reveal].is-in {
 }
 
 /* globals.css には、差し替える前の紺のPaletteの色が残っている */
-.wv .site-footer .brand--footer,
-.wv .site-footer .to-top {
+.wv .site-footer .brand--footer {
   color: var(--wv-linen);
 }
 
@@ -1581,30 +1582,28 @@ html[data-wv-reveal] .wv [data-reveal].is-in {
 }
 
 @media (max-width: 880px) {
-  .wv .wv-hero {
-    height: auto;
-  }
-
+  /* The hero stays pinned on a phone too: the same gesture, strands to cord
+     to mark, plays over the same scroll. Unpinned, the whole story used to
+     happen in one pixel of scroll and the screen went dark at once. */
   .wv .wv-hero__pin {
-    position: static;
-    height: auto;
-    min-height: calc(100svh - var(--header-h));
-    padding-top: calc(var(--header-h) + 56px);
-  }
-
-  .wv .wv-os {
-    min-height: auto;
-  }
-
-  .wv .wv-os__pin {
-    position: static;
-    min-height: auto;
-    /* 下は data-os-scene="static" と同じ値。JS が着く前後で高さが動かない */
-    padding: var(--wv-pad-y) 0 clamp(160px, 30vh, 320px);
+    padding-top: calc(var(--header-h) + clamp(20px, 5vh, 48px));
+    padding-bottom: clamp(24px, 6vh, 64px);
   }
 
   .wv .wv-hero__scrim {
     background: linear-gradient(180deg, rgba(27, 31, 28, 0.9) 0%, rgba(27, 31, 28, 0.7) 55%, rgba(27, 31, 28, 0.25) 100%);
+    /* fades with the words (set from the cord's frame loop), so the mark
+       forms on a clear ground */
+    transition: none;
+  }
+
+  .wv .wv-hero h1 {
+    font-size: clamp(26px, min(7.4vw, 6.4vh), 40px);
+  }
+
+  .wv .wv-hero__lead {
+    font-size: 13.5px;
+    line-height: 1.9;
   }
 
   .wv .wv-hero__hint {
@@ -1700,13 +1699,32 @@ html[data-wv-reveal] .wv [data-reveal].is-in {
   .wv .wv-os__pin {
     position: static;
     min-height: auto;
-    /* 下は data-os-scene="static" と同じ値。JS が着く前後で高さが動かない */
+    /* 動きを減らす設定では固定しない。下は Scene なし(off)と同じ余白 */
     padding: var(--wv-pad-y) 0 clamp(160px, 30vh, 320px);
   }
 }
 
 .wv .wv-nowrap {
   display: inline-block;
+}
+
+/* a short, narrow screen (a small phone, or a phone with the keyboard up):
+   the pinned hero has one screen and no more, so the words shrink to fit */
+@media (max-width: 880px) and (max-height: 680px) {
+  .wv .wv-hero h1 {
+    font-size: clamp(22px, 5.6vh, 30px);
+    margin-top: 12px;
+  }
+
+  .wv .wv-hero__lead {
+    margin-top: 12px;
+    font-size: 12.5px;
+    line-height: 1.75;
+  }
+
+  .wv .wv-hero__actions {
+    margin-top: 16px;
+  }
 }
 
 /* a line break that only exists on a narrow screen */
@@ -1720,263 +1738,85 @@ html[data-wv-reveal] .wv [data-reveal].is-in {
   }
 }
 
-
-/* ---------- /beyond — Phase 2 ---------- */
-
-.wv .wv-beyond__hero {
-  padding-top: clamp(64px, 9vw, 120px);
-}
-
-.wv .wv-beyond__hero-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-  gap: clamp(40px, 6vw, 96px);
-  align-items: start;
-}
-
-.wv .wv-beyond__title {
-  font-family: var(--wv-serif), "Hiragino Mincho ProN", serif;
-  font-weight: 300;
-  font-size: clamp(32px, 4.4vw, 58px);
-  line-height: 1.42;
-  letter-spacing: 0.05em;
-  margin-top: 22px;
-}
-
-.wv .wv-beyond__phases {
-  margin: clamp(8px, 4vw, 56px) 0 0;
-  display: grid;
-  gap: 14px;
-}
-
-.wv .wv-beyond__phases > div {
-  padding: 20px 24px;
-  border: 1px solid var(--wv-line);
-}
-
-.wv .wv-beyond__phases > div.is-here {
-  border-color: var(--wv-copper);
-}
-
-.wv .wv-beyond__phases dt {
-  font-family: var(--wv-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  color: var(--wv-quiet);
-}
-
-.wv .wv-beyond__phases > div.is-here dt {
-  color: var(--wv-accent);
-}
-
-.wv .wv-beyond__phases dd {
-  margin: 8px 0 0;
-  font-size: 14px;
-  line-height: 1.9;
-  color: var(--wv-ink-2);
-}
-
-.wv .wv-beyond__phases dd .wv-link {
-  display: inline-flex;
-  margin-top: 10px;
-}
-
-.wv .wv-beyond__feature {
-  display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-  gap: clamp(40px, 6vw, 96px);
-  align-items: center;
-}
-
-.wv .wv-beyond__laplace {
-  color: var(--wv-linen);
-}
-
-.wv .wv-beyond__laplace .wv-lead {
-  color: #c9c3b4;
-}
-
-.wv .wv-beyond__name {
-  margin-top: 18px;
-  font-family: var(--wv-serif), serif;
-  font-weight: 300;
-  font-size: clamp(40px, 5.6vw, 76px);
-  line-height: 1.1;
-  letter-spacing: 0.12em;
-}
-
-.wv .wv-beyond__dotcraft .wv-beyond__name {
-  letter-spacing: 0.04em;
-}
-
-.wv .wv-beyond__tagline {
-  margin-top: 16px;
-  font-family: var(--wv-serif), serif;
-  font-size: clamp(18px, 1.7vw, 22px);
-  letter-spacing: 0.05em;
-}
-
-.wv .wv-beyond__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-  margin-top: 32px;
-}
-
-.wv .wv-beyond__bench {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  gap: 18px;
-  align-items: center;
-  max-width: 440px;
-  margin-top: 22px;
-  padding: 14px 18px;
-  border: 1px solid var(--wv-line-dark);
-  background: rgba(27, 31, 28, 0.55);
-  color: #c9c3b4;
-  font-size: 12.5px;
-  transition: border-color 0.25s ease;
-}
-
-.wv .wv-beyond__bench:hover {
-  border-color: var(--wv-copper-light);
-}
-
-.wv .wv-beyond__bench small {
-  display: block;
-  font-family: var(--wv-mono);
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  color: var(--wv-copper-light);
-}
-
-.wv .wv-beyond__bench strong {
-  color: var(--wv-linen);
-  font-weight: 500;
-}
-
-.wv .wv-beyond__bench svg {
-  width: 14px;
-  height: 14px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.4;
-  stroke-linecap: round;
-}
-
-.wv .wv-beyond__board {
-  margin: 0;
-}
-
-.wv .wv-beyond__board a {
-  display: block;
-  overflow: hidden;
-  border: 1px solid rgba(237, 231, 218, 0.16);
-  background: #1f1d1a;
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
-}
-
-.wv .wv-beyond__board img {
-  display: block;
-  width: 100%;
-  height: auto;
-  transform: scale(1.02);
-  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.wv .wv-beyond__board a:hover img {
-  transform: scale(1.05);
-}
-
-.wv .wv-beyond__board figcaption {
-  margin-top: 12px;
-  font-family: var(--wv-mono);
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  color: #7e8a80;
-  text-align: right;
-}
-
-.wv .wv-beyond__topics {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 24px 0 0;
-  padding: 0;
-}
-
-.wv .wv-beyond__topics li {
-  padding: 6px 12px;
-  border: 1px solid var(--wv-line);
-  font-family: var(--wv-mono);
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  color: var(--wv-quiet);
-}
-
-.wv .wv-beyond__wave {
-  position: relative;
-  margin: 0;
-  aspect-ratio: 4 / 3;
-  overflow: hidden;
-}
-
-.wv .wv-beyond__wave img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: sepia(0.6) saturate(0.7) contrast(0.95);
-  opacity: 0.9;
-}
-
+/* Narrow: the words cannot sit beside the ring, so they sit under it. The
+   section stays pinned and the same story plays; the scene keeps the upper
+   part of the screen (the camera lifts it) and the caption takes the bottom,
+   over a dark scrim so the threads never run through the letters. */
 @media (max-width: 880px) {
-  .wv .wv-beyond__hero-grid,
-  .wv .wv-beyond__feature {
-    grid-template-columns: 1fr;
-  }
-
-  .wv .wv-beyond__feature--media .wv-beyond__wave {
-    order: -1;
-  }
-}
-
-@media (max-width: 880px) {
-  /* Unpinned there is no scroll distance to scrub the story along, so the
-     scene stops being a backdrop and becomes a block of its own, above the
-     words. Text and scene never share the same space — putting the words on
-     top of the animation is exactly the collision this section had. */
-  .wv .wv-os__scene {
-    position: relative;
-    inset: auto;
-    height: clamp(300px, 52svh, 560px);
-    min-height: 300px;
-    margin: 0 calc(var(--wv-x) * -1) clamp(24px, 6vw, 44px);
-    opacity: 1;
-  }
-
-  .wv .wv-os__grid {
-    display: block;
+  .wv .wv-os__pin {
+    padding: calc(var(--header-h) + 8px) 0 12px;
   }
 
   .wv .wv-os__overview {
-    text-align: left;
     max-width: none;
-    margin: 0 0 clamp(24px, 6vw, 44px);
+    padding-bottom: clamp(16px, 4vh, 40px);
   }
 
-  .wv .wv-os__copy {
+  .wv .wv-os__overview::before {
+    inset: -30% calc(var(--wv-x) * -1) -60%;
+    background: linear-gradient(180deg, rgba(12, 17, 20, 0) 0%, rgba(12, 17, 20, 0.8) 32%, rgba(12, 17, 20, 0.92) 100%);
+  }
+
+  .wv .wv-os__overview .wv-h2,
+  .wv .wv-os__closing .wv-h2 {
+    font-size: clamp(21px, 6.1vw, 40px);
+  }
+
+  .wv .wv-os__overview-lead {
+    margin-top: 16px;
+    font-size: 13.5px;
+    line-height: 1.9;
+  }
+
+  /* the caption: bottom of the screen, full width, under the scene */
+  .wv .wv-os[data-os-scene="on"] .wv-os__copy {
+    align-self: end;
+    justify-self: stretch;
+    width: 100%;
+    padding: 0 0 clamp(14px, 3.5vh, 36px);
+  }
+
+  .wv .wv-os[data-os-scene="on"] .wv-os__copy::before {
+    content: "";
+    position: absolute;
+    inset: -34% calc(var(--wv-x) * -1) -100%;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgba(12, 17, 20, 0) 0%, rgba(12, 17, 20, 0.82) 30%, rgba(12, 17, 20, 0.94) 100%);
+  }
+
+  .wv .wv-os[data-os-scene="on"] .wv-os__tag {
+    margin-bottom: 10px;
+    font-size: 10px;
+  }
+
+  .wv .wv-os[data-os-scene="on"] .wv-os__steps b {
+    font-size: clamp(19px, 5.4vw, 24px);
+    line-height: 1.5;
+  }
+
+  .wv .wv-os[data-os-scene="on"] .wv-os__steps li > p {
+    margin-top: 10px;
     max-width: none;
-    margin-left: 0;
+    font-size: 13px;
+    line-height: 1.85;
+  }
+
+  /* the beat index moves to the top, under the header, out of the caption's way */
+  .wv .wv-os[data-os-scene="on"] .wv-os__index {
+    align-self: start;
+    gap: 6px 14px;
     padding: 0;
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
   }
 
-  .wv .wv-os__copy::before {
-    content: none;
+  .wv .wv-os__index li {
+    padding-top: 7px;
   }
 
-  .wv .wv-os__role {
-    display: none;
+  .wv .wv-os__say {
+    max-width: min(15em, 64vw);
+    line-height: 1.6;
   }
 }

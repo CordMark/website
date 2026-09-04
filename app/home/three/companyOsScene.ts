@@ -144,6 +144,8 @@ export type CompanyOsScene = {
   /** p: scroll progress. shift: 0 centred for the overview, 1 moved aside for the text */
   render: (p: number, time: number, shift: number) => void;
   resize: () => void;
+  /** true when the words sit under the scene (a phone), not beside it */
+  setStacked: (stacked: boolean) => void;
   dispose: () => void;
   /** screen-space positions of the role nodes, for the DOM labels */
   /** `r` is the ring's radius on screen, in px, so words can keep clear of it */
@@ -726,6 +728,11 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
   let lift = 0.9;
   /** 0 on a wide window, 1 on a narrow one: the ring pulls back and slides less */
   let narrow = 0;
+  /** words under the scene: the ring keeps the upper part of the screen and
+      does not slide sideways for a caption that is not there */
+  let stacked = false;
+  /** how much taller than wide the window is, 0 landscape → 1 a phone upright */
+  let upright = 0;
   /** context the company owns. Monotonic: scrolling back up does not undo it. */
   let memoryHeld = 0;
 
@@ -743,12 +750,16 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
     // a squarer window has less room below the ball; lift it a little more
     lift = 0.9 + clamp((tall - 0.6) * 0.8, 0, 0.5);
     narrow = clamp((1200 - width) / 400);
+    upright = clamp((tall - 0.9) / 0.6);
     const s = quality === "low" ? 0.85 : 1;
     dustMat.uniforms.uScale.value = s;
     fieldMat.uniforms.uScale.value = s;
     memMat.uniforms.uScale.value = s;
   };
   resize();
+  const setStacked = (v: boolean) => {
+    stacked = v;
+  };
 
   /** a light running along one link. t: 0 at the role, 1 at the core. */
   const flow = (idx: number, t: number, amt: number, colour: THREE.Color) => {
@@ -801,14 +812,20 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
     const b = SHOTS[k + 1];
     const t = smooth(clamp((p - a.p) / Math.max(1e-6, b.p - a.p)));
     const el = ((a.el + (b.el - a.el) * t) * Math.PI) / 180;
-    const dist = (a.dist + (b.dist - a.dist) * t) * (1 + narrow * 0.18);
+    // stacked, the caption is under the scene: the ring rises to clear it,
+    // and by the amount the frame is upright, not by a fixed step
+    const rise = stacked ? upright : 0;
+    // and pulls back a little, so the people at the sides stay in the frame
+    const dist = (a.dist + (b.dist - a.dist) * t) * (1 + narrow * 0.18 + rise * 0.1);
     shotTarget.set(
       a.target[0] + (b.target[0] - a.target[0]) * t,
-      (a.target[1] + (b.target[1] - a.target[1]) * t) * (1 + (lift - 0.9) * (1 - Math.min(1, p / 0.3))),
+      (a.target[1] + (b.target[1] - a.target[1]) * t) * (1 + (lift - 0.9) * (1 - Math.min(1, p / 0.3))) -
+        rise * (0.55 + 0.75 * Math.min(1, p / 0.3)),
       a.target[2] + (b.target[2] - a.target[2]) * t,
     );
-    // slide the view: the target moves left, so the scene sits to the right
-    shotTarget.x -= (a.sx + (b.sx - a.sx) * t) * (1 - narrow * 0.55);
+    // slide the view: the target moves left, so the scene sits to the right.
+    // Nothing to keep clear of when the words are underneath
+    shotTarget.x -= (a.sx + (b.sx - a.sx) * t) * (1 - narrow * 0.55) * (1 - rise);
     camera.position.set(shotTarget.x, shotTarget.y + Math.sin(el) * dist, shotTarget.z + Math.cos(el) * dist);
     camera.lookAt(shotTarget);
     world.position.set(0, 0, 0);
@@ -998,5 +1015,5 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
     renderer.dispose();
   };
 
-  return { render, resize, dispose, projectRoles, projectCore };
+  return { render, resize, setStacked, dispose, projectRoles, projectCore };
 }

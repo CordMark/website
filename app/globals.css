@@ -411,7 +411,16 @@ button {
   opacity: 0;
   pointer-events: none;
   transform: translateX(100%);
-  transition: transform 0.28s ease, opacity 0.22s ease, visibility 0.28s ease;
+  /* 閉じている間は display:none にする。画面右へ translate しただけの fixed 要素は
+     スマホ Chrome/Safari で layout viewport を右に広げ(scrollWidth が伸びる)、
+     ページ全体が 100vw より広く組まれて固定背景や文字の中心がずれていた。
+     display の transition は allow-discrete と @starting-style で滑らかに保つ */
+  display: none;
+  transition:
+    transform 0.28s ease,
+    opacity 0.22s ease,
+    visibility 0.28s ease,
+    display 0.28s allow-discrete;
   visibility: hidden;
 }
 
@@ -423,7 +432,15 @@ button {
 }
 
 .site-header.is-menu-open .mobile-menu-panel {
+  display: block;
   transform: translateX(0);
+}
+
+@starting-style {
+  .site-header.is-menu-open .mobile-menu-panel {
+    opacity: 0;
+    transform: translateX(100%);
+  }
 }
 
 /* パネルを開いている間、相談するはパネルの中の一つだけにする */
@@ -574,7 +591,7 @@ button {
 
 .site-footer {
   display: grid;
-  grid-template-columns: minmax(270px, 360px) minmax(0, 1fr) 58px;
+  grid-template-columns: minmax(270px, 360px) minmax(0, 1fr);
   gap: clamp(24px, 3vw, 58px);
   align-items: center;
   min-height: clamp(78px, 5vw, 102px);
@@ -622,20 +639,6 @@ button {
   line-height: 1;
   text-transform: uppercase;
   white-space: nowrap;
-}
-
-.to-top {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  justify-self: end;
-  width: 44px;
-  height: 44px;
-  border: 0;
-  color: #080808;
-  font-size: clamp(20px, 1.2vw, 24px);
-  font-weight: 500;
-  line-height: 1;
 }
 
 .subpage {
@@ -1552,10 +1555,6 @@ button {
     flex-wrap: wrap;
     justify-content: flex-start;
     gap: 10px 22px;
-  }
-
-  .to-top {
-    justify-self: start;
   }
 }
 
@@ -2637,8 +2636,7 @@ body:has(.home-v2) .site-footer__brand {
   border-color: rgba(255, 255, 255, 0.18);
 }
 
-body:has(.home-v2) .brand--footer,
-body:has(.home-v2) .to-top {
+body:has(.home-v2) .brand--footer {
   color: #fff;
 }
 
@@ -3045,8 +3043,7 @@ body:has(.subpage) .header-contact {
   border-color: rgba(255, 255, 255, 0.18);
 }
 
-.site-footer .brand--footer,
-.site-footer .to-top {
+.site-footer .brand--footer {
   color: #fff;
 }
 

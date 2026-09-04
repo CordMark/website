@@ -79,9 +79,11 @@ function pickQuality(): SceneQuality | null {
     return null;
   }
   const mem = nav.deviceMemory ?? 8;
+  // a phone draws a small canvas, so "mid" (a sharper pixel ratio) is cheap
+  // there; "low" is kept for the machines that report little memory
   const narrow = window.matchMedia("(max-width: 880px)").matches;
-  if (mem <= 4 || narrow) return "low";
-  if (mem <= 8) return "mid";
+  if (mem <= 4) return "low";
+  if (mem <= 8 || narrow) return "mid";
   return "high";
 }
 
@@ -90,18 +92,18 @@ export function CompanyOsCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const labelRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const sayRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const sceneRef = useRef<CompanyOsScene | null>(null);
   const [failed, setFailed] = useState(false);
-  // 881px を跨ぐと、固定して見せるか流し込むかが入れ替わる。State にしておくと
-  // Effect ごと組み直され、後片付けが走ってから正しい側で建て直る。
-  // 一度読んだだけの頃は、窓を細くしても "on" のまま、Tabletを回すたびに
-  // 節が壊れていた
-  const [pinned, setPinned] = useState(true);
+  // 881px を跨ぐと、横並び(左上に文、右に場面)と縦積み(上に場面、下に文)が
+  // 入れ替わる。State にしておくと Effect ごと組み直され、後片付けが走ってから
+  // 正しい側で建て直る。どちらでも節は固定され、Scrollで物語が進む
+  const [stacked, setStacked] = useState(false);
 
   useEffect(() => {
-    const q = window.matchMedia("(min-width: 881px)");
+    const q = window.matchMedia("(max-width: 880px)");
     // resize も見るのは、環境によって matchMedia の change が飛ばないため。
-    // setPinned は同じ値なら React が捨てるので、拾いすぎても害はない
-    const sync = () => setPinned(q.matches);
+    // setStacked は同じ値なら React が捨てるので、拾いすぎても害はない
+    const sync = () => setStacked(q.matches);
     sync();
     q.addEventListener("change", sync);
     window.addEventListener("resize", sync, { passive: true });
@@ -124,10 +126,6 @@ export function CompanyOsCanvas() {
       section.dataset.osScene = "off";
       return;
     }
-
-    // Below 881px the CSS drops the sticky pin. There the scene is a block in
-    // normal flow above the text — it never shares space with the words.
-    const HELD_P = 0.2;
 
     let scene: CompanyOsScene | null = null;
     let raf = 0;
@@ -160,8 +158,8 @@ export function CompanyOsCanvas() {
       const vh = window.innerHeight;
       const vw = canvas.clientWidth || 1;
       const travel = Math.max(1, rect.height - vh);
-      const p = pinned ? clamp(-rect.top / travel) : HELD_P;
-      const shift = pinned ? easeInOut(clamp((p - SHIFT_FROM) / (SHIFT_TO - SHIFT_FROM))) : 0;
+      const p = clamp(-rect.top / travel);
+      const shift = easeInOut(clamp((p - SHIFT_FROM) / (SHIFT_TO - SHIFT_FROM)));
       const time = (performance.now() - started) / 1000;
       // whichever block of words is on screen right now — measured, not guessed
       const textBox = (shift > 0.5 ? copyEl : overviewEl)?.getBoundingClientRect();
@@ -172,24 +170,15 @@ export function CompanyOsCanvas() {
 
       /* ---- write ---- */
       // one step open at a time — the list can never outgrow the pinned screen
-      if (pinned) {
-        let next = -1;
-        for (let i = 0; i < STEP_AT.length; i++) if (p >= STEP_AT[i]) next = i;
-        if (next !== activeStep) {
-          activeStep = next;
-          stepEls.forEach((el, i) => el.classList.toggle("is-active", i === next));
-          indexEls.forEach((el, i) => el.classList.toggle("is-active", i === next));
-        }
+      let next = -1;
+      for (let i = 0; i < STEP_AT.length; i++) if (p >= STEP_AT[i]) next = i;
+      if (next !== activeStep) {
+        activeStep = next;
+        stepEls.forEach((el, i) => el.classList.toggle("is-active", i === next));
+        indexEls.forEach((el, i) => el.classList.toggle("is-active", i === next));
       }
-      const nextPhase = !pinned
-        ? "static"
-        : p < SHIFT_FROM
-          ? "overview"
-          : p < SHIFT_TO
-            ? "shift"
-            : p < CLOSE_FROM
-              ? "explain"
-              : "closing";
+      const nextPhase =
+        p < SHIFT_FROM ? "overview" : p < SHIFT_TO ? "shift" : p < CLOSE_FROM ? "explain" : "closing";
       if (nextPhase !== phase) {
         phase = nextPhase;
         section.dataset.osPhase = nextPhase;
@@ -198,7 +187,9 @@ export function CompanyOsCanvas() {
       // Role names live in the DOM, never in the scene. A label that would land
       // on the words is dropped instead — the box is measured each frame, so it
       // holds whatever the text reflows to.
-      const pad = 14;
+      const pad = stacked ? 10 : 14;
+      // a phone has no margin to spare: labels may come closer to the edges
+      const edge = stacked ? 36 : 74;
       const onWords = (x: number, y: number) =>
         !!textBox &&
         x > textBox.left - pad &&
@@ -212,12 +203,11 @@ export function CompanyOsCanvas() {
         const q = projected[i];
         // also keep labels off the edges of the window, where they get clipped
         let visible =
-          pinned &&
           sceneAlpha > 0.85 &&
           q.visible &&
           p > 0.1 &&
-          q.x > 74 &&
-          q.x < vw - 74 &&
+          q.x > edge &&
+          q.x < vw - edge &&
           q.y > 90 &&
           q.y < vh - 40 &&
           !onWords(q.x, q.y);
@@ -232,8 +222,8 @@ export function CompanyOsCanvas() {
         }
         if (visible) shown.push({ x: q.x, y: q.y });
         // nearer the camera, larger: the person the beat is about is close
-        const s = clamp(9.5 / Math.max(1, q.depth), 0.8, 1.9);
-        el.style.fontSize = `${(12 * s).toFixed(1)}px`;
+        const s = clamp(9.5 / Math.max(1, q.depth), 0.8, stacked ? 1.35 : 1.9);
+        el.style.fontSize = `${((stacked ? 11 : 12) * s).toFixed(1)}px`;
         // the name sits just above the point, never on it
         // the name sits outside the ring, which grows with the person: above
         // for those behind the hub, below for whoever has come to the front,
@@ -262,27 +252,41 @@ export function CompanyOsCanvas() {
         if (!el) continue;
         const say = SAYS[i];
         const q = projected[say.role];
-        const s = clamp(9.5 / Math.max(1, q.depth), 0.85, vw < 1100 ? 1.15 : 1.45);
-        el.style.fontSize = `${(13.5 * s).toFixed(1)}px`;
+        const s = clamp(9.5 / Math.max(1, q.depth), 0.85, stacked ? 1.0 : vw < 1100 ? 1.15 : 1.45);
+        el.style.fontSize = `${((stacked ? 12.5 : 13.5) * s).toFixed(1)}px`;
         const w = el.offsetWidth || 220;
         const h = el.offsetHeight || 40;
+        const m = stacked ? 16 : 24;
         let x = 0;
         let y = 0;
         let placed = false;
-        if (pinned && activeStep === say.step && sceneAlpha > 0.85 && q.visible) {
-          // the centred spots slide sideways to clear the words and the edges
-          const cx = clamp(q.x - w / 2, Math.max(24, (textBox?.right ?? 0) + pad), vw - 24 - w);
+        if (activeStep === say.step && sceneAlpha > 0.85 && q.visible) {
+          // the centred spots slide sideways to clear the words and the edges.
+          // Stacked, the words are under the scene, not beside it, so only the
+          // window's edges push the spot about
+          const cx = clamp(q.x - w / 2, stacked ? m : Math.max(m, (textBox?.right ?? 0) + pad), vw - m - w);
           // room between the ring's edge and the words, whatever size the
           // ring is on this screen
-          const off = q.r + 36;
-          const spots: [number, number][] = [
-            [q.x + off, q.y - h / 2 + 4],
-            [q.x - off - w, q.y - h / 2 + 4],
-            [cx, q.y + off + 10],
-            [cx, q.y - off - 20 - h],
-          ];
+          const off = q.r + (stacked ? 22 : 36);
+          // the role name hangs off one side of the ring; the words go past it
+          const labelBelow = q.y > coreXY.y + 20;
+          const lh = (labelRefs.current[say.role]?.offsetHeight || 16) + 10;
+          const spots: [number, number][] = stacked
+            ? [
+                // under or over the person first: a phone is taller than it is wide
+                [cx, q.y + off + (labelBelow ? lh : 0)],
+                [cx, q.y - off - 12 - h - (labelBelow ? 0 : lh)],
+                [q.x + off, q.y - h / 2 + 4],
+                [q.x - off - w, q.y - h / 2 + 4],
+              ]
+            : [
+                [q.x + off, q.y - h / 2 + 4],
+                [q.x - off - w, q.y - h / 2 + 4],
+                [cx, q.y + off + 10],
+                [cx, q.y - off - 20 - h],
+              ];
           for (const [sx, sy] of spots) {
-            if (sx < 24 || sx + w > vw - 24 || sy < 90 || sy + h > vh - 24) continue;
+            if (sx < m || sx + w > vw - m || sy < 90 || sy + h > vh - 24) continue;
             if (onWords(sx, sy + h / 2) || onWords(sx + w, sy + h / 2)) continue;
             if (onCore(sx, sy, w, h)) continue;
             x = sx;
@@ -295,16 +299,14 @@ export function CompanyOsCanvas() {
         el.style.opacity = placed ? "1" : "0";
       }
 
-      if (pinned) {
-        // The scene is position:fixed and covers the whole viewport, so it must
-        // stay invisible until this section actually owns the screen — the pin
-        // only fills it once rect.top reaches 0. Fading in any earlier paints
-        // navy (and role labels) over the section above.
-        sceneAlpha = Math.min(clamp((320 - rect.top) / 320), clamp(rect.bottom / 320));
-        // the scene goes out behind the closing words
-        const fade = 1 - easeInOut(clamp((p - FADE_FROM) / 0.05));
-        host.style.opacity = String(sceneAlpha * fade);
-      }
+      // The scene is position:fixed and covers the whole viewport, so it must
+      // stay invisible until this section actually owns the screen — the pin
+      // only fills it once rect.top reaches 0. Fading in any earlier paints
+      // navy (and role labels) over the section above.
+      sceneAlpha = Math.min(clamp((320 - rect.top) / 320), clamp(rect.bottom / 320));
+      // the scene goes out behind the closing words
+      const fade = 1 - easeInOut(clamp((p - FADE_FROM) / 0.05));
+      host.style.opacity = String(sceneAlpha * fade);
 
       raf = requestAnimationFrame(frame);
     };
@@ -323,7 +325,7 @@ export function CompanyOsCanvas() {
         if (onScreen) start();
         else {
           stop();
-          if (pinned) host.style.opacity = "0";
+          host.style.opacity = "0";
         }
       },
       { rootMargin: "20% 0px" },
@@ -344,7 +346,10 @@ export function CompanyOsCanvas() {
             setFailed(true);
           },
         });
-        section.dataset.osScene = pinned ? "on" : "static";
+        scene.setStacked(stacked);
+        sceneRef.current = scene;
+        section.dataset.osScene = "on";
+        section.dataset.osLayout = stacked ? "stack" : "side";
         io.observe(section);
         ro = new ResizeObserver(() => scene?.resize());
         ro.observe(canvas);
@@ -362,19 +367,26 @@ export function CompanyOsCanvas() {
       ro?.disconnect();
       document.removeEventListener("visibilitychange", onVisibility);
       scene?.dispose();
+      sceneRef.current = null;
       delete section.dataset.osScene;
       delete section.dataset.osPhase;
+      delete section.dataset.osLayout;
       stepEls.forEach((el) => el.classList.remove("is-active"));
       indexEls.forEach((el) => el.classList.remove("is-active"));
       host.style.opacity = "";
     };
-  }, [pinned]);
+  }, [stacked]);
 
   useEffect(() => {
     if (!failed) return;
     const section = hostRef.current?.closest<HTMLElement>(".wv-os");
     if (section) section.dataset.osScene = "off";
   }, [failed]);
+
+  // the scene needs to know whether the words are beside it or under it
+  useEffect(() => {
+    sceneRef.current?.setStacked(stacked);
+  }, [stacked]);
 
   return (
     <div className="wv-os__scene" ref={hostRef} aria-hidden="true">
