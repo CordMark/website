@@ -3,6 +3,8 @@
 import { useEffect } from "react";
 import { companyOsScrollFraction, MOBILE_OS_STOPS } from "./companyOsProgress";
 
+import { heroTransitionPosition, setHeroAnimatedScroll } from "./heroProgress";
+
 const HERO_TRANSITION_MS = 5700;
 
 /** One deliberate touch gesture plays one complete scene; reading never advances it. */
@@ -26,19 +28,40 @@ export function MobileStoryScroll() {
       cancelAnimationFrame(raf);
       raf = 0;
       animating = false;
+      setHeroAnimatedScroll(null);
     };
     const play = (target: number, duration: number) => {
       cancel();
       const from = window.scrollY;
+      const heroRect = hero.getBoundingClientRect();
+      const heroTop = heroRect.top + from;
+      const heroTravel = heroRect.height - (hero.querySelector("canvas")?.clientHeight ?? innerHeight);
+      const useHeroTimeline = target > from && from < heroTop + heroTravel && duration === HERO_TRANSITION_MS;
+      const end = (target - heroTop) / heroTravel;
+      const initial = (from - heroTop) / heroTravel;
+      // Resume the same timeline if a user starts partway through the hero.
+      let startTime = 0;
+      if (useHeroTimeline && initial > 0) {
+        let lo = 0, hi = 1;
+        for (let i = 0; i < 24; i++) {
+          const mid = (lo + hi) / 2;
+          if (heroTransitionPosition(mid, end) < initial) lo = mid; else hi = mid;
+        }
+        startTime = (lo + hi) / 2;
+      }
       const started = performance.now();
       animating = true;
       const frame = (now: number) => {
         if (!enabled()) { cancel(); return; }
         const t = Math.min(1, (now - started) / duration);
         const eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
-        window.scrollTo({ top: from + (target - from) * eased, behavior: "instant" });
+        const position = useHeroTimeline
+          ? heroTop + heroTravel * heroTransitionPosition(startTime + (1 - startTime) * t, end)
+          : from + (target - from) * eased;
+        if (useHeroTimeline) setHeroAnimatedScroll(position);
+        window.scrollTo({ top: position, behavior: "instant" });
         if (t < 1) raf = requestAnimationFrame(frame);
-        else { animating = false; raf = 0; }
+        else { animating = false; raf = 0; setHeroAnimatedScroll(null); }
       };
       raf = requestAnimationFrame(frame);
     };

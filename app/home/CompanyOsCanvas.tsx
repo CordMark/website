@@ -177,6 +177,15 @@ export function CompanyOsCanvas() {
 
       /* ---- read ---- */
       const rect = section.getBoundingClientRect();
+      // The fixed WebGL scene is completely hidden until the hero releases.
+      // Do not compete with the logo animation for CPU/GPU time before then.
+      if (rect.top > 0) {
+        if (phase !== "before") { phase = "before"; section.dataset.osPhase = phase; }
+        sceneAlpha = 0;
+        host.style.opacity = "0";
+        raf = requestAnimationFrame(frame);
+        return;
+      }
       const vh = window.innerHeight;
       const vw = canvas.clientWidth || 1;
       const travel = Math.max(1, rect.height - vh);

@@ -110,7 +110,7 @@ export function HeroCord() {
         const tx = b && b.width > 0 ? b.left + b.width / 2 : 48;
         const ty = b && b.width > 0 ? b.top + b.height / 2 : 36;
         const Rt = b && b.width > 0 ? b.width / 3 / 0.92 : 12;
-        const f = smooth(pF);
+        const f = pF;
         center.x = mix(center.x, tx, f);
         // a little lift first, so it reads as drifting up, not sliding
         center.y = mix(center.y, ty, f) - Math.sin(f * Math.PI) * H * 0.04;
@@ -279,10 +279,10 @@ export function HeroCord() {
       // 0 at the top of the hero, 1 when the pin is about to release
       const p = reduce ? 0.28 : heroProgress(rect, H);
 
-      const pW = span(p, 0.0, 0.46);
+      const pW = clamp(p / 0.46);
       const pC = span(p, 0.42, 0.76);
       const pM = span(p, 0.66, 0.94);
-      const pF = span(p, 0.9, HERO_MARK_ARRIVAL);
+      const pF = smooth(clamp((p - 0.9) / (HERO_MARK_ARRIVAL - 0.9)));
       // the C opens as the mark sets off: the left ring's part inside the O goes out
       const pE = span(p, 0.905, 0.95);
       // out only once it has arrived: the header's mark takes over there
