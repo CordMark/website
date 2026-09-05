@@ -637,9 +637,8 @@ body:has(.wv-page) .site-header {
 }
 
 .wv .wv-os {
-  /* The first 30% is the overview, where nothing is explained yet. The story
-     needs the rest, so the whole run is long. */
-  min-height: 560svh;
+  /* The scene shortens the overview hold and keeps each later beat's travel. */
+  min-height: var(--os-scroll-height, 560svh);
   padding: 0 var(--wv-x);
   color: var(--wv-linen);
   /* Starts under the hero's last screen, so it is pinned the moment the mark
@@ -1151,6 +1150,15 @@ body:has(.wv-page) .site-header {
   transition: color 0.35s ease;
 }
 
+.wv .wv-practice:is(.is-reading, :focus-within)::before {
+  opacity: 1;
+}
+
+.wv .wv-practice:is(.is-reading, :focus-within) h3,
+.wv .wv-practice:is(.is-reading, :focus-within) .wv-practice__num {
+  color: var(--wv-accent);
+}
+
 @media (hover: hover) {
   .wv .wv-practice:hover::before {
     opacity: 1;
@@ -1193,6 +1201,10 @@ body:has(.wv-page) .site-header {
   display: flex;
   flex-direction: column;
   padding-top: 6px;
+}
+
+.wv .wv-practice__title-part {
+  display: inline-block;
 }
 
 .wv .wv-practice p {
@@ -1709,6 +1721,92 @@ html[data-wv-reveal] .wv [data-reveal].is-in {
     margin-top: 24px;
   }
 
+  /* Full-width text and a generous link turn each practice into a readable
+     mobile panel. The panel in view picks up the desktop hover treatment. */
+  .wv .wv-practice {
+    grid-template-columns: 56px minmax(0, 1fr);
+    column-gap: 20px;
+    row-gap: 24px;
+    padding: 34px 0 28px;
+  }
+
+  .wv .wv-practice::before {
+    background: linear-gradient(120deg, #f8f3e9, var(--wv-paper));
+  }
+
+  .wv .wv-practice::after {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: 0;
+    width: 56px;
+    height: 2px;
+    background: var(--wv-accent);
+    transform: scaleX(0.25);
+    transform-origin: left;
+    opacity: 0.35;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+  }
+
+  .wv .wv-practice:is(.is-reading, :focus-within)::after {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+
+  .wv .wv-practice__num {
+    font-size: 56px;
+    line-height: 1;
+    color: var(--wv-stone);
+  }
+
+  .wv .wv-practice h3 {
+    margin-top: 10px;
+    font-size: clamp(22px, 5.8vw, 28px);
+    line-height: 1.5;
+  }
+
+  .wv .wv-practice__side {
+    grid-column: 1 / -1;
+  }
+
+  .wv .wv-practice p {
+    max-width: none;
+    line-height: 2;
+  }
+
+  .wv .wv-practice__links {
+    margin-top: 22px;
+  }
+
+  .wv .wv-practice__links .wv-link {
+    width: 100%;
+    min-height: 48px;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom-color: var(--wv-line);
+  }
+
+  .wv .wv-practice__links svg {
+    box-sizing: content-box;
+    flex-shrink: 0;
+    padding: 9px;
+    border: 1px solid var(--wv-line);
+    border-radius: 50%;
+    transition: background 0.35s ease, color 0.35s ease, border-color 0.35s ease;
+  }
+
+  .wv .wv-practice:is(.is-reading, :focus-within) .wv-practice__links svg {
+    background: var(--wv-accent);
+    border-color: var(--wv-accent);
+    color: var(--wv-paper);
+  }
+
+  .wv .wv-practice__hop {
+    margin-top: 16px;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+  }
+
   .wv .wv-origin__grid,
   .wv .wv-origin__purpose {
     grid-template-columns: 1fr;
@@ -1765,6 +1863,8 @@ html[data-wv-reveal] .wv [data-reveal].is-in {
   .wv .wv-link,
   .wv .wv-button,
   .wv .wv-practice::before,
+  .wv .wv-practice::after,
+  .wv .wv-practice__links svg,
   .wv .wv-practice h3,
   .wv .wv-practice__num,
   .wv .wv-os__steps li {

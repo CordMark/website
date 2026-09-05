@@ -15,17 +15,21 @@ const SALES = 3;
  * brackets, and under it what Company OS sent back, marked as such — never a
  * chat window. The role name is on the node already, so it is not repeated.
  * A "\n" in a reply is where it breaks — a card should never break mid-word.
- * `step` is the index into STEP_AT; `role` is where it sits.
+ * `step` is the index into STEP_AT; `role` anchors it to a person or the core.
  */
-type SayLine = { kind: "q" | "os" | "human"; text: string; /** shown from this p on; else from the beat's start */ at?: number };
+type SayLine = {
+  kind: "q" | "os" | "human";
+  text: string;
+  /** shown from this p on; else from the beat's start */
+  at?: number;
+};
 /**
- * One card per beat, beside the person the beat is about. What Company OS
- * passes on to someone else is folded into that card as a line ("…、PMへ"),
- * not shown as a second card across the screen — one place to look per beat.
+ * Conversation stays beside the person. The saved decision appears beside
+ * the Company OS core as a subsequent stage, while the PM's decision remains.
  * The ring turns at the start of each beat, and nothing is said until it
  * stands still (see `turning` in the scene). `at` is a value of p, as before.
  */
-const SAYS: { step: number; role: number; lines: SayLine[] }[] = [
+const SAYS: { step: number; role: number | "core"; lines: SayLine[] }[] = [
   {
     step: 0,
     role: SALES,
@@ -49,9 +53,12 @@ const SAYS: { step: number; role: number; lines: SayLine[] }[] = [
       { kind: "os", text: "営業の知る顧客の事情も揃えて" },
       // the moment the PM presses — the warm ring in the scene
       { kind: "human", text: "Bで進める。", at: 0.665 },
-      // only once the ping has crossed from the hub to the executive
-      { kind: "os", text: "決定と理由を、経営へ通知", at: 0.72 },
     ],
+  },
+  {
+    step: 2,
+    role: "core",
+    lines: [{ kind: "os", text: "決定と理由が、\n証跡として残る", at: 0.7 }],
   },
   { step: 3, role: ENGINEER, lines: [{ kind: "os", text: "決定Bと理由が、仕様とタスクに" }] },
   // the raw voice from the field reaches the hub, which brings the one thing
@@ -69,9 +76,8 @@ const SAYS: { step: number; role: number; lines: SayLine[] }[] = [
 /**
  * The pinned section runs in three phases.
  *
- *   0.00–0.30  OVERVIEW  the whole picture, centred, with a headline and
- *                        nothing else. Scrolling a screen and a half adds not
- *                        one line of body text — you get to look first.
+ *   0.00–0.30  OVERVIEW  the whole picture, centred, with a headline.
+ *                        The settled overview uses half the scroll distance.
  *   0.30–0.34  SHIFT     the composition moves aside and shrinks
  *   0.34–1.00  EXPLAIN   the text column appears and the story is walked
  */
@@ -81,6 +87,11 @@ const SHIFT_TO = 0.34;
 const FADE_FROM = 0.9;
 const CLOSE_FROM = 0.935;
 const STEP_AT = [0.34, 0.46, 0.58, 0.73, 0.8, 0.9];
+// Keep the arrival and story pacing; shorten only the overview before rotation.
+const OVERVIEW_HOLD_FROM = 0.12;
+const OVERVIEW_HOLD_SCALE = 0.5;
+const OVERVIEW_SCROLL_SAVED = (SHIFT_FROM - OVERVIEW_HOLD_FROM) * (1 - OVERVIEW_HOLD_SCALE);
+const OVERVIEW_SCROLL_END = SHIFT_FROM - OVERVIEW_SCROLL_SAVED;
 
 const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const easeInOut = (u: number) => (u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2);
@@ -174,7 +185,12 @@ export function CompanyOsCanvas() {
       const vh = window.innerHeight;
       const vw = canvas.clientWidth || 1;
       const travel = Math.max(1, rect.height - vh);
-      const p = clamp(-rect.top / travel);
+      const scroll = clamp(-rect.top / travel) * (1 - OVERVIEW_SCROLL_SAVED);
+      const p = scroll <= OVERVIEW_HOLD_FROM
+        ? scroll
+        : scroll < OVERVIEW_SCROLL_END
+          ? OVERVIEW_HOLD_FROM + (scroll - OVERVIEW_HOLD_FROM) / OVERVIEW_HOLD_SCALE
+          : scroll + OVERVIEW_SCROLL_SAVED;
       const shift = easeInOut(clamp((p - SHIFT_FROM) / (SHIFT_TO - SHIFT_FROM)));
       const time = (performance.now() - started) / 1000;
       // whichever block of words is on screen right now — measured, not guessed
@@ -274,15 +290,17 @@ export function CompanyOsCanvas() {
         const ny = clamp(coreXY.y, y, y + h);
         return Math.hypot(nx - coreXY.x, ny - coreXY.y) < coreXY.r + 6;
       };
+      const placedCards: { x: number; y: number; w: number; h: number }[] = [];
       for (let i = 0; i < SAYS.length; i++) {
         const el = sayRefs.current[i];
         if (!el) continue;
         const say = SAYS[i];
-        const q = projected[say.role];
+        const isCore = say.role === "core";
+        const q = say.role === "core"
+          ? { ...coreXY, depth: 9.5, visible: true }
+          : projected[say.role];
         const s = clamp(9.5 / Math.max(1, q.depth), 0.85, stacked ? 1.0 : vw < 1100 ? 1.15 : 1.45);
         el.style.fontSize = `${((stacked ? 12.5 : 13.5) * s).toFixed(1)}px`;
-        const w = el.offsetWidth || 220;
-        const h = el.offsetHeight || 40;
         const m = stacked ? 16 : 24;
         let x = 0;
         let y = 0;
@@ -290,11 +308,15 @@ export function CompanyOsCanvas() {
         // lines are all still to come is not shown, tick and all
         let anyOn = false;
         for (let j = 0; j < say.lines.length; j++) {
-          const on = say.lines[j].at === undefined || p >= (say.lines[j].at as number);
+          const line = say.lines[j];
+          const on = line.at === undefined || p >= line.at;
           const child = el.children[j] as HTMLElement | undefined;
           if (child && child.classList.contains("is-on") !== on) child.classList.toggle("is-on", on);
           anyOn ||= on;
         }
+        // Measure after changing the lines so placement uses this frame's height.
+        const w = el.offsetWidth || 220;
+        const h = el.offsetHeight || 40;
         let placed = false;
         // nothing is said while the ring turns: the card of the beat that
         // ended has gone before the next person has arrived
@@ -308,8 +330,16 @@ export function CompanyOsCanvas() {
           const off = q.r + (stacked ? 14 : 36);
           // the role name hangs off one side of the ring; the words go past it
           const labelBelow = q.y > coreXY.y + 20;
-          const lh = (labelRefs.current[say.role]?.offsetHeight || 16) + (stacked ? 6 : 10);
-          const spots: [number, number][] = stacked
+          const roleLabelHeight = typeof say.role === "number" ? labelRefs.current[say.role]?.offsetHeight || 16 : 0;
+          const lh = roleLabelHeight + (stacked ? 6 : 10);
+          const spots: [number, number][] = isCore
+            ? [
+                [q.x + off, q.y - h / 2],
+                [q.x - off - w, q.y - h / 2],
+                [cx, q.y - off - h],
+                [cx, q.y + off],
+              ]
+            : stacked
             ? [
                 // under or over the person first: a phone is taller than it is wide
                 [cx, q.y + off + (labelBelow ? lh : 0)],
@@ -327,12 +357,28 @@ export function CompanyOsCanvas() {
                 [cx, q.y - off - 16 - h - (labelBelow ? 0 : lh)],
               ];
           // which way the words sit from the person, in the order tried above
-          const sides = stacked ? ["under", "over", "right", "left"] : ["right", "left", "under", "over"];
+          const sides = isCore
+            ? ["right", "left", "over", "under"]
+            : stacked ? ["under", "over", "right", "left"] : ["right", "left", "under", "over"];
           for (let k = 0; k < spots.length; k++) {
             const [sx, sy] = spots[k];
             if (sx < m || sx + w > vw - m || sy < 90 || sy + h > vh - 24) continue;
-            if (onWords(sx, sy + h / 2) || onWords(sx + w, sy + h / 2)) continue;
+            const captionGap = stacked ? 24 : pad;
+            if (
+              textBox &&
+              sx < textBox.right + pad && sx + w > textBox.left - pad &&
+              sy < textBox.bottom + captionGap && sy + h > textBox.top - captionGap
+            ) continue;
             if (onCore(sx, sy, w, h)) continue;
+            if (placedCards.some(card =>
+              sx < card.x + card.w + 12 && sx + w > card.x - 12 &&
+              sy < card.y + card.h + 12 && sy + h > card.y - 12
+            )) continue;
+            if (isCore && labelRefs.current.some(label => {
+              if (!label || Number(label.style.opacity) < 0.1) return false;
+              const box = label.getBoundingClientRect();
+              return sx < box.right + 8 && sx + w > box.left - 8 && sy < box.bottom + 8 && sy + h > box.top - 8;
+            })) continue;
             x = sx;
             y = sy;
             placed = true;
@@ -340,7 +386,10 @@ export function CompanyOsCanvas() {
             break;
           }
         }
-        if (placed) el.style.transform = `translate3d(${Math.round(x)}px, ${Math.round(y)}px, 0)`;
+        if (placed) {
+          el.style.transform = `translate3d(${Math.round(x)}px, ${Math.round(y)}px, 0)`;
+          placedCards.push({ x, y, w, h });
+        }
         el.style.opacity = placed ? "1" : "0";
       }
 
@@ -394,6 +443,7 @@ export function CompanyOsCanvas() {
         });
         scene.setStacked(stacked);
         sceneRef.current = scene;
+        section.style.setProperty("--os-scroll-height", `${100 + 460 * (1 - OVERVIEW_SCROLL_SAVED)}svh`);
         section.dataset.osScene = "on";
         section.dataset.osLayout = stacked ? "stack" : "side";
         io.observe(section);
@@ -417,6 +467,7 @@ export function CompanyOsCanvas() {
       delete section.dataset.osScene;
       delete section.dataset.osPhase;
       delete section.dataset.osLayout;
+      section.style.removeProperty("--os-scroll-height");
       stepEls.forEach((el) => el.classList.remove("is-active"));
       indexEls.forEach((el) => el.classList.remove("is-active"));
       host.style.opacity = "";

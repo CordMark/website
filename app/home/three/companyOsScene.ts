@@ -11,8 +11,8 @@ import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
  * What it has to say, in one picture:
  *
  *   One change in a spec travels through three people and comes back as the
- *   day's work. Nobody stops. The executive sees only the decision that
- *   mattered. The thing in the middle is a ball of threads — the same cord the
+ *   day's work. Nobody stops. Decisions and reasons stay in a shared record.
+ *   The thing in the middle is a ball of threads — the same cord the
  *   hero wove, now holding the company's context.
  *
  * Rules it never breaks:
@@ -31,9 +31,8 @@ import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
  *                          and opens one path, to the PM
  *   decide      0.58–0.73  the hub gathers what sales knows and hands it to
  *                          the PM; the PM decides. The one warm light. The
- *                          decision goes back to the hub, and a dim ping
- *                          reaches the executive — told, not asked — before
- *                          the beat ends
+ *                          decision goes back to the hub and remains as a
+ *                          shared record with its reasons
  *   act         0.73–0.80  it returns to the engineer as work; the trace stays
  *   visibility  0.80–0.90  the engineer's raw word reaches the hub, and the
  *                          hub carries the one thing nobody reported to the
@@ -820,10 +819,9 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
     );
 
     // context the company owns never goes down, even scrolling back up
-    memoryHeld = Math.max(memoryHeld, Math.max(act * 0.35, span(p, 0.8, 1.0)));
+    memoryHeld = Math.max(memoryHeld, span(p, 0.69, 0.7) * 0.12, act * 0.35, span(p, 0.8, 1.0));
 
     /* ---- the ring turns: the speaker comes to the front ---- */
-    void shift;
     const frontAz = frontAt(p).az;
     cell.rotation.set(0, (-frontAz * Math.PI) / 180, -0.04 + Math.sin(time * 0.04) * 0.03);
 
@@ -839,10 +837,13 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
     const rise = stacked ? upright : 0;
     // and pulls back a little, so the people at the sides stay in the frame
     const dist = (a.dist + (b.dist - a.dist) * t) * (1 + narrow * 0.18 + rise * 0.1);
+    // Lift the scene and its projected reply together above the caption.
+    // Short phones need extra room for the caption's wrapped lines.
+    const captionLift = (0.85 + clamp((740 - height) / 150, 0, 0.6)) * shift;
     shotTarget.set(
       a.target[0] + (b.target[0] - a.target[0]) * t,
       (a.target[1] + (b.target[1] - a.target[1]) * t) * (1 + (lift - 0.9) * (1 - Math.min(1, p / 0.3))) -
-        rise * (0.55 + 0.95 * Math.min(1, p / 0.3)),
+        rise * (0.55 + 0.95 * Math.min(1, p / 0.3) + captionLift),
       a.target[2] + (b.target[2] - a.target[2]) * t,
     );
     // slide the view: the target moves left, so the scene sits to the right.
@@ -881,7 +882,7 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
     focus[ENGINEER] = Math.max(w(0.46, 0.58), w(0.73, 0.8), w(0.34, 0.46) * 0.35, w(0.8, 0.9) * 0.7);
     focus[PM] = w(0.46, 0.8);
     focus[SALES] = Math.max(focus[SALES], w(0.58, 0.65) * 0.7);
-    focus[EXEC] = Math.max(w(0.69, 0.75) * 0.6, w(0.8, 0.9));
+    focus[EXEC] = w(0.8, 0.9);
 
     // Who is lit, and when. Nobody has their own colour — a palette of four
     // would be read as four ranks. Colour only ever means state.
@@ -890,8 +891,7 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
     heat[ENGINEER] = Math.max(pulse(p, 0.46, 0.6) * 0.9, pulse(p, 0.74, 0.84), pulse(p, 0.8, 0.88) * 0.7);
     heat[PM] = Math.max(pulse(p, 0.52, 0.66), decide * (1 - span(p, 0.74, 0.79)));
     heat[SALES] = Math.max(heat[SALES], pulse(p, 0.58, 0.64) * 0.7);
-    // the ping arrives: the executive lights a little, once, and reads
-    heat[EXEC] = Math.max(pulse(p, 0.7, 0.76) * 0.5, pulse(p, 0.82, 0.96), span(p, 0.875, 0.888) * (1 - span(p, 0.9, 0.92)));
+    heat[EXEC] = Math.max(pulse(p, 0.82, 0.96), span(p, 0.875, 0.888) * (1 - span(p, 0.9, 0.92)));
 
     for (let i = 0; i < ROLES.length; i++) {
       const appear = clamp((whole - i * 0.06) / 0.55);
@@ -952,12 +952,10 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
     outbound(PM, p, 0.52, 0.58, CYAN_HOT);
 
     // 03 DECIDE — the hub gathers what sales knows of the customer and hands
-    // it to the PM; the PM decides. The executive is told, not asked: a dim
-    // ping, and no reply comes back.
+    // it to the PM; the decision returns to the hub and becomes shared memory.
     inbound(SALES, p, 0.58, 0.62, CYAN);
     outbound(PM, p, 0.61, 0.65, CYAN_HOT);
     inbound(PM, p, 0.665, 0.7, HUMAN_LIT);
-    outbound(EXEC, p, 0.69, 0.725, BLUE_PALE, 0.55);
 
     // 04 ACT — back to the engineer, the decision with the grounds for it
     outbound(ENGINEER, p, 0.745, 0.8, warmCyan);

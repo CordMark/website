@@ -6,6 +6,7 @@ import { GroundWatch } from "./home/GroundWatch";
 import { HeroCord } from "./home/HeroCord";
 import { CordImpression } from "./home/CordImpression";
 import { RevealWatch } from "./home/RevealWatch";
+import { PracticesWatch } from "./home/PracticesWatch";
 import "./home/home.css";
 
 const serif = Noto_Serif_JP({
@@ -45,7 +46,7 @@ const companyOsSteps = [
     tag: "03 / DECIDE",
     who: "PM",
     title: "問いを運ばず、決めることに時間を使う。",
-    body: "営業の知る顧客の事情まで揃った状態で、PMが決める。誰が何を根拠に決めたかが決定と一緒に残り、経営には知らされる。",
+    body: "営業の知る顧客の事情まで揃った状態で、PMが決める。決定と理由が証跡として残り、エンジニアも営業も経営も、同じ経緯を確認できる。",
     human: true,
   },
   {
@@ -70,7 +71,7 @@ const companyOsSteps = [
 const practices = [
   {
     index: "DELIVERY",
-    title: "課題に合わせた受託・共同開発",
+    title: ["課題に合わせた", "受託・共同開発"],
     body: "顧客の具体的な課題に応えるアプリ・システムを開発する。現場を理解し、信頼を築き、そこで得た知見を支援とProductへつなぐ。",
     href: "/service/development",
     link: "開発の相談をする",
@@ -78,7 +79,7 @@ const practices = [
   },
   {
     index: "SUPPORT",
-    title: "AI駆動開発の導入・教育・伴走",
+    title: ["AI駆動開発の", "導入・教育・伴走"],
     body: "開発チームの工程を診断し、仕様の書き方からレビュー、テスト、文書、教育までをAI前提の型に組み替え、チームの標準として定着させる。",
     href: "/service/support",
     link: "AI駆動開発支援",
@@ -86,7 +87,7 @@ const practices = [
   },
   {
     index: "PRODUCT",
-    title: "Company OSの企画・開発・展開",
+    title: ["Company OSの", "企画・開発・展開"],
     body: "会社の意思と日々の仕事をつなぐProductをつくる。顧客の現場で得た知見を、契約と機密性を守った範囲でProductへ還元する。",
     href: "/company-os",
     link: "Company OSについて",
@@ -118,6 +119,7 @@ export default function Home() {
     <div className={`wv ${serif.variable} ${sans.variable}`}>
       <GroundWatch />
       <RevealWatch />
+      <PracticesWatch />
       <main id="top" className="site-main">
         {/* 1. Hero — 人の意思を主語にする。Scrollで糸が編まれる */}
         <section className="wv-hero" data-ground="night" aria-labelledby="wv-hero-heading">
@@ -155,8 +157,7 @@ export default function Home() {
           <div className="wv-os__pin">
             <CompanyOsCanvas />
             <div className="wv-inner wv-os__grid">
-              {/* Shown alone while the scene plays. No body text yet — the
-                  picture gets a screen and a half to itself. */}
+              {/* The overview appears first, before the ring turns into the story. */}
               <div className="wv-os__overview">
                 <p className="wv-label">Company OS</p>
                 <h2 className="wv-h2" id="wv-os-heading">
@@ -245,7 +246,7 @@ export default function Home() {
                     <span className="wv-practice__num">0{i + 1}</span>
                     <div className="wv-practice__main">
                       <span className="wv-practice__role">{item.index}</span>
-                      <h3>{item.title}</h3>
+                      <h3>{item.title.map(part => <span className="wv-practice__title-part" key={part}>{part}</span>)}</h3>
                     </div>
                     <div className="wv-practice__side">
                       <p>{item.body}</p>
