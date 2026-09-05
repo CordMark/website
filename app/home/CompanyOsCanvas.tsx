@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { CompanyOsScene, SceneQuality } from "./three/companyOsScene";
+import { companyOsProgress, OVERVIEW_SCROLL_SAVED, STEP_AT } from "./companyOsProgress";
 
 /** the roles in the scene, in the order the scene places them */
 const ROLE_LABELS = ["エンジニア", "決める人", "経営", "営業"];
@@ -86,12 +87,6 @@ const SHIFT_TO = 0.34;
 /** the scene goes out from here; then the last beat takes the middle of the screen */
 const FADE_FROM = 0.9;
 const CLOSE_FROM = 0.935;
-const STEP_AT = [0.34, 0.46, 0.58, 0.73, 0.8, 0.9];
-// Keep the arrival and story pacing; shorten only the overview before rotation.
-const OVERVIEW_HOLD_FROM = 0.12;
-const OVERVIEW_HOLD_SCALE = 0.5;
-const OVERVIEW_SCROLL_SAVED = (SHIFT_FROM - OVERVIEW_HOLD_FROM) * (1 - OVERVIEW_HOLD_SCALE);
-const OVERVIEW_SCROLL_END = SHIFT_FROM - OVERVIEW_SCROLL_SAVED;
 
 const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const easeInOut = (u: number) => (u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2);
@@ -185,12 +180,7 @@ export function CompanyOsCanvas() {
       const vh = window.innerHeight;
       const vw = canvas.clientWidth || 1;
       const travel = Math.max(1, rect.height - vh);
-      const scroll = clamp(-rect.top / travel) * (1 - OVERVIEW_SCROLL_SAVED);
-      const p = scroll <= OVERVIEW_HOLD_FROM
-        ? scroll
-        : scroll < OVERVIEW_SCROLL_END
-          ? OVERVIEW_HOLD_FROM + (scroll - OVERVIEW_HOLD_FROM) / OVERVIEW_HOLD_SCALE
-          : scroll + OVERVIEW_SCROLL_SAVED;
+      const p = companyOsProgress(-rect.top / travel);
       const shift = easeInOut(clamp((p - SHIFT_FROM) / (SHIFT_TO - SHIFT_FROM)));
       const time = (performance.now() - started) / 1000;
       // whichever block of words is on screen right now — measured, not guessed

@@ -3,6 +3,7 @@ import { Footer } from "./Footer";
 import { CompanyOsCanvas } from "./home/CompanyOsCanvas";
 import { CordMark } from "./home/CordMark";
 import { GroundWatch } from "./home/GroundWatch";
+import { MobileStoryScroll } from "./home/MobileStoryScroll";
 import { HeroCord } from "./home/HeroCord";
 import { CordImpression } from "./home/CordImpression";
 import { RevealWatch } from "./home/RevealWatch";
@@ -117,6 +118,7 @@ function External() {
 export default function Home() {
   return (
     <div className={`wv ${serif.variable} ${sans.variable}`}>
+      <MobileStoryScroll />
       <GroundWatch />
       <RevealWatch />
       <PracticesWatch />
