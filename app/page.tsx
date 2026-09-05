@@ -137,7 +137,9 @@ export default function Home() {
                 <span className="wv-nowrap">決まる。</span>
               </h1>
               <p className="wv-hero__lead">
-                AIで、実装は速くなりました。それでも会社を止めているのは、問いが答えを待ち、判断が上がってくるまでの往復です。CordMarkは、その往復を短くし、速くなった分を人が考え、決め、創造する時間へ戻す会社です。自分たちの会社で先に動かしたものを、顧客の現場へ持ち込みます。
+                AIで、仕事は速くなった。では、次のボトルネックはどこにあるのか。
+                <br />
+                CordMarkは、開発の進め方から会社の意思決定まで、AIを前提にした仕組みをつくり、判断から実行までの流れをつなぎます。そこで生まれた余力を、人が考え、決め、創造する時間へつなげていきます。
               </p>
               <div className="wv-hero__actions">
                 <a className="wv-button" href="#company-os">
