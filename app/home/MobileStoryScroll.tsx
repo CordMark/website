@@ -3,9 +3,8 @@
 import { useEffect } from "react";
 import { companyOsScrollFraction, MOBILE_OS_STOPS } from "./companyOsProgress";
 
-import { heroTransitionPosition, setHeroAnimatedScroll } from "./heroProgress";
+import { HERO_TRANSITION_MS, heroTransitionPosition, setHeroAnimatedScroll } from "./heroProgress";
 
-const HERO_TRANSITION_MS = 5700;
 
 /** One deliberate touch gesture plays one complete scene; reading never advances it. */
 export function MobileStoryScroll() {

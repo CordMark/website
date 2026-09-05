@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { HERO_MARK_ARRIVAL, heroProgress } from "./heroProgress";
+import { HERO_MARK_ARRIVAL, heroDockingEase, heroProgress } from "./heroProgress";
 
 /**
  * The hero cord.
@@ -282,7 +282,7 @@ export function HeroCord() {
       const pW = clamp(p / 0.46);
       const pC = span(p, 0.42, 0.76);
       const pM = span(p, 0.66, 0.94);
-      const pF = smooth(clamp((p - 0.9) / (HERO_MARK_ARRIVAL - 0.9)));
+      const pF = heroDockingEase((p - 0.9) / (HERO_MARK_ARRIVAL - 0.9));
       // the C opens as the mark sets off: the left ring's part inside the O goes out
       const pE = span(p, 0.905, 0.95);
       // out only once it has arrived: the header's mark takes over there

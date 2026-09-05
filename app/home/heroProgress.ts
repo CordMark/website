@@ -1,5 +1,6 @@
 /** The moving mark reaches the header before either mark starts fading. */
 export const HERO_MARK_ARRIVAL = 0.985;
+export const HERO_TRANSITION_MS = 5200;
 
 export function heroProgress(rect: Pick<DOMRect, "top" | "height">, canvasHeight: number) {
   const top = rect.top - (animatedScroll !== null ? animatedScroll - window.scrollY : 0);
@@ -14,7 +15,8 @@ export function setHeroAnimatedScroll(value: number | null) {
 
 /** Smooth monotone interpolation: immediate start, continuous speed at each beat. */
 export function heroTransitionPosition(t: number, end: number) {
-  const times = [0, 0.2, 0.45, 0.86, 0.9, 1];
+  // Keep the immediate opening; the flight now takes 1.8 seconds.
+  const times = [0, 1140, 2565, 4365, 4593, HERO_TRANSITION_MS].map(ms => ms / HERO_TRANSITION_MS);
   const positions = [0, 0.46, 0.9, HERO_MARK_ARRIVAL, 1, end];
   const slopes = times.slice(1).map((time, i) => (positions[i + 1] - positions[i]) / (time - times[i]));
   const tangents = [slopes[0], ...slopes.slice(1).map((slope, i) => 2 * slopes[i] * slope / (slopes[i] + slope)), 0];
@@ -26,4 +28,10 @@ export function heroTransitionPosition(t: number, end: number) {
     + (u ** 3 - 2 * u ** 2 + u) * h * tangents[i]
     + (-2 * u ** 3 + 3 * u ** 2) * positions[i + 1]
     + (u ** 3 - u ** 2) * h * tangents[i + 1];
+}
+
+/** A more pronounced acceleration through the flight, with a soft landing. */
+export function heroDockingEase(progress: number) {
+  const u = Math.min(1, Math.max(0, progress));
+  return u * u * u * (u * (u * 6 - 15) + 10);
 }
