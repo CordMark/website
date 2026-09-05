@@ -836,7 +836,7 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
     const rise = stacked ? upright : 0;
     // Raising the ring on phones lowers the effective viewing angle at the
     // core. Look down more steeply so front/back people clear the AI sphere.
-    const el = ((a.el + (b.el - a.el) * t + rise * 12 * shift) * Math.PI) / 180;
+    const el = ((a.el + (b.el - a.el) * t + rise * 10 * shift) * Math.PI) / 180;
     // and pulls back a little, so the people at the sides stay in the frame
     const dist = (a.dist + (b.dist - a.dist) * t) * (1 + narrow * 0.18 + rise * 0.1);
     // Lift the scene and its projected reply together above the caption.
