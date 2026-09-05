@@ -35,7 +35,7 @@ const SAYS: { step: number; role: number | "core"; lines: SayLine[] }[] = [
     step: 0,
     role: SALES,
     lines: [
-      { kind: "q", text: "これって、できないんでしたっけ?" },
+      { kind: "q", text: "部署ごとに閲覧制限できますか？" },
       { kind: "os", text: "いまの仕様と実装を確認。\n根拠付きで、その場で回答" },
     ],
   },
