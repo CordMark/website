@@ -831,10 +831,12 @@ export function mountCompanyOsScene(opts: MountOptions): CompanyOsScene {
     const a = SHOTS[k];
     const b = SHOTS[k + 1];
     const t = smooth(clamp((p - a.p) / Math.max(1e-6, b.p - a.p)));
-    const el = ((a.el + (b.el - a.el) * t) * Math.PI) / 180;
     // stacked, the caption is under the scene: the ring rises to clear it,
     // and by the amount the frame is upright, not by a fixed step
     const rise = stacked ? upright : 0;
+    // Raising the ring on phones lowers the effective viewing angle at the
+    // core. Look down more steeply so front/back people clear the AI sphere.
+    const el = ((a.el + (b.el - a.el) * t + rise * 12 * shift) * Math.PI) / 180;
     // and pulls back a little, so the people at the sides stay in the frame
     const dist = (a.dist + (b.dist - a.dist) * t) * (1 + narrow * 0.18 + rise * 0.1);
     // Lift the scene and its projected reply together above the caption.
