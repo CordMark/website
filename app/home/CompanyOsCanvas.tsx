@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import type { CompanyOsScene, SceneQuality } from "./three/companyOsScene";
 
 /** the roles in the scene, in the order the scene places them */
-const ROLE_LABELS = ["エンジニア", "PM", "経営", "営業"];
+const ROLE_LABELS = ["エンジニア", "決める人", "経営", "営業"];
 const ENGINEER = 0;
 const PM = 1;
 const EXEC = 2;
@@ -43,7 +43,7 @@ const SAYS: { step: number; role: number | "core"; lines: SayLine[] }[] = [
     role: ENGINEER,
     lines: [
       { kind: "q", text: "仕様はAかBか。決めてほしい" },
-      { kind: "os", text: "なぜ必要か、選択肢、選んだ先の影響を\n添えて、PMへ" },
+      { kind: "os", text: "なぜ必要か、選択肢、選んだ先の影響を\n添えて、決める人へ" },
     ],
   },
   {

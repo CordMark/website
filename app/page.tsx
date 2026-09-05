@@ -44,9 +44,9 @@ const companyOsSteps = [
   },
   {
     tag: "03 / DECIDE",
-    who: "PM",
+    who: "決める人",
     title: "問いを運ばず、決めることに時間を使う。",
-    body: "営業の知る顧客の事情まで揃った状態で、PMが決める。決定と理由が証跡として残り、エンジニアも営業も経営も、同じ経緯を確認できる。",
+    body: "営業の知る顧客の事情まで揃った状態で、内容に応じた担当者が決める。決定と理由が証跡として残り、エンジニアも営業も経営も、同じ経緯を確認できる。",
     human: true,
   },
   {
@@ -178,7 +178,7 @@ export default function Home() {
                   一つの仕様変更が、三つの立場を通って仕事に戻るまで。AIが決めるのではなく、人が判断できる状態を用意します。
                 </p>
                 <ol className="wv-os__steps" aria-label="Company OSの流れ">
-                  {companyOsSteps.map((step) => (
+                  {companyOsSteps.map((step, index) => (
                     <li key={step.tag} className={step.human ? "is-human" : undefined}>
                       <span className="wv-os__tag">
                         {step.tag}
@@ -188,6 +188,11 @@ export default function Home() {
                       <p>
                         <span>{step.body}</span>
                       </p>
+                      {index === companyOsSteps.length - 1 && (
+                        <a className="wv-link wv-os__detail-link" href="/company-os">
+                          Company OSの具体的な活用シーンを見る <Arrow />
+                        </a>
+                      )}
                     </li>
                   ))}
                 </ol>
@@ -208,6 +213,9 @@ export default function Home() {
                 <p className="wv-os__overview-lead">
                   全員がAIを学ぶ必要はない。いつもの仕事の裏側でAIが動き、使うほど会社を知る。AIを導入した、その先へ。
                 </p>
+                <a className="wv-link wv-os__detail-link" href="/company-os">
+                  Company OSの具体的な活用シーンを見る <Arrow />
+                </a>
               </div>
 
               {/* where we are in the six beats — pinned screens only */}
