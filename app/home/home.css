@@ -2028,3 +2028,26 @@ html[data-wv-reveal] .wv [data-reveal].is-in {
     padding-bottom: clamp(60px, 20vh, 280px);
   }
 }
+
+/* Keep room for dialogue between the people and the caption on short phones. */
+@media (max-width: 880px) and (max-height: 740px) {
+  .wv .wv-os[data-os-scene="on"] .wv-os__copy {
+    padding-bottom: 0;
+  }
+}
+
+@media (max-width: 380px) and (max-height: 700px) {
+  .wv .wv-os[data-os-scene="on"] .wv-os__tag {
+    margin-bottom: 6px;
+  }
+
+  .wv .wv-os[data-os-scene="on"] .wv-os__steps b {
+    line-height: 1.4;
+  }
+
+  .wv .wv-os[data-os-scene="on"] .wv-os__steps li > p {
+    margin-top: 6px;
+    font-size: 12px;
+    line-height: 1.75;
+  }
+}

@@ -169,6 +169,7 @@ export function CompanyOsCanvas() {
 
     const stepEls = Array.from(section.querySelectorAll<HTMLElement>(".wv-os__steps li"));
     const indexEls = Array.from(section.querySelectorAll<HTMLElement>(".wv-os__index li"));
+    const stepsEl = section.querySelector<HTMLElement>(".wv-os__steps");
     const overviewEl = section.querySelector<HTMLElement>(".wv-os__overview");
     const copyEl = section.querySelector<HTMLElement>(".wv-os__copy");
 
@@ -193,7 +194,9 @@ export function CompanyOsCanvas() {
       const shift = easeInOut(clamp((p - SHIFT_FROM) / (SHIFT_TO - SHIFT_FROM)));
       const time = (performance.now() - started) / 1000;
       // whichever block of words is on screen right now — measured, not guessed
-      const textBox = (shift > 0.5 ? copyEl : overviewEl)?.getBoundingClientRect();
+      // The copy wrapper includes empty top padding. Only the visible text
+      // blocks dialogue placement; counting that padding hid replies on phones.
+      const textBox = (shift > 0.5 ? (stacked ? stepsEl : copyEl) : overviewEl)?.getBoundingClientRect();
 
       scene.render(p, time, shift);
       const turning = scene.turning(p) > 0;
@@ -362,7 +365,7 @@ export function CompanyOsCanvas() {
           for (let k = 0; k < spots.length; k++) {
             const [sx, sy] = spots[k];
             if (sx < m || sx + w > vw - m || sy < 90 || sy + h > vh - 24) continue;
-            const captionGap = stacked ? 24 : pad;
+            const captionGap = stacked ? 12 : pad;
             if (
               textBox &&
               sx < textBox.right + pad && sx + w > textBox.left - pad &&
