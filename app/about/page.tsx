@@ -68,15 +68,6 @@ const grounds: Array<{ label: string; title: string; body: string }> = [
   },
 ];
 
-/** 節2 — 一つの循環。研究から製品までを、別々の仕事にしない */
-const loop: Array<{ title: string; body: string }> = [
-  { title: "読む", body: "海外で公開される論文と一次情報を、英語のまま追う。" },
-  { title: "つくる", body: "読んだものを実装して、使える形かどうかを自分の手で確かめる。" },
-  { title: "現場で使う", body: "確かめた方法を、自社と顧客の開発の現場で回す。" },
-  { title: "教える", body: "他の人が実践できる形に言葉を整え、支援と発信で渡す。" },
-  { title: "方法と製品にする", body: "現場で残った工夫を、再利用できる型とソフトウェアへ変える。" },
-];
-
 /** 節3 — 判断の仕方。原文は会社の正本、ここでは判断の場面が見える文だけ */
 const principles = [
   {
@@ -160,12 +151,11 @@ export default function AboutPage() {
                 <aside className="wv-chapter wv-about-chapter" aria-label="この章の位置">
                   <CordMark className="wv-about-chapter__mark" title="CordMarkのマーク" />
                   <p className="wv-chapter__role">CORD MARK</p>
-                  <p className="wv-chapter__note">社名は、土器に残る縄目から。</p>
                 </aside>
                 <p className="wv-lead">
-                  CordMarkは、2026年に横浜で始めた会社です。AIは人の意思に置き換わるものではなく、人の意思を実現するための力だと考えています。AIで生産力が上がった分を、仕事量の拡大ではなく、人が考え、決め、創造し、他者と関わる時間へ戻す。そのために会社の意思と日々の仕事をつなぐ
+                  AIを、人が考え、決め、創造するための力にする。CordMarkは、会社の意思と日々の仕事をつなぐ
                   <span className="wv-nowrap">Company OS</span>
-                  をつくり、まず自分たちの会社で使い、顧客の現場へ持ち込んでいます。
+                  の開発と、AIを前提にした開発支援に取り組んでいます。
                 </p>
               </div>
             </div>
@@ -185,21 +175,14 @@ export default function AboutPage() {
             <div className="wv-about-founders__grid">
               <div className="wv-about-founders__story" data-reveal="2">
                 <p className="wv-lead">
-                  橋本武士と山本圭亮は、カナダのブリティッシュコロンビア大学（UBC）でComputer Scienceを学びました。在学中はAIが急速に発展した時期と重なり、研究室で論文を読み、実装を試し、Coding Agentを日々の道具として使い込むうちに、人の能力がAIで大きく広がる変化を、自分の手の中で経験しました。
+                  橋本武士と山本圭亮は、カナダのブリティッシュコロンビア大学（UBC）でComputer Scienceを学びました。AIが急速に発展するなか、論文を読み、実装を試し、Coding Agentを使い込み、人の能力が広がる変化を経験しました。
                 </p>
                 <p>
-                  そこで見えたのは、AIは作業を速くする道具にとどまらない、ということでした。人の意思や創造性を、一人では届かなかった大きさの成果へ変える基盤になる。その考えを会社にするために、2026年7月、横浜でCordMark株式会社を設立しました。
-                </p>
-                <p>
-                  いまは受託・共同開発とAI駆動開発支援で顧客の現場に入りながら、Company OSをつくっています。並行して、AIが行き渡った先の人の営みも、自分たちの手で形にしています。仲間の心理を読み合う2v2の戦略ボードゲーム
-                  <a className="wv-link wv-link--inline" href="/beyond">
-                    Laplace
-                  </a>
-                  と、AIの先の社会と人間を考えるメディア
-                  <a className="wv-link wv-link--inline" href="/beyond">
-                    DotCraft
-                  </a>
-                  。理解したことを、遊びと言葉と映像にして渡し続けています。
+                  AIで人の意思や創造性を、より大きな成果へつなげたい。その考えから、2026年7月、横浜でCordMarkを設立しました。開発事業に加え、ボードゲーム
+                  <a className="wv-link wv-link--inline" href="/beyond">Laplace</a>
+                  とメディア
+                  <a className="wv-link wv-link--inline" href="/beyond">DotCraft</a>
+                  を通じて、AIの先の遊びや表現も探っています。
                 </p>
               </div>
               <dl className="wv-about-founders__names" data-reveal="3" aria-label="創業者">
@@ -217,7 +200,7 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* 節2 — 順番の話。二列を縦罫で継ぎ、下に循環の五行 */}
+        {/* 節2 — 自社で使い、顧客の現場で確かめる */}
         <section className="wv-section wv-about-practice" data-ground="paper" aria-labelledby="about-practice-heading">
           <div className="wv-inner">
             <div data-reveal>
@@ -228,7 +211,7 @@ export default function AboutPage() {
                 <span className="wv-nowrap">自分たちで使う。</span>
               </h2>
               <p className="wv-lead">
-                仕事の流れを組み替える提案は、外から眺めているだけでは書けません。詰まるのはたいてい、機能の不足ではなく、誰がいつ何を決めるかの取り決めのほうです。だから順番を決めています。
+                論文を読み、実装し、現場で使う。そこで得た知見を、開発支援と製品に還元しています。
               </p>
             </div>
             <div className="wv-split" data-reveal="2">
@@ -240,24 +223,7 @@ export default function AboutPage() {
                 </div>
               ))}
             </div>
-            <div className="wv-about-loop" data-reveal="3">
-              <p className="wv-label">The loop</p>
-              <p className="wv-about-loop__lead">
-                研究を読むことも、実案件も、教えることも、製品をつくることも、別々の仕事にしていません。一つの循環として回します。
-              </p>
-              <ol className="wv-list wv-about-loop__list" aria-label="五つの循環">
-                {loop.map((step, i) => (
-                  <li key={step.title}>
-                    <span className="wv-list__num">{String(i + 1).padStart(2, "0")}</span>
-                    <div>
-                      <b>{step.title}</b>
-                      <p>{step.body}</p>
-                    </div>
-                  </li>
-                ))}
-              </ol>
-            </div>
-            <p className="wv-about-practice__links" data-reveal="4">
+            <p className="wv-about-practice__links" data-reveal="3">
               <a className="wv-link" href="/company-os">
                 Company OS <Arrow />
               </a>
@@ -284,7 +250,7 @@ export default function AboutPage() {
                 判断の仕方。
               </h2>
               <p className="wv-lead">
-                速く動く会社ほど、判断の数が増えます。二人の代表と、その場にいる人が迷ったときに戻る四つを、先に決めています。美辞麗句ではなく、案件の判断にそのまま使える形で。
+                日々の仕事で、迷ったときに立ち返る四つの指針です。
               </p>
             </div>
             <ol className="wv-index" data-reveal="2">
@@ -312,7 +278,7 @@ export default function AboutPage() {
                 会社概要
               </h2>
               <p className="wv-lead wv-about-company__origin">
-                社名は、縄文の土器に残る縄目、cord markから。余った力が暮らしの形になった、いちばん古い痕跡です。
+                社名のCordMarkは、縄文土器に残る縄目（cord mark）に由来します。
               </p>
               <p className="wv-about-company__link">
                 <a className="wv-link" href="/#origin">
