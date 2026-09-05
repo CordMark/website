@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { HERO_MARK_ARRIVAL, heroProgress } from "./heroProgress";
 
 /**
  * The hero cord.
@@ -20,7 +21,7 @@ import { useEffect, useRef } from "react";
  *                 sits where the header's own mark is; on the way the left
  *                 ring loses the part inside the right one — a C and an O,
  *                 which is the logo
- *   0.96 – 1.00   it goes out there, and the header's mark comes in
+ *   0.985 – 1.00  it goes out there, and the header's mark comes in
  */
 
 const STRANDS = [
@@ -276,17 +277,16 @@ export function HeroCord() {
       ctx.clearRect(0, 0, W, H);
 
       // 0 at the top of the hero, 1 when the pin is about to release
-      const travel = Math.max(1, rect.height - H);
-      const p = reduce ? 0.28 : clamp(-rect.top / travel);
+      const p = reduce ? 0.28 : heroProgress(rect, H);
 
       const pW = span(p, 0.0, 0.46);
       const pC = span(p, 0.42, 0.76);
       const pM = span(p, 0.66, 0.94);
-      const pF = span(p, 0.9, 0.985);
+      const pF = span(p, 0.9, HERO_MARK_ARRIVAL);
       // the C opens as the mark sets off: the left ring's part inside the O goes out
       const pE = span(p, 0.905, 0.95);
       // out only once it has arrived: the header's mark takes over there
-      const alpha = 1 - span(p, 0.96, 1.0);
+      const alpha = 1 - span(p, HERO_MARK_ARRIVAL, 1.0);
 
       // a warm, low light behind the cord — it dies out before the paper begins
       const glow = (1 - span(p, 0.72, 1.0)) * alpha;

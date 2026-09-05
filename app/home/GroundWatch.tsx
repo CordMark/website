@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { HERO_MARK_ARRIVAL, heroProgress } from "./heroProgress";
 
 /**
  * Keeps the header readable, and hands the mark over to it.
@@ -26,6 +27,8 @@ export function GroundWatch() {
     if (!root) return;
     const sections = Array.from(root.querySelectorAll<HTMLElement>("[data-ground]"));
     const hero = root.querySelector<HTMLElement>(".wv-hero");
+    const heroCanvas = hero?.querySelector<HTMLCanvasElement>(".wv-hero__cord");
+    const reduceQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (!sections.length) return;
 
     let raf = 0;
@@ -44,10 +47,10 @@ export function GroundWatch() {
         if (r.top <= probe && r.bottom > probe) dark = DARK.has(s.dataset.ground ?? "");
       }
       const heroRect = hero?.getBoundingClientRect();
-      // the cord finishes becoming the mark, and flying up to the header,
-      // near the end of the hero pin (HeroCord fades it from 0.96)
-      const heroP = heroRect ? -heroRect.top / Math.max(1, heroRect.height - window.innerHeight) : 1;
-      const docked = heroP > 0.965;
+      // Match HeroCord's canvas height: mobile browser chrome can make
+      // innerHeight taller than the 100svh canvas and dock the mark too soon.
+      const heroP = heroRect ? heroProgress(heroRect, heroCanvas?.clientHeight ?? window.innerHeight) : 1;
+      const docked = reduceQuery.matches || heroP >= HERO_MARK_ARRIVAL;
       const heroOwns = !!heroRect && heroP < 1 && heroRect.bottom > 0;
       const isScrolled = window.scrollY > 24;
 
@@ -83,11 +86,16 @@ export function GroundWatch() {
     update();
     window.addEventListener("scroll", schedule, { passive: true });
     window.addEventListener("resize", schedule, { passive: true });
+    reduceQuery.addEventListener("change", schedule);
+    const ro = new ResizeObserver(schedule);
+    if (heroCanvas) ro.observe(heroCanvas);
 
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("scroll", schedule);
       window.removeEventListener("resize", schedule);
+      reduceQuery.removeEventListener("change", schedule);
+      ro.disconnect();
       delete document.documentElement.dataset.wvGround;
       delete document.documentElement.dataset.wvScrolled;
       delete document.documentElement.dataset.wvMark;
