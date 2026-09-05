@@ -405,12 +405,16 @@
 
 /* ---------- Header over the dark hero ---------- */
 
+/* The route already identifies dark openings in the server-rendered header.
+   Use it until GroundWatch measures the section, including before hydration. */
+html:not([data-wv-ground]) .site-header.site-header--over-dark,
 html[data-wv-ground="dark"] .site-header.site-header--over-dark {
   color: #ede7da;
   background: transparent;
   box-shadow: none;
 }
 
+html:not([data-wv-ground]) .site-header.site-header--over-dark .header-contact,
 html[data-wv-ground="dark"] .site-header.site-header--over-dark .header-contact {
   color: #ede7da;
   border-color: rgba(237, 231, 218, 0.45);
@@ -422,10 +426,12 @@ body:has(.wv) .site-header .mobile-menu-toggle {
   background: transparent;
 }
 
+html:not([data-wv-ground]) .site-header.site-header--over-dark .mobile-menu-toggle__lines span,
 html[data-wv-ground="dark"] .site-header.site-header--over-dark .mobile-menu-toggle__lines span {
   background: #ede7da;
 }
 
+html:not([data-wv-ground]) .site-header.site-header--over-dark .site-nav__menu,
 html[data-wv-ground="dark"] .site-header.site-header--over-dark .site-nav__menu {
   color: #050505;
 }
