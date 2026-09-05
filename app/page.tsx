@@ -136,11 +136,16 @@ export default function Home() {
                 <span className="wv-nowrap">いちばん遅い会話で</span>
                 <span className="wv-nowrap">決まる。</span>
               </h1>
-              <p className="wv-hero__lead">
-                AIで、仕事は速くなった。では、次のボトルネックはどこにあるのか。
-                <br />
-                CordMarkは、開発の進め方から会社の意思決定まで、AIを前提にした仕組みをつくり、判断から実行までの流れをつなぎます。そこで生まれた余力を、人が考え、決め、創造する時間へつなげていきます。
-              </p>
+              <div className="wv-hero__lead">
+                <p>
+                  AIで、仕事は速くなった。
+                  <br />
+                  では、次のボトルネックはどこにあるのか。
+                </p>
+                <p>
+                  CordMarkは、開発の進め方から会社の意思決定まで、AIを前提にした仕組みをつくり、判断から実行までの流れをつなぎます。
+                </p>
+              </div>
               <div className="wv-hero__actions">
                 <a className="wv-button" href="#company-os">
                   Company OS <Arrow />

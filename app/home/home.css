@@ -624,6 +624,14 @@ body:has(.wv-page) .site-header {
   color: #d9d3c5;
 }
 
+.wv .wv-hero__lead p {
+  margin: 0;
+}
+
+.wv .wv-hero__lead p + p {
+  margin-top: 0.75em;
+}
+
 .wv .wv-hero__actions {
   display: flex;
   flex-wrap: wrap;

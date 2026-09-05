@@ -6,7 +6,7 @@ import { companyOsScrollFraction, MOBILE_OS_STOPS } from "./companyOsProgress";
 import { HERO_TRANSITION_MS, heroTransitionPosition, setHeroAnimatedScroll } from "./heroProgress";
 
 
-/** One deliberate touch gesture plays one complete scene; reading never advances it. */
+/** One deliberate touch or wheel gesture plays one complete scene. */
 export function MobileStoryScroll() {
   useEffect(() => {
     const hero = document.querySelector<HTMLElement>(".wv-hero");
@@ -17,7 +17,10 @@ export function MobileStoryScroll() {
     let raf = 0;
     let animating = false;
     let gesture: { x: number; y: number; consumed: boolean } | null = null;
-    const enabled = () => mobile.matches && !reduced.matches && os.dataset.osScene === "on";
+    let wheelConsumed = false;
+    let wheelDelta = 0;
+    let lastWheelAt = -Infinity;
+    const enabled = () => !reduced.matches && os.dataset.osScene === "on";
     const stops = () => {
       const top = os.getBoundingClientRect().top + window.scrollY;
       const travel = Math.max(1, os.offsetHeight - window.innerHeight);
@@ -76,7 +79,7 @@ export function MobileStoryScroll() {
     };
     const onStart = (event: TouchEvent) => {
       gesture = null;
-      if (!enabled() || event.touches.length !== 1) return;
+      if (!mobile.matches || !enabled() || event.touches.length !== 1) return;
       const target = event.target;
       if (!(target instanceof Element) || !target.closest(".wv-hero, .wv-os")) return;
       if (target.closest("button, input, textarea, select, [role='button']")) return;
@@ -105,6 +108,36 @@ export function MobileStoryScroll() {
       }
     };
     const onEnd = () => { gesture = null; };
+    const onWheel = (event: WheelEvent) => {
+      if (!enabled() || event.ctrlKey || event.defaultPrevented) return;
+      if (document.body.style.overflow === "hidden") { reset(); return; }
+      if (Math.abs(event.deltaX) > Math.abs(event.deltaY) || event.deltaY === 0) return;
+      const target = event.target;
+      if (target instanceof Element && target.closest("input, textarea, select, [contenteditable='true'], [role='dialog']")) return;
+      const y = window.scrollY;
+      const positions = stops();
+      if (y > positions.at(-1)! + 8) return;
+      const now = performance.now();
+      // A trackpad's momentum belongs to the gesture that started the scene,
+      // even when its wheel events continue after the animation has ended.
+      if (!animating && now - lastWheelAt > 240) {
+        wheelConsumed = false;
+        wheelDelta = 0;
+      }
+      lastWheelAt = now;
+      if (!animating && !wheelConsumed && ((event.deltaY > 0 && y >= positions.at(-1)! - 8) || (event.deltaY < 0 && y <= 8))) return;
+      if (!event.cancelable) return;
+      event.preventDefault();
+      if (animating) { wheelConsumed = true; return; }
+      if (wheelConsumed) return;
+      const delta = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? window.innerHeight : 1);
+      if (Math.sign(delta) !== Math.sign(wheelDelta)) wheelDelta = 0;
+      wheelDelta += delta;
+      if (Math.abs(wheelDelta) >= 24) {
+        wheelConsumed = true;
+        next(wheelDelta > 0 ? 1 : -1);
+      }
+    };
     const onClick = (event: MouseEvent) => {
       const target = event.target;
       if (!(target instanceof Element)) return;
@@ -115,8 +148,14 @@ export function MobileStoryScroll() {
         play(stops()[1], HERO_TRANSITION_MS);
       } else cancel();
     };
-    const reset = () => { gesture = null; cancel(); };
-    const onKey = () => cancel();
+    const reset = () => {
+      gesture = null;
+      wheelConsumed = false;
+      wheelDelta = 0;
+      lastWheelAt = -Infinity;
+      cancel();
+    };
+    const onKey = () => reset();
     let viewportWidth = window.innerWidth;
     const onResize = () => {
       // Mobile browser chrome changes the height during scrolling; that must
@@ -128,6 +167,7 @@ export function MobileStoryScroll() {
     document.addEventListener("touchmove", onMove, { passive: false });
     document.addEventListener("touchend", onEnd);
     document.addEventListener("touchcancel", reset);
+    document.addEventListener("wheel", onWheel, { passive: false });
     document.addEventListener("click", onClick);
     document.addEventListener("keydown", onKey);
     window.addEventListener("resize", onResize);
@@ -140,6 +180,7 @@ export function MobileStoryScroll() {
       document.removeEventListener("touchmove", onMove);
       document.removeEventListener("touchend", onEnd);
       document.removeEventListener("touchcancel", reset);
+      document.removeEventListener("wheel", onWheel);
       document.removeEventListener("click", onClick);
       document.removeEventListener("keydown", onKey);
       window.removeEventListener("resize", onResize);
