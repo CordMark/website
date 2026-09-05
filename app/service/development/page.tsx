@@ -113,7 +113,7 @@ export default function DevelopmentPage() {
           </div>
         </section>
 
-        {/* 節1 なぜ速いか — 見出しを左に置き、右に短い二段落。絵はない */}
+        {/* 節1 なぜ速いか — 見出しを左に置き、右に短い段落。絵はない */}
         <section className="wv-section wv-dev-speed" data-ground="paper2" aria-labelledby="dev-speed-heading">
           <div className="wv-inner">
             <div className="wv-dev-speed__grid">
@@ -127,12 +127,7 @@ export default function DevelopmentPage() {
               </div>
               <div className="wv-dev-speed__body" data-reveal="2">
                 <p>
-                  AIがまだ賢くなかった頃から、開発に使い続けてきました。どのモデルに何を任せ、どこに人が要るか。自分たちの開発の仕組みを自分たちでつくり、それで開発してきた蓄積が、いまの速さです。
-                </p>
-                <p className="wv-dev-proof">
-                  このサイトも、仕事の合間の
-                  <span className="wv-dev-proof__num">二日</span>
-                  でつくりました。
+                  AIがまだ賢くなかった頃から、開発に使い続けてきました。どのモデルに何を任せ、どこに人が要るか。開発の仕組みから自らつくり、実践を重ねてきた蓄積が、いまの速さです。このサイトも、仕事の合間の2日でつくりました。
                 </p>
               </div>
             </div>
