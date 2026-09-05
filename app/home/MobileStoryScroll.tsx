@@ -3,6 +3,8 @@
 import { useEffect } from "react";
 import { companyOsScrollFraction, MOBILE_OS_STOPS } from "./companyOsProgress";
 
+const HERO_TRANSITION_MS = 5700;
+
 /** One deliberate touch gesture plays one complete scene; reading never advances it. */
 export function MobileStoryScroll() {
   useEffect(() => {
@@ -48,7 +50,7 @@ export function MobileStoryScroll() {
         : [...positions].reverse().find(p => p < y - 8);
       if (target === undefined) return;
       const crossesHero = Math.min(y, target) < positions[1] - 8;
-      play(target, crossesHero ? 1900 : 1050);
+      play(target, crossesHero ? HERO_TRANSITION_MS : 1050);
     };
     const onStart = (event: TouchEvent) => {
       gesture = null;
@@ -88,7 +90,7 @@ export function MobileStoryScroll() {
       if (!link) return;
       if (enabled() && link.closest(".wv-hero") && link.getAttribute("href") === "#company-os" && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
         event.preventDefault();
-        play(stops()[1], 1900);
+        play(stops()[1], HERO_TRANSITION_MS);
       } else cancel();
     };
     const reset = () => { gesture = null; cancel(); };
